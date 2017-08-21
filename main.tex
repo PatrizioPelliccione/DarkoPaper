@@ -2503,15 +2503,15 @@ In our work, we envision resolution of the following types of safety problems: (
 
 For the third type of problems (collision avoidance between agents), our framework provides a palette of coordination protocols for the agents to be able to perform collision avoidance maneuvers. 
 To resolve safety problems related to collision between agents, our framework uses the concept of ensembles described above.
-Agents dynamically form collaborative groups using attribute-based communication ensembles as described in [reference needed] to gain benefits that otherwise
+Agents dynamically form collaborative groups using attribute-based communication ensembles as described in \todo{[reference needed]} to gain benefits that otherwise
 would not be possible. In safety problem resolution, the agents must follow certain rules and in return the ensemble offers a guarantee that if all single agents follow the rules, safety will be preserved. Adherence to these collective
-rules temporarily reduces the flexibility of the collaborating agents, but has a strongly positive impact on safety. Comparing to mission resolution where the those collective rules are more flexible, the safety resolution requires stronger and more precise and detailed rules. 
+rules temporarily reduces the flexibility of the collaborating agents, but has a strongly positive impact on safety. Comparing to mission resolution where \del{the} those collective rules are more flexible, the safety resolution requires stronger, more precise, and detailed rules. 
 
 
-A safety ensemble is primary determined by the agents that collaborate to solve a safety solver. In a collision between multiple agents, our safety resolution procedure consists of: (i) a protocol for on-the-fly ensemble formation for safety resolution and (ii) a recursive function that is initially called locally by the ensemble leader to select and commit a solution. In the safety problem resolution, all entities in the ensemble need to participate in the solution creation because of the binary nature of the solution i.e. we might have full solution or not solution at all,
+A safety ensemble is primary determined by the agents that collaborate to solve a safety solver. In a collision between multiple agents, our safety resolution procedure consists of: (i) a protocol for on-the-fly ensemble formation for safety resolution and (ii) a recursive function that is initially called locally by the ensemble leader to select and commit a solution. In the safety problem resolution, all entities in the ensemble \ugh{need}\patrizio{need or might?} to participate in the solution creation \ugh{because of the binary nature of the solution i.e. we might have full solution or not solution at all,
 %which give a 
 %full solution to the problem 
-while in the mission resolution a partial solution is enough for solving a particular problem.
+while in the mission resolution a partial solution is enough for solving a particular problem} \patrizio{please explain better...not so clear}.
 If one agent fails to comply to the rules in the ensemble, safety will be compromised. Here, the shape and structure of the ensemble is strongly correlated with the type of the safety problem due to the fact that all involved participants need to generate their corresponding behaviours to guarantee the safety of the system.
 
 
@@ -2521,7 +2521,7 @@ If one agent fails to comply to the rules in the ensemble, safety will be compro
 
 
 
-\begin{lstlisting}[caption=EDL Specification for safety resolution ensembles, language=Python]
+\begin{lstlisting}[caption=EDL Specification for safety resolution ensembles, language=Python, mathescape=true]
 ensemble SafetyResolution
     id Leader: Agent
     membership
@@ -2530,8 +2530,8 @@ ensemble SafetyResolution
            Solver_Agent [1..n]: Agent
     constraints
         constraint Agent.hascommpath(Leader)
-        \forall Agent \in ensemble
-        \exists Agent.solver  compatible to Leader.solver
+        $\forall$ Agent $\in$ ensemble
+        $\exists$ Agent.solver  compatible to Leader.solver
     fitness Leader.solution.quality
     knowledge exchange
         Leader.Problem=Agent.Problem(conflict_region)
@@ -2542,39 +2542,39 @@ ensemble SafetyResolution
 %(Leader.solution+Solver_Agent.solution)==FULL  
 %(position,speed)
 %(center, speed)     \forall a  \in VR(a1)
-We  specify the ensemble  type  used  for  safety  problem resolution on Figure xxx. To identify the ensemble, we declare a leader  agent  to  be  the  id  of  the  ensemble - essentially saying that instances of this ensemble type cannot be created without the ensemble being associated with an unique agent instance, which can be seen as a coordinator of the ensemble. 
+We  specify the ensemble  type  used  for  safety  problem resolution on Figure \todo{xxx. Do you mean Listings 3?}. To identify the ensemble, we declare a leader  agent  to  be  the  id  of  the  ensemble - essentially saying that instances of this ensemble type cannot be created without the ensemble being associated with \chg{an}{a} unique agent instance, which can be seen as a coordinator of the ensemble. \patrizio{please explain better. Moreover in the listing (row 2), is id a variable? Then what's Leader? As I understand Agent is the type} 
 A Leader of an ensemble for safety resolution is an agent that leads the ensemble formation and decides for a safety resolution protocol.
 %has knowledge of all ensemble members.
-Example could be a fixed camera positioned in a particular point in the environment that checks if there is a possibility for collision between two or more robots or a robot that notices an other robot in its visible region. Unlike the leader in the mission resolution ensemble, the leader in a safety resolution has knowledge of all the possible ensemble participants when decides for a solution type and when it starts the coordination of the problem resolution process.
+Example could be a fixed camera positioned in a particular point in the environment that checks if there is a possibility for collision between two or more robots or a robot that notices another robot in its visible region. Unlike the leader in the mission resolution ensemble, the leader in a safety resolution has knowledge of all the possible ensemble participants when decides for a solution type and when it starts the coordination of the problem resolution process.
 
 %the process of coordination.
-As we can see from Figure xxx,
+As we can see from Figure \todo{xxx},
 the  ensemble  membership  function  consists  of  three  sections as before. First, the structure of the ensemble is defined by declaring the ensemble roles the agents can play. In  our  case, same as in the mission resolution, an  agent  can  play one  of  the  following  roles in the safety resolution ensemble:
 \begin{itemize}
 \item Leader - an agent that has the highest safety index and leads the ensemble formation
 %triggers the top-level PROBLEM\_CASE and leads the ensemble formation
 \item Solver\_Agent  (an  agent  that  can provide partial solution that contributes towards the final solution)
 \end{itemize}
-Next,  we  place  semantic  constraints,  represented  by  the constraint  expression.  In  our  safety resolution ensemble a  constraint  for  an agent  to  be  part of  the  ensemble  is  that  there  must  be  a communication  link between  the  corresponding  agent  and its  leader.  What  we  mean  here  is  that the Leader can communicate with all ensemble participants. The other very important aspect in the ensemble formation is the solution space. In contrast to the mission resolution ensemble, a safety resolution ensemble must provide a full solution, so we put that as a constraint. What we mean is that all ensemble participants agree to follow a specific protocol suggested by the Leader i.e. each entity in the ensemble must have a solver compatible to the solver proposed by the leader. That means the full solution consists of combination of behaviours generated by all participants in the ensemble.
+Next,  we  place  semantic  constraints,  represented  by  the constraint  expression.  In  our  safety resolution ensemble a  constraint  for  an agent  to  be  part of  the  ensemble  is  that  there  must  be  a communication  link between  the  corresponding  agent  and its  leader.  What  we  mean  here  is  that the Leader can communicate with all ensemble participants. The other very important aspect in the ensemble formation is the solution space. In contrast to the mission resolution ensemble, a safety resolution ensemble must provide a full solution, so we put that as a constraint. What we mean is that all ensemble participants agree to follow a specific protocol suggested by the Leader i.e. each entity in the ensemble must have a solver compatible to the solver proposed by the leader\patrizio{what's happen if an entity does not have a solver compatible to the solver proposed by the leader? Please explain here}. That means the full solution consists of combination of behaviours generated by all participants in the ensemble.
 The third part of the membership definition  is  the  fitness  function, providing  information  about which  aspect  of  the  ensemble  membership  should  be  optimized. In  our  example,  the  fitness  function  is represented as maximized solution quality of the leader that coordinates all ensemble participants. 
-Finally, knowledge exchange is specified,creating an information exchange between the members of the ensemble.  In  our  case,  we  have  exchange  of  three  types  of information.  First,  is  the  information  of the agents' conflict\_region which is calculated by the position of the agent and its corresponding speed 
+Finally, knowledge exchange is specified, creating an information exchange between the members of the ensemble.  In  our  case,  we  have  exchange  of  three  types  of information.  First,  \patrizio{missing subject} is  the  information  of the agents' conflict\_region, which is calculated by the position of the agent and its corresponding speed 
 %that generates the problem case
-(line 12). The conflict\_region is the safety region of an agent in a specific time interval during mission execution. Second, each of the entities in the  ensemble receives an information about a specific solver proposed by the Leader. Each entity in the ensemble receives information about a collision avoidance algorithm and the attributes of the algorithm (example of attributes of the algorithm might be the central point around which the entities will perform the collision avoidance protocol,  their corresponding speed etc) (line 13).
+(line 12). The conflict\_region is the safety region of an agent in a specific time interval during mission execution. Second, each of the entities in the  ensemble receives an information about a specific solver proposed by the Leader. Each entity in the ensemble receives information about a collision avoidance algorithm and the attributes of the algorithm (example of attributes of the algorithm might be the central point around which the entities will perform the collision avoidance protocol,  their corresponding speed, etc.) (line 13).
 Third, the leader gets information about the solution  of each entity in the ensemble (line 14).
 %that  can  be  provided  by  each  agent  in  the  ensemble(line 14).
 
 
 We defined the following protocol (Figure 8) that is used for on-the-fly ensemble formation when agents discover that they are facing with a possible collision among them. Each agent starts executing in the \textit{Discover} state. 
-If an agent $a_i$ notices other agents in its visible region, it broadcasts $ReqforSafetyRegion$ event with identifier for the $VR$ - visible  region, the time $\tau$ when the message is sent and the identifier of the agent $id$, asking for the safety region $SR$ of the robots in its "visible region" during some time period $\Delta\tau$. Then it goes to \textit{WaitForResponse} state.
+If an agent $a_i$ notices other agents in its visible region, it broadcasts the $ReqforSafetyRegion$ event with identifier for the $VR$ - visible  region, the time $\tau$ when the message is sent and the identifier of the agent $id$, asking for the safety region $SR$ of the robots in its ``visible region" during some time period $\Delta\tau$. Then it goes to the \textit{WaitForResponse} state.
 
 \begin{figure}[h]
 \includegraphics[width=3.25in]{Figures/SafetyResolution_FF.pdf}
-\caption{State machine animating each entity in the safety resolution process}
+\caption{State machine animating each entity in the safety resolution process \patrizio{better to represent states with circles instead of rectangles; it's more standard. Moreover the figure is unreadable}}
 \end{figure}
 
 %that consists of the following data
 %checks if there could be a possible collision between the one that sends the message and itself. If the agent notices a possible collision, depending of its state
-When an agent receives the event \textit{ReqforSafetyRegion(msg)}, depending of state it is, it generates a message  $m=(r\_id: int, conflict\_region: R, ensemble\_state: int)$ where \textit{r\_id} is the identifier of the robot creating the message, the conflict region is a region in the environment that should not intersect with the region of operation of an active robot. If the agent is not part of an ensemble the conflict region is equal to the agent's $SR^i_\Delta\tau$, while if the agent is part of an ensemble it represents the \textit{execution region of the ensemble} which is the union of the
+When an agent receives the event \textit{ReqforSafetyRegion(msg)}, depending of state it is, it generates a message  $m=(r\_id: int, conflict\_region: R, ensemble\_state: int)$, where \textit{r\_id} is the identifier of the robot creating the message, the conflict region is a region in the environment that should not intersect with the region of operation of an active robot. If the agent is not part of an ensemble, the conflict region is equal to the agent's $SR^i_\Delta\tau$, while if the agent is part of an ensemble, it represents the \textit{execution region of the ensemble}, which is the union of the
 $SR^i_\Delta\tau$ of all ensemble constituents. The ensemble\_state gives information if the agent is part of an ensemble and if it is, it gives information in which phase of operation the ensemble is. It can be in one of the following states: 
 \begin{itemize}
 \item \textbf{NO\_ENSEMBLE:} means that the agent is not part of an ensemble
@@ -2584,33 +2584,33 @@ means that the agent is a part of an ensemble that is established and it execute
 \end{itemize}
 
 
-In the \textit{WaitforResponse} state, the agent waits to receive feedback from all the agents that were found in its visible region $VR$. When it receives message from all the agents in its visible region it goes to a state \textit{Decide}. In state \textit{Decide}, the agent goes through all messages and does the following: first, it checks if there is a possible collision between the agent that sends the message and itself.  
+In the \textit{WaitforResponse} state, the agent waits to receive feedback from all the agents that were found in its visible region $VR$. When it receives message from all the agents in its visible region it goes to a state \textit{Decide}. In state \textit{Decide}, the agent goes through all messages and does the following: first, it checks if there is a possible collision between the agent that sends the message \ugh{and itself}\patrizio{?}.  
 If there is a possible collision it does one of the following:
-(i)if the message is from an agent that is an ensemble that is in execution phase and can't be interrupted, it considers it as a dynamic obstacle and adds it in its collision region $CollisionR$; (ii) if the message is from an agent that is in an ensemble that is in an initialization phase it considers the possibility to join to that ensemble, (ii) otherwise it considers the possibility to starts with the initialization of an ensemble.
+(i)if the message is from an agent \ugh{that is an ensemble that is} in execution phase and can't be interrupted, it considers it as a dynamic obstacle and adds it in its collision region $CollisionR$; (ii) if the message is from an agent that is in an ensemble that is in an initialization phase it considers the possibility to join to that ensemble, \chg{(ii)}{(iii)} otherwise it considers the possibility to starts with the initialization of an ensemble.\patrizio{these items are difficult to follow. Use proper items}
 
-After the iteration through all the messages it does the following decision:
+After the iteration through all the messages it\patrizio{who is it?} does the following decision:
 \begin{itemize}
-\item if there is at least one message from an agent that is in ensemble that is in an initialization phase (statement B in Figure 8. is true), it goes to state \textit{JOIN}. In this state it considers all collision regions of the agents that are in an ensemble that is in execution phase as a dynamic obstacle and initiates the joining process. If there are multiple messages from agents that are in ensemble\_state==INITIALIZATION, it considers only joining to the agent 
+\item if there is at least one message from an agent \ugh{that is in ensemble that is in an initialization phase} (statement B in Figure 8. is true), it\patrizio{who is it?} goes to state \textit{JOIN}. \ugh{In this state it considers all collision regions of the agents that are in an ensemble that is in execution phase as a dynamic obstacle and initiates the joining process.} If there are multiple messages from agents that are in ensemble\_state==INITIALIZATION, it considers only joining to the agent 
 that has the highest safety index.  
 %the highest identifier that is placed in the variable \textit{entity} (line x).
-\item If there isn't any message from an agent that is in ensemble that is in an initialization phase (statement B is false), it checks if there is at least one message from an agent that is no part of any ensemble (ensemble\_state="NO\_ENSEMBLE") i.e. if statement A in Figure 8 is true. If there are multiple messages of that kind, with the function \textit{findsafestrobot} it finds the identifier of the agent with the highest safety index in its visible region. If the agent has the highest safety index in its visible region, it goes into state \textit{FORMING} from where it starts the initialization of the ensemble, otherwise it goes into state \textit{INITIALIZE}.
-\item This is the case when the agent has received only messages from agents that are parts of ensembles that are in their planning\&execution phase. In this case the agent goes into \textit{AVOID} state where the agent acts as it discovered a dynamic obstacle. In this state the agent should activate some of its solvers for dynamic obstacle avoidance that are able to generate a behavior(solution) for a dynamic obstacle avoidance. In this state, the entity performs isolated adaptation and threats this problem on the same level as a dynamic obstacle.
+\item \ugh{If there isn't any message from an agent that is in ensemble that is in an initialization phase} (statement B is false), it checks if there is at least one message from an agent that is no part of any ensemble (ensemble\_state=``NO\_ENSEMBLE") i.e. if statement A in Figure \todo{8} is true. If there are multiple messages of that kind, with the function \textit{findsafestrobot} it finds the identifier of the agent with the highest safety index in its visible region. If the agent has the highest safety index in its visible region, it goes into state \textit{FORMING} from where it starts the initialization of the ensemble, otherwise it goes into state \textit{INITIALIZE}.
+\item This is the case when the agent has received only messages from agents that are parts of ensembles that are in their planning\&execution phase. In this case the agent goes into the \textit{AVOID} state where the agent acts as it discovered a dynamic obstacle. In this state the agent should activate some of its solvers for dynamic obstacle avoidance that are able to generate a behavior(solution) for a dynamic obstacle avoidance. In this state, the entity performs isolated adaptation and threats this problem on the same level as a dynamic obstacle.
 %and threat the whole ensemble conflict region as a dynamic obstacle.
 \end{itemize}
 
-We define conflict set $Rconf$ for an entity $e$ as the set of entities that are in its visible region, can collide with $e$ and are not part of an ensemble that is in planning\&execution phase. This means that $Rconf$ entities are "open" for performing an appropriate collision avoidance protocol that should avoid the possible collision.
+We define conflict set $Rconf$ for an entity $e$ as the set of entities that are in its visible region, can collide with $e$ and are not part of an ensemble that is in planning\&execution phase. This means that $Rconf$ entities are ``open" for performing an appropriate collision avoidance protocol that should avoid the possible collision.
 
 From the \textit{INITIALIZE} state, the entity waits for a message \textit{m} from the agent that has the highest safety index in its visible region to decide in which state it should go. If it receives a message  that there exists another entity with a higher safety index (statement D is true), it transits to a \textit{JOIN} state from where it starts the procedure for joining an existing ensemble. 
 Otherwise, if it receives an \textit{ACCEPT} message means that the agent with the highest safety index in its visible region started the process for ensemble creation, and then it goes to a state \textit{Coordinate}. That means that there isn't any other entity with higher safety index in both of their visible regions.\\
-The entity in the \textit{FORMING} state is a possible leader(coordinator) of an ensemble. The entity in this state sends ensemble "proposal" requests to the entities that are in its vision region and have safety regions that overlaps with its safety region at some point of time in the future.
+The entity in the \textit{FORMING} state is a possible leader(coordinator) of an ensemble. The entity in this state sends ensemble ``proposal" requests to the entities that are in its vision region and have safety regions that overlaps with its safety region at some point of time in the future.
 %announced a possible conflict meaning their safety regions at some point of time might overlap.
 The entity stays in the \textit{FORMING} state until one of the following happens: 
 \begin{itemize}
-\item  it receives a message from an entity in its visible region that "rejects" its ensemble "proposal" meaning that the entity that send the message "knows" about another entity that has a higher safety index, so that entity should be the coordinator/leader of the ensemble (statement D is true). In that case, the entity that received the message directly goes into state \textit{JOIN}.
+\item  it receives a message from an entity in its visible region that ``rejects" its ensemble ``proposal" meaning that the entity that send the message ``knows" about another entity that has a higher safety index, so that entity should be the coordinator/leader of the ensemble (statement D is true). In that case, the entity that received the message directly goes into state \textit{JOIN}.
 \item it receives a message from all entities in $Rconf$ 
 %its conflict zone \darko{define conflict zone earlier}
 %visible region that might collide with it 
-that they agree with the proposal for ensemble creation. That means statement D is false i.e. there isn't any entity in its visible region that knows about other entity that is in the \textit{FORMING} state and has a higher safety index.
+\ugh{that they agree with the proposal for ensemble creation}. That means statement D is false i.e. \ugh{there isn't any entity in its visible region that knows about other entity that} is in the \textit{FORMING} state and has a higher safety index.
 \end{itemize}
 
 %rejection from an agent that 
@@ -2620,8 +2620,8 @@ the coordination between the different entities in the ensemble happens.  The en
 When each of Rconf entities join the ensemble, the entity
 goes into a \textit{Planning} state. The last entity that enters the \textit{Planning} state is the leader. When the leader enters this state,  on-the-fly ensemble formation phase finishes and the final ensemble is formed. 
 Here, the leader has information for all ensemble participants and the final conflict region of the ensemble.
-In this state the leader makes a decision of what is the best solver i.e.  what is the best collision avoidance protocol that all ensemble participants should follow. We implemented that by using the function $coordinate()$ on Figure 9. which is executed only the ensemble leader. Based on the ensemble information it
-lists a prioritized list of all possible solvers (list of collision avoidance algorithms) embedded in the Knowledge component that could solve the possible collision for this ensemble formation (line 3). 
+In this state the leader makes a decision of what is the best solver i.e.  what is the best collision avoidance protocol that all ensemble participants should follow. We implemented that by using the function $coordinate()$ on Figure \todo{9}\patrizio{please use latex commands to refer to figures. Moreover, you probably wants to refr to Listing 4}, which is executed only the ensemble leader. \ugh{Based on the ensemble information it
+lists a prioritized list} of all possible solvers (list of collision avoidance algorithms) embedded in the Knowledge component that could solve the possible collision for this ensemble formation (line 3). 
 Then, the ensemble leader starts from the first algorithm and calls the recursive function resolve\_safety(A, id, e\_j) where A is the algorithm that is chosen for safety resolution, id is the identifier of the entity that executes the algorithm to generate a solution and e\_j is the identifier of the entity that triggered the algorithm in the entity that executes it. 
 Initially resolve\_safety(A, id, e\_j) is called locally by the ensemble leader so it has the form resolve\_safety(A, id, id) (line 5).
 
@@ -2722,6 +2722,7 @@ function commit(id){
 	}
 \end{lstlisting}
 
+\patrizio{I am missing here a discussion about the correctness of the collective adaptation.}
 
 \darko{END}
 
