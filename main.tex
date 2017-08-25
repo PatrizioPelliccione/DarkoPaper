@@ -84,6 +84,8 @@
  
 \usepackage{listings}
 \usepackage{color}
+\usepackage{graphicx, subfigure}
+\usepackage{caption}
 
  
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -691,7 +693,8 @@ is a list of regions representing obstacles.
 
 
 In  the  following  we  focus  on  the  concept  of  an agent,  see Definition 4. 
-Informally, we represent an agent through its configuration (a set of configuration properties representing its state and environment where it operates). Each configuration property describes a particular aspect of the agent(e.g., aspect of its state like an agent location, current speed, current battery level, set of resources or information of its  environment). An agent observes the environment and collects information about its local operational context (Ex. an agent can identify obstacles or other agents in its local environment).
+Informally, we represent an agent through its state (a set of  properties representing its configuration %representing its state
+and environment where it operates). Each property describes a particular aspect of the agent's state(e.g., an agent location, current speed, current battery level, set of resources or information of its  environment). An agent observes the environment and collects information about its local operational context (Ex. an agent can identify obstacles or other agents in its local environment).
 
 We define property for an agent as follows.
 
@@ -711,7 +714,7 @@ Now, we  formally define an agent.
 A generic agent $a_i=(CP, EP)$ is defined as a tuple %\patrizio{how an agent configuration relates to an agent?}:%
 where:
 \begin{itemize}
-\item $SP$ is the agent's state expressed as a set of uniquely identified \textit{states properties} (ex. current speed, current battery level etc.)
+\item $CP$ is the agent's configuration expressed as a set of uniquely identified \textit{configuration properties} (ex. current speed, current battery level etc.)
 \item $EP$ is a set of uniquely identified \textit{environmental properties} each describing a particular aspect of agent's environment. (ex. obstacles, other agents in the local environment etc.). 
 \end{itemize}
 \end{definition}
@@ -830,7 +833,7 @@ where:
 \item  $S_p$ is the source state of the transition
 \item  $S_k$ is the the target state of the transition
 \item  $\lambda \in \Sigma$ is a concrete atomic transition that is performed;
-\item I is a set of conditions that must be satisfied for a transition to be performed. The conditions are agent's configuration properties that capture the key characteristics of the agent state.
+\item I is a set of conditions that must be satisfied for a transition to be performed. The conditions are agent's properties that capture the key characteristics of the agent state and its environment.
 %and its behaviour plan execution. 
 %and must be valid during all the time of the execution of op 
 (ex. $battery level > x$ etc.);
@@ -967,6 +970,25 @@ operate are often unpredictable and unknown.
 %challenge is to deal with the question of what to do when the
 %specification becomes unsatisfiable due to the discovery of an
 %unexpected obstacle. C
+
+\vspace{-.1cm}
+\begin{figure*}[ht!]
+\centering
+\captionsetup{justification=centering}
+\subfigure[Mission Execution Framework]{%
+            \label{fig:second}
+            \includegraphics[width=.395\textwidth]{Figures/MissionExecution.png}
+        }
+        \subfigure[Adaptation Manager]{%
+           \label{fig:third}
+           \includegraphics[ width=.35\textwidth]{Figures/Execution_Framework.png}
+        }
+\vspace{-.2cm}
+ \caption{Overview of the proposed approach}
+ \vspace{-.2cm}
+\label{overall} 
+\end{figure*}
+
 
 \patrizio{missing a figure here}
 In this work we propose a framework for supporting \textbf{execution} of MMRSs missions. 
@@ -1469,26 +1491,16 @@ More details about the adaptation process will be provided in the next section w
 
 
 
-\darko{end}
+
 
 
 
 
 \begin{figure}[h]
-\includegraphics[width=.5\textwidth]{Figures/AgentArchitecture1.pdf}
-\caption{Agent Architecture}\label{fig:agentsArchitecture}
+\includegraphics[width=.5\textwidth]{Figures/MAPE-K_FF.pdf}
+\caption{MAPE-K loop of an entity; Planning component consists of two sub-components Mission Manager(MM) and Safety Manager(SM) }\label{fig:agentsArchitecture}
 \end{figure}
 
-
-The agent architecture consists of 4 components:
-\begin{itemize}
-    \item \textit{Behavior Manager:} containing information about the overall behavior of an agent. Here the Behaviour Plans are stored as Behaviours in a Behaviour Tree. Each agent is assigned a Behaviour Tree. A behaviour tree is a run-time structure that represents the Behaviours associated with a specific agent. In the beginning of the mission, it contains all behaviours related to a specific agent $A_i$ to fulfill its part of the mission. During mission execution, the agent's behaviour tree may be updated as a result of violations in the behaviour plan with safety or mission related issues.
-    %conditions.
-   % Each behaviour in the Behaviour Tree is associated with a specific GOAL.
-    \item \textit{Execution manager} is in charge of :(i) interacting with the \textit{Behaviour Manager} to receive the information about the status of the current behaviour, (ii) checking when safety-related conditions are violated in order to trigger the \textit{Safety Manager} which is safety-specific adaptation component, (iii) checking when mission-related conditions are violated in order to trigger the \textit{Mission Manager} to perform mission problem resolution and (iv) to log mission data.
-    \item \textit{Safety Manager:} Contains "safety" solvers which are algorithms that generate a behavior for collision avoidance. These are agent-specific and defined before mission definition.
-    \item \textit{Mission Manager:} Contains solvers which generate a behavior for completing parts of the mission. These are mission-specific and employed  before the start of the mission.  
-\end{itemize}
 
 
 
@@ -1527,10 +1539,20 @@ Our framework implements a \textit{Mission Manager component} as part of the Pla
 
 %partitioning the different types of problems and solvers and 
 \subsection{Collective adaptation}
-At design time we assigned the goal space $G$ for a task $t$ to a set of agents $A$. A subregion $SR^t_i$ of a task $t$ that a specific agent $a_i$  was assigned to do can be decomposed in number of blocks with different dimensions with various different strategies. We showed in \cite{bozhinoski2015flyaq, di2013engineering} how we decompose the regions on blocks. Then, for each block we associate a goal location $G_i \in Coordinates$ and for each agent $a_i \in A$ involved in a specific task $t$ we generate a  behaviour plan $BP^t_i$ covering a sub-region $SR^t_i \in G$ from its home location $G^i_{home}$ to the last goal location $G^i_n$.
+At design time we assigned the goal space $G$ for a task $t$ to a set of agents $A$. On Figure~\ref{Fig:Synthesis} the goal space G is assigned to two agents $a_1$ and $a_2$. A subregion $SR^t_i$ of a task $t$ that a specific agent $a_i$  was assigned to do can be decomposed in number of blocks with different dimensions with various different strategies (ex. the rectangle delimited by q11, q16, q15, and q12 in Figure~\ref{Fig:Synthesis} is one block). We showed in \cite{bozhinoski2015flyaq, di2013engineering} how we decompose the regions on blocks.  
+Then, for each block we assigned a unique identifier and associate a goal location $G_i \in Coordinates$. 
+For each agent $a_i \in A$ involved in a specific task $t$ we generate a  behaviour plan $BP^t_i$ covering a sub-region $SR^t_i \in G$ from its home location $G^i_{home}$ to the last goal location $G^i_n$. 
+%(ex. on Figure~\ref{Fig:Synthesis} those are c1 and $G_9$ correspondingly)
 
- As mission-specific problems strongly depend on the type of tasks the MMRS performs, in this context, we define a mission-specific problem as a covering problem for a set of blocks in a subregion $SR^t_i \in G$ of a task $t$ that a specific entity $y_i=(a_i,r)$  was assigned, but was not able to cover. The uncovered region is called a \textit{problem's space}.
-Accordingly, we focus only on one type of mission-specific solvers which represent behaviour \textit{strategies} for covering a region.
+\begin{figure}[h]
+\includegraphics[width=3.25in]{Figures/Synthesis2.png}
+\caption{Task assignment for two agents}\label{Fig:Synthesis}
+\end{figure}
+
+
+
+ As mission-specific problems strongly depend on the type of tasks the MMRS performs, in this context, we define a mission-specific problem as a coverage path planning problem for a set of blocks in a subregion $SR^t_i \in G$ of a task $t$ that a specific entity $y_i=(a_i,r)$  was assigned to cover, but was not able. The uncovered region is called a \textit{problem's space}.
+Accordingly, we focus only on one type of mission-specific solvers which represent \textit{strategies} for covering a region. The mission-specific solvers are formulated as algorithms solving a coverage path planning problem which depends on the type of the geometry of the task $t$. Example of a solver can be an algorithm that generates a solution for covering a region with respect to a specified grid of points as in Figure~\ref{Fig:Synthesis}.
 
  %and here, we defined mission tasks as covering problems, in this paper  our collective adaptation based 
 %coverage path planning problem. 
@@ -1555,13 +1577,14 @@ Our definition of a solver in this particular context allows partial solving of 
 % and we provided a general type algorithm for problem resolution. 
 
 %should be able to cover a part or the full region defined in the problem.
-In this context, \textit{Mission problem resolution} consists in reducing the problem space of a problem until the problem space is empty or until a specific time deadline is reached. We formally define a solution of the mission problem resolution as follows.
+In this context, \textit{Mission problem resolution} consists in reducing the problem space of a problem until the problem space is empty or until a specific time deadline is reached. We believe that cooperation in emergent application scenarios requires a new kind of problem resolution approach which is efficient in terms of short delay, so we defined a time deadline until when a solution should be found. If a full solution to the problem is found before the deadline, the mission problem resolution process don't need to wait until the deadline is reached, but it immediately returns the found solution.
+We formally define a solution of the mission problem resolution as follows.
 
 \begin{definition}
 A solution in the mission problem resolution $R$ is defined as:
 $Sol=\max \limits_{ \emptyset \leq P_i \leq P_o} R(E_i, P_i, d)$
 %$$MR=\lim_{P_i\to \emptyset; t \to d} f(E_i, P_i, max(S_i)))$$ 
-where $E_i$ is the ensemble solving a problem $P_i$, $P_0$ is the initial problem that should be solved and $d$ is a time deadline until a solution should be found.
+where $E_i$ is the ensemble solving a problem $P_i$, $P_0$ is the initial problem that should be solved, $d$ is a time deadline and $Sol$ is the best solution found for that particular time deadline $d$.
 %$\sum_{\substack{1 \le i \le 10 \\ 1 \le j \le 5}}^\infty x^{i} y^{j} $
 
 %$\max\limits_{\substack{0 \leq t \leq d; \\ \emptyset \leq P_i \leq P_o}} x^i y^j$
@@ -1575,32 +1598,9 @@ where $E_i$ is the ensemble solving a problem $P_i$, $P_0$ is the initial proble
 
 %In other words that means that the region that should be covered by a particular set of agents. 
 
-We believe that cooperation in emergent application scenarios requires a new kind of problem resolution approach which is efficient in terms of short delay and which does not require knowledge of which and how many agents are in the system in a particular point of time. 
-That is why we propose a best-effort approach for mission problem resolution that consists of three phases:
-\begin{itemize}
-\item discover phase 
-\item construct phase
-\item commit phase
-\end{itemize}
- 
+%We believe that cooperation in emergent application scenarios requires a new kind of problem resolution approach That is why
 
 
-
- In the discover phase,  %information regarding 
- %which could be the 
- the possible entities that can participate in the mission problem resolution are found. At any point of time during mission execution, each entity in the system has partial view of the system that consists of a list of entities \textit{neighbours} that can communicate with. Neighborhood $NR$ is a region of an entity $e_i$ that gives information with which other entities can communicate in a particular point of time $\tau$.
- %at that time.
- Each entity that contains an active solver(solver for which the preconditions for activation are fulfilled) %and can generate a solution
- can contribute towards a solution to the mission-specific problem if it is in a \textit{communication range} with the entity that triggered the problem. We will explain what we mean by that later. \\
- In the \textbf{discover phase}, those entities are found
- %resolution process is discovered 
- and a \textit{temporal} ensemble is formed. \textit{Temporal} ensemble consists of all possible entities that might participate in the resolution process.\\
- In the \textbf{construct phase}, each discovered entity in the \textit{temporal} ensemble contributes towards the global solution formation.
- Solutions are composed from multiple solvers from different entities, the same way problems can be decomposed on multiple sub-problems. The entity that triggered the problem resolution process  decides which is the \textit{best} solution and which part from the temporal ensemble contributes towards it.\\
-In the \textbf{commit phase}, the entity that triggered the problem resolution process requires a commitment from each entity that contributes towards the best solution.
-%in the "temporal" ensemble. 
-In meanwhile, some of the entities might leave the \textit{temporal} ensemble due to a lack of resources, because they have commitment for another problem resolution process or because the entity is not anymore in the communication range of the one that triggered the problem\darko{this is not in the code}.
-After entities commit their resources for execution, a \textit{final solution} is obtained. The ensemble that provided the final solution is called \textit{stable ensemble}. A stable ensemble is the ensemble that provides guarantees about the proposed solution i.e. if all behaviours from all entities in the final ensemble execute correctly (according to the generated plan), the final solution will be guaranteed.
 %executed. 
  %We will explain the whole approach in more details in the next section.
 
@@ -1654,20 +1654,16 @@ The main section of the ensemble specification is
 the \textit{ensemble membership} which defines the
 structure of the ensemble.
 A structure of an ensemble is defined through the ensemble
-roles the agents can participate in. A partial EDL Specification for the mission resolution ensembles is presented on Listing 1.
-
-\begin{lstlisting}[caption=EDL Specification for mission resolution ensembles, language=Python]
+roles the agents can participate in. A partial EDL Specification for the mission resolution ensembles is presented on Listing~\ref{lstEDLMission}.
+\begin{lstlisting}[caption=EDL Specification for mission resolution ensembles, language=Python, label=lstEDLMission]
 ensemble MissionResolution
     id Leader: Agent
     membership
         roles
            Leader : Agent
-           Solver_Agent_1 [1..n]: Agent
-           Solver_Agent_2 [1..n]: Agent
-           ...
-           Solver_Agent_N [1..n]: Agent
+           Solver_Agent [1..n]: Agent
     constraints
-        constraint Agent.hascommpath(Root)
+        constraint Agent.hascommpath(Leader)
     fitness sum Leader.solution.quality+Solver_Agent.solution.quality
     knowledge exchange
         Agent.target = Leader.id
@@ -1700,11 +1696,13 @@ structure of the ensemble is defined by declaring the ensemble
 roles that the components can participate in.
 In our case, an agent can play one of the following roles in the mission resolution ensemble:
 \begin{itemize}
-\item Leader (an agent that triggers a problem) and leads the ensemble formation
-\item Solver\_Agent\_1, Solver\_Agent\_2, ... , Solver\_Agent\_N  (roles of agents that participate in the solution creation of the aforementioned problem)
+\item Leader: an agent that triggers a problem $P_k$ and leads the ensemble formation
+\item Solver\_Agent: an agent that participate in the solution creation of the aforementioned problem $P_k$
+%\_1, Solver\_Agent\_2, ... , Solver\_Agent\_N  
+%(roles of agents that participate in the solution creation of the aforementioned problem)
 %\item LEADER (an agent that provides a final solution to a triggered top-level problem case). In situations where the ROOT\_AGENT provides a partial solution to its triggered problem case, the agent that has the role ROOT\_AGENT has also the role ROOT LEADER ENSEMBLE
 \end{itemize}
-An agent can play more then one role in the ensemble i.e. it can be a leader and a solver\_agent\_x (it can trigger a problem, but at a same time it can provide a partial solution to the problem it triggered).
+An agent can play more then one role in the ensemble i.e. it can be a leader and a solver\_agent (it can trigger a problem, but at a same time it can provide a partial solution to the problem it triggered).
 %Role is a set of behaviours that an agent can "play" at run-time for execution of a TASK. The agent can play a specific role only if it satisfies the constraints c. These type of constraints usually are:  (1) information if the AGENT contains a specific resource or (2) information about the state of a resource of an AGENT. 
 %(Example. The GROUND STATION (TYPE AGENT) can't play the ROLE "PHOTOGRAPHER. (1) A drone can play the ROLE "Photographer" only if it has a CAMERA. (2) A drone can play the ROLE "Photographer" only if it has "enough" battery). Roles are reusable units.
 %Role is a run-time instance that 
@@ -1739,7 +1737,7 @@ In other words, each entity in the ensemble should have a neighborhood region th
 %for each entity in the ensemble overlaps 
 %neighborhood region of another e
 of at least one other entity from the same ensemble.
-Here, we take in consideration the fact that all entities preserved their position in the environment (they are static for some time period $\tau$). 
+Here, we assume that all entities preserved their position in the environment (they are static for some time period $\tau$). 
 %i it taking in consideration the fact that all Agents preserved their position in the environment.
 The third part of the membership definition is the fitness function, specified with a numeric expression. The fitness function provides information about which aspect of the ensemble membership should be optimized. That gives the framework a way to decide which agents should participate in the ensemble formation. More precisely, ensemble instances will be created in such a way to maximize the fitness function. In our example, the fitness function is calculated as a sum of the solution quality provided by all entities in the communication range of the leader. Finally, knowledge exchange is specified, creating an information exchange between the members of the ensemble. In our case, we have exchange of three types of information. First, is the information on which agent is the leader in the ensemble (line 14), second each of the agents in the ensemble has information about the problem that should be solved (line 15) and last is the solution that the leader obtains 
 %about the solution that can be provided 
@@ -1757,22 +1755,57 @@ for each agent in the ensemble (line 16).
 
 % The resolution process consists of formation of an ensemble where each agent contributes towards the problem resolution with a partial solution.
 
+We propose a best-effort approach for mission problem resolution which is efficient in terms of short delay and which does not require knowledge of which and how many entities(agents) are in the system in a particular point of time.
 To realize our approach, we abstractly define a recursive best-effort algorithm that covers the procedure for mission problem resolution.
-The algorithm starts from an agent $a_i$ that originally detected a Problem $P_i$ and expects to commit a solution until a time deadline $d$.
+The algorithm starts from an entity $e_i$ that originally detected a Problem $P_i$ and expects to commit a solution until a time deadline $d$.
 %The function is called locally by an agent $a_i$ that originally detected a Problem $P_i$ and expects to commit a solution until a time deadline $d$. 
 Further recursive calls are propagated to other agents in the environment using events.
 %a Remote Procedure Call.
-As described  previously, the algorithm consists of three phases:
-\begin{itemize}
+
+The algorithm consists of three phases:
+\begin{enumerate}
 \item discover phase 
 \item construct phase
 \item commit phase
-\end{itemize}
- In the \textbf{discover phase}, the possible agents in the dynamic ensemble are found. Each of the agents that can contribute towards a solution to a specific problem and have a communication path towards 
+\end{enumerate}
+ 
+ In the \textbf{discover phase},  %information regarding 
+ %which could be the 
+ the possible entities that can participate in the mission problem resolution are found. Each of the entities that can contribute with a solution to a specific problem and have a communication path towards 
  %the agent that triggered the problem
- the leader are discovered and links between each of the corresponding agents is created. \\
- In the \textbf{construct phase}, each of the agents in the communication range contributes towards the global solution by resolving a particular sub-problem of the general problem, and produces a solution with some specific quality until a specific deadline $d$ is reached.
- In the \textbf{commit phase}, the leader of the ensemble knows how well each of the agents can solve a particular sub-problem so it sends request to the agents that can contribute with the best solution to commit their resources to this execution. After agents in the ensemble commit their resources for execution, a \textit{stable ensemble} is formed and the \textit{final solution} is obtained.
+ the leader are discovered and links between each of the corresponding entities is created. 
+ At any point of time during mission execution, each entity in the system has partial view of the system that consists of a list of entities \textit{neighbours} that can communicate with. Neighborhood $NR$ is a region of an entity $e_i$ that gives information with which other entities can communicate in a particular point of time $\tau$.
+ %at that time.
+ Each entity that contains an active solver(solver for which the preconditions for activation are fulfilled) %and can generate a solution
+ can contribute towards a solution to the mission-specific problem if it is in a \textit{communication range} with the entity that triggered the problem. In the \textbf{discover phase}, those entities are found
+ %resolution process is discovered 
+ and a \textit{temporary} ensemble is formed. The \textit{temporary} ensemble consists of all possible entities that might participate in the resolution process.
+ 
+ In the \textbf{construct phase}, each discovered entity in the \textit{temporary} ensemble contributes towards the global solution formation.
+ Each of the entities in the communication range contributes towards the global solution by resolving a particular sub-problem of the general problem, and produces a solution with some specific quality $q$ until a specific deadline $d$ is reached. Hence, solutions are composed from multiple solvers from different entities, the same way problems can be decomposed on multiple sub-problems. In the end, the entity that triggered the problem resolution process  decides which is the \textit{best} solution and which part of the temporary ensemble contributes towards it.
+ 
+%In the \textbf{commit phase}, the entity that triggered the problem resolution process requires a commitment from each entity that contributes towards the best solution.
+%in the "temporary" ensemble. 
+In the \textbf{commit phase}, the leader of the ensemble knows how well each of the entities can solve a particular sub-problem so it sends request to the entities that can contribute with the best solution to commit their resources. 
+%After agents in the ensemble commit their resources for execution, a \textit{stable ensemble} is formed and the \textit{final solution} is obtained.
+Meanwhile, some of the entities might leave the \textit{temporary} ensemble due to a lack of resources, because they have commitment for another problem resolution process or because the entity is not anymore in the communication range of the one that triggered the problem\darko{this is not in the code}.
+After entities commit their resources for execution,   a \textit{stable ensemble} is formed and the \textit{final solution} is obtained.
+%a \textit{final solution} is obtained. 
+The ensemble that provided the final solution is called \textit{stable ensemble}. It is the ensemble that provides guarantees about the proposed solution i.e. if all behaviours from all entities in the final ensemble execute correctly (according to the generated behaviour plan), the final solution will be guaranteed.
+
+
+
+%As described  previously, the algorithm consists of three phases:
+%\begin{itemize}
+%\item discover phase 
+%\item construct phase
+%\item commit phase
+%\end{itemize}
+% In the \textbf{discover phase}, the possible agents in the dynamic ensemble are found. Each of the agents that can contribute towards a solution to a specific problem and have a communication path towards 
+ %the agent that triggered the problem
+ %the leader are discovered and links between each of the corresponding agents is created. \\
+ %In the \textbf{construct phase}, each of the agents in the communication range contributes towards the global solution by resolving a particular sub-problem of the general problem, and produces a solution with some specific quality until a specific deadline $d$ is reached.
+ %In the \textbf{commit phase}, the leader of the ensemble knows how well each of the agents can solve a particular sub-problem so it sends request to the agents that can contribute with the best solution to commit their resources to this execution. After agents in the ensemble commit their resources for execution, a \textit{stable ensemble} is formed and the \textit{final solution} is obtained.
  %is the  minimal solution in the mission resolution process.  
  
  For our algorithm to work we take in consideration the following assumptions:
@@ -1780,12 +1813,12 @@ As described  previously, the algorithm consists of three phases:
 \item All missions problems can be decomposed on sub-problems
 \item The agent that triggered the problem does not fail between the time it triggers a problem and commits a solution to an ensemble %for execution
 \item There exists connectivity between the agent that triggered the problem and at least one other agent in the environment for an adaptation to happen (that agent can be the same agent that triggered the problem)
-\item There is not big difference in the resource configuration for one agent %agent variance in the resources of an agent 
+\item There is not a noticeable difference in the resource configuration for one agent %agent variance in the resources of an agent 
 between the time it proposes a solution and commits its solution
-\item There is not a big difference in the %large variance in the 
+\item There is not a noticeable difference in the %large variance in the 
 connectivity formation between agents that proposed solution and commit their solutions
 \item The last two assumptions are translated to the following assumption: % bigger assumption 
-there isn't a big difference between the  solution  quality the moment  a solution is proposed and the moment a solution is committed.
+there isn't a noticeable difference between the  solution  quality the moment  a solution is proposed and the moment a solution is committed.
 \end{itemize}
 
 %\begin{itemize}
@@ -1799,7 +1832,7 @@ there isn't a big difference between the  solution  quality the moment  a soluti
 
 
 The decentralized mission manager for an entity $r_i \in R$ is shown in
-Listing 2 in the form of a state machine, which is executed by
+Listing~\ref{lstMission} in the form of a state machine, which is executed by
 each entity in the system. It is presented in the form of pseudo-code that closely represents the syntax of the P programming language.
 A P program comprises of concurrently executing state machines communicating asynchronously with each other
 using events accompanied by typed data values. Each state machine
@@ -1818,7 +1851,7 @@ to target machine $r_k$. An entity $r_i$ broadcasts event ev with payload d to a
 
 
 
-\begin{lstlisting}[caption=Mission problem resolution algorithm, language=Python]
+\begin{lstlisting}[caption=Mission problem resolution algorithm, language=Python, label=lstMission]
 machine MissionResolution{
  start state Discover{
   on TriggerMissionProblem(problem Pi) do{
@@ -2172,7 +2205,7 @@ state RequestCommit{
  
  
  
-Now we will describe the algorithm in Listing 2. 
+Now we will describe the algorithm in Listing~\ref{lstMission}. 
 The mission-problem resolution state machine has three states: \textit{Discover}, \textit{ConstructSolution} and \textit{RequestCommit}. 
 It contains the following variables which are important for understanding the code: 
 ri - represents the id of the robot that executes the state machine, P is the whole problem space for which the entity has already proposed a solution, S is the global solution that the leader obtains, timerV is a state machine that is instantiated when a problem is triggered, sol is a local solution provided by an entity in the ensemble. \\
@@ -2194,10 +2227,10 @@ If there is a partial solution, the problem space is reduced to \textit{Pj} (\te
 The events \textit{ReqForSolver} and \textit{onSolutionFound} are used for ensemble formation. 
 They create the links between the different ensemble participants that provide solution in the resolution process. For each link, a corresponding problem communication is derived. For each problem communication, a combination of potential solutions is identified across all reachable entities and returned. The entity that triggered the Problem stays in the \textit{ConstructSolution} state until the timeout is reached. When the \textit{Timer} machine sends \textit{TIMEOUT} event to the entity that triggered the problem, the same entity goes to \textit{RequestCommit} state.
 
-\textbf{Lines 25-50.}
+\textbf{Lines 52-68.}
 Upon entering the RequestCommit state, the function \textit{find\_best\_solution} is executed to identify the best solution \textit{sbest} and which combination of entities contributes to \textit{sbest} (line 54). The function \textit{find\_best\_solution} is beyond the scope of this paper but generally is a domain and application specific. Finally, the leader sends the event \textit{commit} to ask the ensemble participants in the specific problem resolution to commit their resources. 
 It should be noted that in the time between the solution is proposed and the solution is chosen, some deviations of resources important for problem resolution might be encountered. That is why the check function (line 19) checks the change in the proposed and the current solution, it updates the Behaviour Tree in the update() function \textbf{(line 20)} with the current state of the local solution and sends confirmation to the leader. When the leader receives confirmation from all ensemble participants (line 61) it updates its Behaviour Tree and transits to Discover State. 
-The algorithm provided in Listing 2 is able to resolve only one problem resolution triggered by one agent at one point of time without any recursion. Here, all the members in the ensemble can directly communicate with the leader. We propose an extension of the algorithm for resolving multiple problems triggered by different entities at a same time. Furthermore, sub-problems are recursively triggered across different entities in the system in order to have a larger range of possible solutions i.e. a leader can obtain a solution from an entity that can't directly communicate with it, but through another entity in the ensemble that is in its communication range. We define a data type  $MissionResolution = (PI, Ei, Si, ES, deadline, parent, PO, FE, FS)$ which is a tuple that contains information about one problem resolution (one ensemble) in which the entity participates.
+The algorithm provided in Listing~\ref{lstMission} is able to resolve only one problem resolution triggered by one agent at one point of time without any recursion. Here, all the members in the ensemble can directly communicate with the leader. We propose an extension of the algorithm for resolving multiple problems triggered by different entities at a same time. Furthermore, sub-problems are recursively triggered across different entities in the system in order to have a larger range of possible solutions i.e. a leader can obtain a solution from an entity that can't directly communicate with it, but through another entity in the ensemble that is in its communication range. We define a data type  $MissionResolution = (PI, Ei, Si, ES, deadline, parent, PO, FE, FS)$ which is a tuple that contains information about one problem resolution (one ensemble) in which the entity participates.
 It contains the following variables:
 %has the following data:
 \begin{itemize}
@@ -2205,20 +2238,21 @@ It contains the following variables:
 it can be generated as a result of the inadequacy between the entity configuration model and the model of its behaviour plan.
 \item \textit{parent} gives information from where the initial problem originates. If it is generated by the entity then parent receives the id of the robot $r_i$.
 \item \textit{PI} is a reduced version of the problem that is obtained after the entity proposes some solution. We use the value of PI for identifying the different resolution processes in which the entity participates.
-\item \textit{Ei} stores the information about which are the entities that participate in the temporal ensemble formation, 
-\item \textit{Si} is the solution proposed by the temporal ensemble 
+\item \textit{Ei} stores the information about which are the entities that participate in the temporary ensemble formation, 
+\item \textit{Si} is the solution proposed by the temporary ensemble 
 \item \textit{ES} is a matrix which gives information which entity proposed which solution
 \item \textit{deadline} is a timer machine that is instantiated when a problem is triggered and decides until which period of time an ensemble formation is allowed.
 \item \textit{FE} is the stable ensemble which is obtained after commitment.
 \item \textit{FS} is the final solution proposed by the stable ensemble
 \end{itemize}
 %MAX\_DELAY is the 
-We represent a simplified version of the communication between two entities where one is a leader and one is solving the problem in Figure 6.
 
-\begin{figure}[h]
-\includegraphics[width=3.25in]{Figures/MissionResolution_SD.pdf}
-\caption{Overview of the communication between two entities, problem triggered by the one in the left side}
-\end{figure}
+%We represent a simplified version of the communication between two entities where one is a leader and one is solving the problem in Figure~\ref{fig:MissionR}.
+
+%\begin{figure}[h]
+%\includegraphics[width=3.25in]{Figures/MissionResolution_FK.pdf}
+%\caption{Overview of the communication between two entities, problem triggered by the one in the left side}\label{fig:MissionR}
+%\end{figure}
 
 
 %<- robot_id; P <---- whole problem space
@@ -2236,12 +2270,12 @@ We represent a simplified version of the communication between two entities wher
 %returns the current state of the global solution.
 %The \textit{commit} event is a recursive function which goes through each participant in the resolution process and asks for resource commitment. Then, it updates the Behaviour Tree \textbf{(line 67)} with the current state of the local solution and it returns the current state of the global solution.
 
-We can represent each instance of the resolution process as a tree, which we will call problem resolution tree (Figure 7). On top of the tree is an entity that triggered the general problem $P0$, while each node in the lower levels in the tree represents an entity that decompose the problem of its father entity and provides a partial/full solution. In the end, we have a resolution tree consisting of nodes representing the entities in one possible instance of the problem resolution process. We define a \textit{hierarchical order} in the resolution tree depending on the \textit{communication range} of the entities. The order of an entity in the tree  
-is defined through the hop counter that refers to the number of intermediate entities through which information must pass between the entity and the leader in the ensemble. For example in Figure 7, the leader e1 might not be able to communicate its problem P1 with the entities e5,..., e10 which are the leafs in the resolution tree because of the limitation in its communication range, but it might need few entities from the ensemble that are able to transit the information to the leafs (like entities e2, e3, e4) which are in the communication range of the leader e1, but also in the communication range of the leafs in the tree. The order of the entities that can directly communicate with the leader is higher comparing to the entities that need an intermediate entity to relay (in Figure 6, the leader e1 has the highest order, while the leafs e5,...e10 have the lowest order).
+We can represent each instance of the resolution process as a tree, which we will call problem resolution tree (Figure~\ref{fig:MissionTree}). On top of the tree is an entity that triggered the general problem $P0$, while each node in the lower levels in the tree represents an entity that decompose the problem of its father entity and provides a partial/full solution. In the end, we have a resolution tree consisting of nodes representing the entities in one possible instance of the problem resolution process. We define a \textit{hierarchical order} in the resolution tree depending on the \textit{communication range} of the entities. The order of an entity in the tree  
+is defined through the hop counter that refers to the number of intermediate entities through which information must pass between the entity and the leader in the ensemble. For example in Figure~\ref{fig:MissionTree}, the leader e1 might not be able to communicate its problem P1 with the entities e5,..., e10 which are the leafs in the resolution tree because of the limitation in its communication range, but it might need few entities from the ensemble that are able to transit the information to the leafs (like entities e2, e3, e4) which are in the communication range of the leader e1, but also in the communication range of the leafs in the tree. The order of the entities that can directly communicate with the leader is higher comparing to the entities that need an intermediate entity to relay (in Figure~\ref{fig:MissionTree}, the leader e1 has the highest order, while the leafs e5,...e10 have the lowest order).
 
 \begin{figure}[h]
-\includegraphics[width=3.25in]{Figures/ResolutionTree_F1.pdf}
-\caption{Problem Resolution Tree}
+\includegraphics[width=3.25in]{Figures/ResolutionTree_FN.pdf}
+\caption{Problem Resolution Tree}\label{fig:MissionTree}
 \end{figure}
 
 A formal definition of the problem resolution tree is as follows. 
@@ -2281,10 +2315,10 @@ Each child in the tree decompose the problem received from its parent, so in the
 
 %\patrizio{write as a theorem, theorem environment of Latex} 
 
-\textbf{Correctness and completeness}
+\subsection{Correctness and completeness}
 To resolve mission resolution problems we used a gossiping protocol that aims to disseminate the information about a specific problem and finds a solution. To prove the correctness and completeness of the approach, we need to prove correctness and completeness of the algorithm. 
-Taking some additional assumptions, we prove correctness and completeness of the algorithm .\\
-\textbf{Correctness} 
+Taking some additional assumptions, we prove correctness and completeness of the algorithm.
+\subsubsection{Correctness} 
 
 In order to prove that our algorithm is correct, we assume that the solvers provided by the different entities are correct. 
 Correctness of a solver means that an entity's solver can generate a behaviour(solution) to resolve a particular mission related problem with a quality $q_a$. If that behaviour is executed correctly we have a correct adaptation.
@@ -2293,13 +2327,24 @@ What we mean by closeness to the agent is the following: in one instance of the 
 %is \textit{hierarchically closer} 
 %to the leader(entity that triggered the problem) 
 and can propose a solution $s_k$ to a sub-problem $p_k$ , then we consider that the solution $s_k$ has precedence over solutions that are able to solve the same sub-problem $p_k$, but are coming from other agents that have lower order in the hierarchy in this instance of the problem resolution process.  
-Because the communication between entities is limited, the algorithm is searching for solutions closer to the entity that triggered the problem $p_k$ and if it finds one, it stops the search for other solutions that are generated from entities that might produce solutions with better intrinsic quality, but are further from the leader. Thus, when we speak about hierarchy, we consider hierarchy of agents in terms of the problem resolution tree: the nodes that are closer to the root (meaning they need less number of hops to communicate with the root) have a higher order in the hierarchy comparing to nodes that are lower in the branching. Root has the highest order in the hierarchy, while the leafs have the lowest order in the resolution tree.
+Because the communication between entities is limited, the algorithm is searching for solutions closer to the entity that triggered the problem $p_k$ and if it finds one, it stops the search for other solutions that are generated from entities that might produce solutions with better intrinsic quality, but are further from the leader. Thus, when we speak about hierarchy, we consider hierarchy of entities in terms of the problem resolution tree: the nodes that are closer to the root (meaning they need less number of hops to communicate with the root) have a higher order in the hierarchy comparing to nodes that are lower in the branching. Root has the highest order in the hierarchy, while the leafs have the lowest order in the resolution tree.
 %hierarchy in the resolution tree.
 
-The only guarantees we can make about this resolution process is that the commited solution (if everything goes well) will be executed. That being said, the assumption is that there isn't a big difference in the solution quality between the moment a solution is proposed and a solution is chosen. That is why we assume that the time between a solution is proposed and a solution is commited is really small, that there isn't any change in the entity's resources and in the connectivity formation of the ensemble. However, change in the resources for the proposed solution might come if an entity participate in two different resolution processes triggered by different leaders. Our assumption is that if an entity participates in two different resolution processes from different leaders the usage of resources will not overlap. In these cases, we say that the commited solution quality is equal to the chosen solution quality. 
-However there is another case when an entity tries to propose multiple solutions in one problem resolution process. Here, we will proof that with our algorithm that won't be possible. 
+The leader when calculating the best solution, doesn't have the exact information how each entity in the ensemble contributes towards the final solution. The only information the leader of the problem resolution process has when making the decision is how each entity that is directly reachable (it can directly communicates with) can help in resolving part of the the bigger problem of the leader. All reachable entities might have formed sub-ensembles that contribute towards the final solution, but the leader does not have that information.
+For example a leader might be able to communicate with two entities that can provide some solution to the initial problem. Each of those two entities might have formed a temporary sub-ensemble. 
+The two temporary sub-ensembles are on the same hierarchical level and they might have one entity in-common, however they belong to different instances of the resolution process and can be represented with two different problem resolution trees. When the leader decides for the final solution it might consider a combination of both sub-ensembles which create the final solution and chooses a final \textit{stable ensemble} that is a combination of both sub-ensembles. We can represent the stable ensemble in one instance of the problem resolution tree as in Figure~\ref{fig:MissionTree}.
+
+The only guarantees we can make about this resolution process is that the commited solution (if everything goes well) will be executed. That being said, the assumption is that there should not be a noticeable difference in the solution quality between the moment a solution is proposed and a solution is chosen. Solution quality will remain the same if there isn't any change in the \textit{entity's resources} and in the \textit{connectivity formation} of the ensemble.
+That is why we assume that the time between a solution is proposed and a solution is commited is really small so that there isn't any change in the \textit{connectivity formation} of the ensemble (\textbf{Assumption 1}).
+%that  of the ensemble. Hence, we can say that the solution quality depends on these 
+However, change in the resources for the proposed solution might come if an entity participate in two different resolution processes triggered by different leaders. During problem resolution, entities might propose solutions for different problems in different ensembles. As the resources of the entities are limited, we made the assumption that
+%the quality of the commited solution is equal to the quality of the proposed solution meaning that
+the entity will not participate in two different resolution processes (resolution processes triggered by two different leaders) which overlap in the usage of the resources i.e. 
+if an entity participates in two different resolution processes from different leaders the usage of resources will not overlap (\textbf{Assumption 2}). 
+However, there is another case that impacts the quality of the solution and that is when an entity tries to propose multiple solutions in one problem resolution process. Here, we will proof that with our algorithm that won't be possible. 
 Thus, we define correctness as follows.
 
+In these cases, we say that the commited solution quality is equal to the chosen solution quality. 
 %Recollect that when computing a trajectory for a robotri
 %, the execution
 %of MRMP is decomposed into two phases: rst the coordination
@@ -2316,27 +2361,20 @@ Thus, we define correctness as follows.
 %\end{theorem}
 
 \begin{theorem}[Correctness]
-If an entity $e$ triggers a problem $P_i$, then the Mission Problem Resolution Algorithm finds and computes the best quality solution $S_i$  proposed by an Ensemble $E$ that is in the communication range of the entity $e$.
+If an entity $e$ triggers a problem $P_i$ and Assumption 1 and Assumption 2 are true, then the Mission Problem Resolution Algorithm finds and computes the best quality solution $S_i$  proposed by an Ensemble $E$ that is in the communication range of the entity $e$.
 \end{theorem}
 
 
 
 
 \begin{proof}
-As we mentioned earlier we assume that all mission related problems can be decomposed. Let's say we have an entity $e$ that triggered the problem $Pi$. $Pi$ can be decomposed on $m$ different different ways. For each different decomposition there is a sequence of local solutions proposed by an ensemble $E_m$  that combined together give a global solution $S_m$. The global solution $S_m$ is a sequence of local solutions $s_0, s_1, ..., s_k$, each of them with a particular quality $q_0, q_q, ..., q_k$ correspondingly. Let's assume there exists an ensemble consisting of \textit{n} entities for which there is a communication path between them and the leader(the ensemble might include the leader) and that they can provide the best final solution $S_i$ to a problem $P_i$. Correspondingly, we can decompose the solution to a sequence of local solutions $S_i=(s_0, s_1, s_2, ..., s_n)$ each with a particular quality  $q_0, q_q, ..., q_n$.  We can represent that ensemble using the problem resolution tree (Figure 7). 
-
-During problem resolution, entities might propose solutions for different problems in different ensembles. As the resources of the entities are limited, we made the assumption that the quality of the commited solution is equal to the quality of the proposed solution meaning that the entity will not participate in two different resolution processes (resolution processes triggered by two different leaders) which overlap in the usage of the resources.
-
-The leader when calculating the best solution, doesn't have the exact information how each entity in the ensemble contributes towards the final solution. The only information the leader of the problem resolution process has when making the decision is how each entity that is directly reachable (it can directly communicates with) can help in resolving part of the the bigger problem of the leader. All reachable entities might have formed sub-ensembles that contribute towards the final solution, but the leader does not have that information.
-For example a leader might be able to communicate with two entities that can provide some solution to the initial problem. Each of those two entities might have formed a temporary sub-ensemble. 
-The two temporary sub-ensembles are on the same hierarchical level and they might have one entity in-common, however they belong to different instances of the resolution process and can be represented with two different problem resolution trees. When the leader decides for the final solution it might consider a combination of both sub-ensembles which create the final solution and chooses a final \textit{stable ensemble} that is a combination of both sub-ensembles. We can represent the stable ensemble in one instance of the problem resolution tree as in Figure 7.
-
+As we mentioned earlier we assume that all mission related problems can be decomposed. Let's say we have an entity $e$ that triggered the problem $Pi$. $Pi$ can be decomposed on $m$ different different ways. For each different decomposition there is a sequence of local solutions proposed by an ensemble $E_m$  that combined together give a global solution $S_m$. The global solution $S_m$ is a sequence of local solutions $s_0, s_1, ..., s_k$, each of them with a particular quality $q_0, q_q, ..., q_k$ correspondingly. Let's assume there exists an ensemble consisting of \textit{n} entities for which there is a communication path between them and the leader(the ensemble might include the leader) and that they can provide the best final solution $S_i$ to a problem $P_i$. Correspondingly, we can decompose the solution to a sequence of local solutions $S_i=(s_0, s_1, s_2, ..., s_n)$ each with a particular quality  $q_0, q_q, ..., q_n$.  We can represent that ensemble using the problem resolution tree (Figure~\ref{fig:MissionTree}). 
 In order to prove that the algorithm is correct, 
 %we need computes the best quality solution 
 we need to prove that the computed solution $S_i$ by the leader of the stable ensemble $E_n$ is the best for the problem $P_i$.
 To prove that, we use the problem resolution tree of the \textit{stable ensemble}. The root of the tree is the leader. We need to prove that the solution calculated by the leader has the highest quality i.e. $S_i=(s_0, s_1, s_2, ..., s_n)$ each with a particular quality  $q_0, q_q, ..., q_n$.  
 As our mission problem resolution is recursive at 
-each node in the resolution tree, the algorithm calculates the best solution by considering the best combination of solutions proposed by its children. After calculating the best solution, it sends that solution to its parent. Starting from the leafs of the tree, the nodes calculate the best combination of solutions. In the end, the leader composes all combinations and calculates the best combination of solutions proposed by its children. If entity proposed solutions to multiple problems in the same instance of the problem resolution tree, the algorithm will return a value which might not be correct because of lack of resources for the entities that proposed multiple solutions.
+each node in the resolution tree, the algorithm calculates the best solution by considering the best combination of solutions proposed by its children. After calculating the best solution, it sends that solution to its parent. Starting from the leafs of the tree, the nodes calculate the best combination of solutions. In the end, the leader composes all combinations and calculates the best combination of solutions proposed by its children. If an entity proposed solutions to multiple problems in the same instance of the problem resolution tree, the algorithm will return a value which might not be correct because of lack of resources for the entities that proposed multiple solutions.
 %Hence, we need to have a set of n \textit{different agents} in the \textit{stable ensemble} contributing towards the final solution $S_i$.
 
 That is why we need to have (i) a set of n \textit{different agents} in the \textit{stable ensemble} contributing towards the final solution $S_i$  as a precondition for the leader to be able to correctly calculate the best possible solution. Our algorithm should not 
@@ -2375,7 +2413,7 @@ Taking in consideration these assumptions, we define the completeness of the app
 If a solution $S_i$ for a specific problem $P_i$ exists and we have an infinite time to find it, the algorithm is able to find it.
 \end{theorem}
 \begin{proof}
-If we represent one instance of the resolution process of problem $P_i$ as function that reduces problem $_Pi$, then we can represent each reduction of $P_i$ in a monotonic decreasing sequence, each instance representing the appropriate reductions of the problem $P_i$.
+If we represent one instance of the resolution process of problem $P_i$ as function that reduces problem $P_i$, then we can represent each reduction of $P_i$ in a monotonic decreasing sequence, each instance representing the appropriate reductions of the problem $P_i$.
 According to the monotone convergence theorem [reference needed \darko{Where to find good reference for this}], if a sequence is decreasing and is bounded below by a minimum, in some infinite time will reach that minimum. In our case, the minimum would be the problem that corresponds to the final solution $S_i$ that in ideal situation will be the empty set.
 Having that for all instances of the mission resolution process, we can conclude completeness.
 \end{proof}
@@ -2505,13 +2543,19 @@ For the third type of problems (collision avoidance between agents), our framewo
 To resolve safety problems related to collision between agents, our framework uses the concept of ensembles described above.
 Agents dynamically form collaborative groups using attribute-based communication ensembles as described in \todo{[reference needed]} to gain benefits that otherwise
 would not be possible. In safety problem resolution, the agents must follow certain rules and in return the ensemble offers a guarantee that if all single agents follow the rules, safety will be preserved. Adherence to these collective
-rules temporarily reduces the flexibility of the collaborating agents, but has a strongly positive impact on safety. Comparing to mission resolution where \del{the} those collective rules are more flexible, the safety resolution requires stronger, more precise, and detailed rules. 
+rules temporarily reduces the flexibility of the collaborating agents, but has a strongly positive impact on safety. Comparing to mission resolution where those collective rules are more flexible, the safety resolution requires stronger, more precise, and detailed rules. 
 
 
-A safety ensemble is primary determined by the agents that collaborate to solve a safety solver. In a collision between multiple agents, our safety resolution procedure consists of: (i) a protocol for on-the-fly ensemble formation for safety resolution and (ii) a recursive function that is initially called locally by the ensemble leader to select and commit a solution. In the safety problem resolution, all entities in the ensemble \ugh{need}\patrizio{need or might?} to participate in the solution creation \ugh{because of the binary nature of the solution i.e. we might have full solution or not solution at all,
+A safety ensemble is primary determined by the agents that collaborate to solve a safety solver. In a collision between multiple agents, our safety resolution procedure consists of: (i) a protocol for on-the-fly ensemble formation for safety resolution and (ii) a recursive function that is initially called locally by the ensemble leader to select and commit a solution. In the safety problem resolution, all entities in the ensemble must  participate in the solution creation because full solution is required. What we mean here is that we treat safety as binary (MMRS is safe or not). In contrast, in the mission resolution a partial solution is enough for solving a particular problem.
+%Because of this perspective of the problem, all entities in the safety resolution problem must perform their corresponding behaviours for safety to be satisfied i.e. to have a full solution.
+%Safety has a binary value (the system is safe or not), while  All participants in the safety ensemble must participate in the 
+%because of its binary nature. What we mean by the binary nature is that  of the solution is that 
+%s hard constraints, whose full satisfaction is required
+%\ugh{because of the binary nature of the solution i.e. we might have full solution or not solution at all,
 %which give a 
 %full solution to the problem 
-while in the mission resolution a partial solution is enough for solving a particular problem} \patrizio{please explain better...not so clear}.
+%while in the mission resolution a partial solution is enough for solving a particular problem}
+%\patrizio{please explain better...not so clear}.
 If one agent fails to comply to the rules in the ensemble, safety will be compromised. Here, the shape and structure of the ensemble is strongly correlated with the type of the safety problem due to the fact that all involved participants need to generate their corresponding behaviours to guarantee the safety of the system.
 
 
@@ -2521,7 +2565,7 @@ If one agent fails to comply to the rules in the ensemble, safety will be compro
 
 
 
-\begin{lstlisting}[caption=EDL Specification for safety resolution ensembles, language=Python, mathescape=true]
+\begin{lstlisting}[caption=EDL Specification for safety resolution ensembles, language=Python, mathescape=true, label=lstSafety]
 ensemble SafetyResolution
     id Leader: Agent
     membership
@@ -2542,39 +2586,42 @@ ensemble SafetyResolution
 %(Leader.solution+Solver_Agent.solution)==FULL  
 %(position,speed)
 %(center, speed)     \forall a  \in VR(a1)
-We  specify the ensemble  type  used  for  safety  problem resolution on Figure \todo{xxx. Do you mean Listings 3?}. To identify the ensemble, we declare a leader  agent  to  be  the  id  of  the  ensemble - essentially saying that instances of this ensemble type cannot be created without the ensemble being associated with \chg{an}{a} unique agent instance, which can be seen as a coordinator of the ensemble. \patrizio{please explain better. Moreover in the listing (row 2), is id a variable? Then what's Leader? As I understand Agent is the type} 
+We  specify the ensemble  type  used  for  safety  problem resolution on Listing~\ref{lstSafety}. To identify the ensemble, we declare a leader  agent  to  be  the  id  of  the  ensemble - essentially saying that instances of this ensemble type cannot be created without the ensemble being associated with a unique agent instance, which can be seen as a coordinator of the ensemble. \patrizio{please explain better. Moreover in the listing (row 2), is id a variable? Then what's Leader? As I understand Agent is the type} 
 A Leader of an ensemble for safety resolution is an agent that leads the ensemble formation and decides for a safety resolution protocol.
 %has knowledge of all ensemble members.
 Example could be a fixed camera positioned in a particular point in the environment that checks if there is a possibility for collision between two or more robots or a robot that notices another robot in its visible region. Unlike the leader in the mission resolution ensemble, the leader in a safety resolution has knowledge of all the possible ensemble participants when decides for a solution type and when it starts the coordination of the problem resolution process.
 
 %the process of coordination.
-As we can see from Figure \todo{xxx},
+As we can see from Listing~\ref{lstSafety},
 the  ensemble  membership  function  consists  of  three  sections as before. First, the structure of the ensemble is defined by declaring the ensemble roles the agents can play. In  our  case, same as in the mission resolution, an  agent  can  play one  of  the  following  roles in the safety resolution ensemble:
 \begin{itemize}
 \item Leader - an agent that has the highest safety index and leads the ensemble formation
 %triggers the top-level PROBLEM\_CASE and leads the ensemble formation
 \item Solver\_Agent  (an  agent  that  can provide partial solution that contributes towards the final solution)
 \end{itemize}
-Next,  we  place  semantic  constraints,  represented  by  the constraint  expression.  In  our  safety resolution ensemble a  constraint  for  an agent  to  be  part of  the  ensemble  is  that  there  must  be  a communication  link between  the  corresponding  agent  and its  leader.  What  we  mean  here  is  that the Leader can communicate with all ensemble participants. The other very important aspect in the ensemble formation is the solution space. In contrast to the mission resolution ensemble, a safety resolution ensemble must provide a full solution, so we put that as a constraint. What we mean is that all ensemble participants agree to follow a specific protocol suggested by the Leader i.e. each entity in the ensemble must have a solver compatible to the solver proposed by the leader\patrizio{what's happen if an entity does not have a solver compatible to the solver proposed by the leader? Please explain here}. That means the full solution consists of combination of behaviours generated by all participants in the ensemble.
+Next,  we  place  semantic  constraints,  represented  by  the constraint  expression.  In  our  safety resolution ensemble a  constraint  for  an agent  to  be  part of  the  ensemble  is  that  there  must  be  a communication  link between  the  corresponding  agent  and its  leader.  What  we  mean  here  is  that the Leader can communicate with all ensemble participants. The other very important aspect in the ensemble formation is the solution space. In contrast to the mission resolution ensemble, a safety resolution ensemble must provide a full solution, so we put that as a constraint. Full solution consists of combination of behaviours generated by all participants in the ensemble. What we mean is that all ensemble participants agree to follow a specific protocol suggested by the Leader i.e. each entity in the ensemble must have a solver compatible to the solver proposed by the leader. Our assumption is that each entity has at least one solver that is compatible to the solvers of the rest of the system. We consider this assumption reasonable because we consider safety independently from the mission, so 
+all safety solvers can be independently embedded in the knowledge component before the start of the mission independently of its type.  
+%\patrizio{what's happen if an entity does not have a solver compatible to the solver proposed by the leader? Please explain here}. 
 The third part of the membership definition  is  the  fitness  function, providing  information  about which  aspect  of  the  ensemble  membership  should  be  optimized. In  our  example,  the  fitness  function  is represented as maximized solution quality of the leader that coordinates all ensemble participants. 
-Finally, knowledge exchange is specified, creating an information exchange between the members of the ensemble.  In  our  case,  we  have  exchange  of  three  types  of information.  First,  \patrizio{missing subject} is  the  information  of the agents' conflict\_region, which is calculated by the position of the agent and its corresponding speed 
+Finally, knowledge exchange is specified, creating an information exchange between the members of the ensemble.  In  our  case,  we  have  exchange  of  three  types  of information.  First,  it is  the  information  of the agents' conflict\_region, which is calculated by the position of the agent and its corresponding speed 
 %that generates the problem case
 (line 12). The conflict\_region is the safety region of an agent in a specific time interval during mission execution. Second, each of the entities in the  ensemble receives an information about a specific solver proposed by the Leader. Each entity in the ensemble receives information about a collision avoidance algorithm and the attributes of the algorithm (example of attributes of the algorithm might be the central point around which the entities will perform the collision avoidance protocol,  their corresponding speed, etc.) (line 13).
 Third, the leader gets information about the solution  of each entity in the ensemble (line 14).
 %that  can  be  provided  by  each  agent  in  the  ensemble(line 14).
 
 
-We defined the following protocol (Figure 8) that is used for on-the-fly ensemble formation when agents discover that they are facing with a possible collision among them. Each agent starts executing in the \textit{Discover} state. 
+We defined the following protocol (Figure~\ref{fig:STMachine}) that is used for on-the-fly ensemble formation when agents discover that they are facing with a possible collision among them. Each agent starts executing in the \textit{Discover} state. 
 If an agent $a_i$ notices other agents in its visible region, it broadcasts the $ReqforSafetyRegion$ event with identifier for the $VR$ - visible  region, the time $\tau$ when the message is sent and the identifier of the agent $id$, asking for the safety region $SR$ of the robots in its ``visible region" during some time period $\Delta\tau$. Then it goes to the \textit{WaitForResponse} state.
 
 \begin{figure}[h]
-\includegraphics[width=3.25in]{Figures/SafetyResolution_FF.pdf}
-\caption{State machine animating each entity in the safety resolution process \patrizio{better to represent states with circles instead of rectangles; it's more standard. Moreover the figure is unreadable}}
+\includegraphics[width=3.25in]{Figures/SafetyResolution_FFFF.pdf}
+\caption{State machine animating each entity in the safety resolution process}\label{fig:STMachine}
+% \patrizio{better to represent states with circles instead of rectangles; it's more standard. Moreover the figure is unreadable}}
 \end{figure}
 
 %that consists of the following data
 %checks if there could be a possible collision between the one that sends the message and itself. If the agent notices a possible collision, depending of its state
-When an agent receives the event \textit{ReqforSafetyRegion(msg)}, depending of state it is, it generates a message  $m=(r\_id: int, conflict\_region: R, ensemble\_state: int)$, where \textit{r\_id} is the identifier of the robot creating the message, the conflict region is a region in the environment that should not intersect with the region of operation of an active robot. If the agent is not part of an ensemble, the conflict region is equal to the agent's $SR^i_\Delta\tau$, while if the agent is part of an ensemble, it represents the \textit{execution region of the ensemble}, which is the union of the
+When an agent $a_i$ receives the event \textit{ReqforSafetyRegion(msg)}, depending of state it is, it generates a message  $m=(a_i:int;  conflict\_region:R; ensemble\_state:int)$, where \textit{$a_i$} is the identifier of the agent creating the message, the conflict region is a region in the environment that should not intersect with the region of operation of an active agent. If the agent is not part of an ensemble, the conflict region is equal to the agent's $SR^i_\Delta\tau$, while if the agent is part of an ensemble, it represents the \textit{execution region of the ensemble}, which is the union of the
 $SR^i_\Delta\tau$ of all ensemble constituents. The ensemble\_state gives information if the agent is part of an ensemble and if it is, it gives information in which phase of operation the ensemble is. It can be in one of the following states: 
 \begin{itemize}
 \item \textbf{NO\_ENSEMBLE:} means that the agent is not part of an ensemble
@@ -2584,33 +2631,48 @@ means that the agent is a part of an ensemble that is established and it execute
 \end{itemize}
 
 
-In the \textit{WaitforResponse} state, the agent waits to receive feedback from all the agents that were found in its visible region $VR$. When it receives message from all the agents in its visible region it goes to a state \textit{Decide}. In state \textit{Decide}, the agent goes through all messages and does the following: first, it checks if there is a possible collision between the agent that sends the message \ugh{and itself}\patrizio{?}.  
-If there is a possible collision it does one of the following:
-(i)if the message is from an agent \ugh{that is an ensemble that is} in execution phase and can't be interrupted, it considers it as a dynamic obstacle and adds it in its collision region $CollisionR$; (ii) if the message is from an agent that is in an ensemble that is in an initialization phase it considers the possibility to join to that ensemble, \chg{(ii)}{(iii)} otherwise it considers the possibility to starts with the initialization of an ensemble.\patrizio{these items are difficult to follow. Use proper items}
+In the \textit{WaitforResponse} state, the agent $a_i$ waits to receive feedback from all the agents that were found in its visible region $VR$. When it receives message from all the agents in its visible region it goes to a state \textit{Decide}. In state \textit{Decide}, the agent goes through all messages and for each message it does the following: first, it checks if the agent $a_j$ that sends the message might collide with $a_i$.
+%there is a possible collision between  \ugh{and itself}\patrizio{?}.  
+If there is a possible collision it categorize the message in one of the following categories:
+\begin{enumerate}
+\item  \textbf{Category 1:} The message is from an agent $a_j$ that is a part of an ensemble in an initialization state (ensemble\_state=initialization). In this case, the agent $a_i$ considers the possibility to join to that ensemble, 
+\item \textbf{Category 2:} The message is from an agent $a_j$ that is not part of an ensemble (ensemble\_state=no\_ensemble). Here, the agent $a_i$ considers the possibility to start with initialization of an ensemble.
+%\patrizio{these items are difficult to follow. Use proper items}
+\item \textbf{Category 3:} The message is from an agent $a_j$ that is a part of an ensemble that is in planning\&execution state (ensemble\_state=planning\&execution). In this case, the agent $a_i$ considers the conflict\_region received in the message as a dynamic obstacle and adds it in its collision region $CollisionR$. The ensemble in planning\&execution state can't be interrupted.
+\end{enumerate}
 
-After the iteration through all the messages it\patrizio{who is it?} does the following decision:
+After $a_i$ finishes the iteration through all the messages, it does the following decision:
 \begin{itemize}
-\item if there is at least one message from an agent \ugh{that is in ensemble that is in an initialization phase} (statement B in Figure 8. is true), it\patrizio{who is it?} goes to state \textit{JOIN}. \ugh{In this state it considers all collision regions of the agents that are in an ensemble that is in execution phase as a dynamic obstacle and initiates the joining process.} If there are multiple messages from agents that are in ensemble\_state==INITIALIZATION, it considers only joining to the agent 
-that has the highest safety index.  
-%the highest identifier that is placed in the variable \textit{entity} (line x).
-\item \ugh{If there isn't any message from an agent that is in ensemble that is in an initialization phase} (statement B is false), it checks if there is at least one message from an agent that is no part of any ensemble (ensemble\_state=``NO\_ENSEMBLE") i.e. if statement A in Figure \todo{8} is true. If there are multiple messages of that kind, with the function \textit{findsafestrobot} it finds the identifier of the agent with the highest safety index in its visible region. If the agent has the highest safety index in its visible region, it goes into state \textit{FORMING} from where it starts the initialization of the ensemble, otherwise it goes into state \textit{INITIALIZE}.
-\item This is the case when the agent has received only messages from agents that are parts of ensembles that are in their planning\&execution phase. In this case the agent goes into the \textit{AVOID} state where the agent acts as it discovered a dynamic obstacle. In this state the agent should activate some of its solvers for dynamic obstacle avoidance that are able to generate a behavior(solution) for a dynamic obstacle avoidance. In this state, the entity performs isolated adaptation and threats this problem on the same level as a dynamic obstacle.
+\item if there is at least one message from \textit{category 1} 
+%an agent \ugh{that is in ensemble that is in an initialization phase}
+(statement B in Figure~\ref{fig:STMachine}. is true), the agent $a_i$ goes to state \textit{JOIN} and initiates the joining process. 
+%\ugh{In this state it considers all collision regions of the agents that are in an ensemble that is in execution phase as a dynamic obstacle and initiates the joining process.} 
+If there are multiple messages from \textit{category 1}, the agent $a_i$ considers only joining to the ensemble which leader thas the highest safety index.  
+%the highest identifier that is placed in the variable \textit{entity} (line x) agents that are in ensemble\_state==initialization.
+\item %\ugh{If there isn't any message from an agent that is in ensemble that is in an initialization phase}
+if there isn't any message from \textit{category 1} (statement B in Figure~\ref{fig:STMachine} is false), it checks if there is at least one message from \textit{category 2} i.e.
+%an agent that is no part of any ensemble (ensemble\_state=``NO\_ENSEMBLE") i.e. 
+if statement A in Figure~\ref{fig:STMachine} is true. If there are multiple messages of that kind, with the function \textit{findsafestrobot} it finds the identifier of the agent with the highest safety index in its visible region. If the agent has the highest safety index in its visible region, it goes into state \textit{FORMING} from where it starts the initialization of the ensemble, otherwise it goes into state \textit{INITIALIZE}.
+\item This is the case when the agent has received only messages from agents that are parts of ensembles that are in their planning\&execution phase (\textit{category 3}). In this case the agent $a_i$ goes into the \textit{AVOID} state where the agent acts as it discovered a dynamic obstacle. In this state the agent should activate some of its solvers for dynamic obstacle avoidance that are able to generate a behavior(solution) for a dynamic obstacle avoidance. Here, the agent performs isolated adaptation and threats this problem on the same level as a dynamic obstacle.
 %and threat the whole ensemble conflict region as a dynamic obstacle.
 \end{itemize}
 
-We define conflict set $Rconf$ for an entity $e$ as the set of entities that are in its visible region, can collide with $e$ and are not part of an ensemble that is in planning\&execution phase. This means that $Rconf$ entities are ``open" for performing an appropriate collision avoidance protocol that should avoid the possible collision.
+We define conflict set $Rconf$ for an entity $e$ as the set of entities that are in its visible region, can collide with $e$ and are not part of an ensemble that is in planning\&execution phase (entities that have send messages from category 2 and category 3). This means that $Rconf$ entities are ``open" for performing an appropriate collision avoidance protocol that should avoid the possible collision.
 
 From the \textit{INITIALIZE} state, the entity waits for a message \textit{m} from the agent that has the highest safety index in its visible region to decide in which state it should go. If it receives a message  that there exists another entity with a higher safety index (statement D is true), it transits to a \textit{JOIN} state from where it starts the procedure for joining an existing ensemble. 
 Otherwise, if it receives an \textit{ACCEPT} message means that the agent with the highest safety index in its visible region started the process for ensemble creation, and then it goes to a state \textit{Coordinate}. That means that there isn't any other entity with higher safety index in both of their visible regions.\\
 The entity in the \textit{FORMING} state is a possible leader(coordinator) of an ensemble. The entity in this state sends ensemble ``proposal" requests to the entities that are in its vision region and have safety regions that overlaps with its safety region at some point of time in the future.
 %announced a possible conflict meaning their safety regions at some point of time might overlap.
-The entity stays in the \textit{FORMING} state until one of the following happens: 
+The entity  $e_i$ stays in the \textit{FORMING} state until one of the following happens: 
 \begin{itemize}
 \item  it receives a message from an entity in its visible region that ``rejects" its ensemble ``proposal" meaning that the entity that send the message ``knows" about another entity that has a higher safety index, so that entity should be the coordinator/leader of the ensemble (statement D is true). In that case, the entity that received the message directly goes into state \textit{JOIN}.
-\item it receives a message from all entities in $Rconf$ 
+\item it receives a message from all entities in $Rconf$ and they all accepted the proposal for ensemble creation.
 %its conflict zone \darko{define conflict zone earlier}
 %visible region that might collide with it 
-\ugh{that they agree with the proposal for ensemble creation}. That means statement D is false i.e. \ugh{there isn't any entity in its visible region that knows about other entity that} is in the \textit{FORMING} state and has a higher safety index.
+%\ugh{that they agree with the proposal for ensemble creation}. 
+That means statement D is false i.e. there isn't any entity in $Rconf$ that "knows" about other entity $e_j$ that
+%with higher safety index  \ugh{there isn't any entity in its visible region that knows about other entity that}
+is in the \textit{FORMING} state and has a higher safety index.
 \end{itemize}
 
 %rejection from an agent that 
@@ -2620,8 +2682,10 @@ the coordination between the different entities in the ensemble happens.  The en
 When each of Rconf entities join the ensemble, the entity
 goes into a \textit{Planning} state. The last entity that enters the \textit{Planning} state is the leader. When the leader enters this state,  on-the-fly ensemble formation phase finishes and the final ensemble is formed. 
 Here, the leader has information for all ensemble participants and the final conflict region of the ensemble.
-In this state the leader makes a decision of what is the best solver i.e.  what is the best collision avoidance protocol that all ensemble participants should follow. We implemented that by using the function $coordinate()$ on Figure \todo{9}\patrizio{please use latex commands to refer to figures. Moreover, you probably wants to refr to Listing 4}, which is executed only the ensemble leader. \ugh{Based on the ensemble information it
-lists a prioritized list} of all possible solvers (list of collision avoidance algorithms) embedded in the Knowledge component that could solve the possible collision for this ensemble formation (line 3). 
+In this state the leader makes a decision of what is the best solver i.e.  what is the best collision avoidance protocol that all ensemble participants should follow. We implemented that by using the function $coordinate()$  %\todo{9}\patrizio{please use latex commands to refer to figures. Moreover, you probably wants to refr to Listing 4}, 
+which is executed only by the ensemble leader (Listing~\ref{lstCodeSafety}). 
+%\ugh{Based on the ensemble information it lists a prioritized list}
+Based on the information about the ensemble (conflict regions, participants etc.), the leader generates a prioritized list of all possible solvers (list of collision avoidance algorithms) embedded in the Knowledge component that could solve the possible collision for this ensemble formation (line 3). 
 Then, the ensemble leader starts from the first algorithm and calls the recursive function resolve\_safety(A, id, e\_j) where A is the algorithm that is chosen for safety resolution, id is the identifier of the entity that executes the algorithm to generate a solution and e\_j is the identifier of the entity that triggered the algorithm in the entity that executes it. 
 Initially resolve\_safety(A, id, e\_j) is called locally by the ensemble leader so it has the form resolve\_safety(A, id, id) (line 5).
 
@@ -2644,7 +2708,7 @@ The function resolve\_safety returns a boolean:
 \item it returns false when the entity itself or one of its children(targets) doesn't contain the algorithm A in its knowledge component.
 \end{itemize}
 
-In the end the resolve\_safety for the ensemble leader (line 5) returns true if all the entities in the ensemble are able and agreed to perform some algorithm A. If that is not the case, the ensemble leader goes through the other algorithms in the SolverList and repeats the process until finds a suitable algorithm A for which all ensemble participants are able to perform it. If it finds one, it calls locally the function \textit{commit} and breaks the loop. Execution of the commit function is when the entity enters the Execution state in Figure 8.
+In the end the resolve\_safety for the ensemble leader (line 5) returns true if all the entities in the ensemble are able and agreed to perform some algorithm A. If that is not the case, the ensemble leader goes through the other algorithms in the SolverList and repeats the process until finds a suitable algorithm A for which all ensemble participants are able to perform it. If it finds one, it calls locally the function \textit{commit} and breaks the loop. Execution of the commit function is when the entity enters the Execution state in Figure~\ref{fig:STMachine}.
 
 %If other agents are involved in the safety problem resolution, 
 %a set of solvers is identified across all reachable entities. A solution is calculated by remote invoking of the
@@ -2674,9 +2738,7 @@ When the entity finishes with the \textit{commit} function in the Execution stat
 
 
 
-\begin{lstlisting}[language=Python]
 
-\end{lstlisting}
 
 
 
@@ -2688,7 +2750,7 @@ When the entity finishes with the \textit{commit} function in the Execution stat
 
 
 
-\begin{lstlisting}[caption=Code snippets from the Planning and Execution state, language=Python]
+\begin{lstlisting}[caption=Code snippets from the Planning and Execution state, language=Python, label=lstCodeSafety]
 function coordinate(){
 	if (id==ensemble.leader){
 		SolverList = callSolvers(ensemble);
@@ -2773,6 +2835,19 @@ If a full solution is found (line 17) - meaning all agents involved in the probl
 \darko{END}
 
 
+
+The agent architecture consists of 4 components:
+\begin{itemize}
+    \item \textit{Behavior Manager:} containing information about the overall behavior of an agent. Here the Behaviour Plans are stored as Behaviours in a Behaviour Tree. Each agent is assigned a Behaviour Tree. A behaviour tree is a run-time structure that represents the Behaviours associated with a specific agent. In the beginning of the mission, it contains all behaviours related to a specific agent $A_i$ to fulfill its part of the mission. During mission execution, the agent's behaviour tree may be updated as a result of violations in the behaviour plan with safety or mission related issues.
+    %conditions.
+   % Each behaviour in the Behaviour Tree is associated with a specific GOAL.
+    \item \textit{Execution manager} is in charge of :(i) interacting with the \textit{Behaviour Manager} to receive the information about the status of the current behaviour, (ii) checking when safety-related conditions are violated in order to trigger the \textit{Safety Manager} which is safety-specific adaptation component, (iii) checking when mission-related conditions are violated in order to trigger the \textit{Mission Manager} to perform mission problem resolution and (iv) to log mission data.
+    \item \textit{Safety Manager:} Contains "safety" solvers which are algorithms that generate a behavior for collision avoidance. These are agent-specific and defined before mission definition.
+    \item \textit{Mission Manager:} Contains solvers which generate a behavior for completing parts of the mission. These are mission-specific and employed  before the start of the mission.  
+\end{itemize}
+
+
+
 \begin{figure}[h]
 \includegraphics[width=3.25in]{Figures/CAdapt2.png}
 \caption{Safety Problem Resolution\patrizio{unreadable}}
@@ -2781,6 +2856,9 @@ If a full solution is found (line 17) - meaning all agents involved in the probl
 
 
 %we envision the following: creation of dynamic ensemble are created using attribute-based communication grouping together agents that can see each other in specific regi.
+
+
+
 
 In Figure 1, the Problem resolution for safety related issues is presented.
 
@@ -2953,7 +3031,7 @@ In the end, we proved \textit{correctness and completeness of the adaptation alg
 
 %Here, we present a method for proving partial satisfaction for the liveness (soft) constraints to
 %appropriately attend to the user’s (unexpressed) intentions in
-%different types of specifications (e.g., sequential and temporal
+%different types of specifications (e.g., sequential and temporary
 %conditions on goal visits in addition to coverage) while still satisfying
 %the safety (hard) constraints
 
