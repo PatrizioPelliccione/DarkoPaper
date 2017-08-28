@@ -2988,25 +2988,16 @@ For each of them, we categorize the approaches as follows.
 & A. Type & Openness & Ens. type & Mgmt. & Hierarchy &  ENV & Coop. Mechanisms & Concerns sep. & Adaptability &Type  & Human \\
 \hline
 
-\cite{cui2014refresh} & Heterogenous & NA &\checkmark &\checkmark & &\checkmark & & &\checkmark & &\\
-\cite{MihailescuVO11} &\checkmark & & & \checkmark&  \checkmark& & \checkmark& & &\checkmark & & \checkmark \\
-\cite{Pinto}&\checkmark & & & \checkmark&  \checkmark& & \checkmark& & &\checkmark & \checkmark  & \\
-\cite{SimsGL03}& \checkmark& & & \checkmark&  & &\checkmark & & &\checkmark &  & \checkmark  \\
-\cite{RoohiS11}& &\checkmark & &\checkmark &\checkmark  & & &\checkmark & &\checkmark & & \checkmark \\
-\cite{CoppoDV14}& &\checkmark & & &\checkmark  &\checkmark & &\checkmark & & & & \checkmark \\
-\cite{PredaGGLM15}& &\checkmark & & &\checkmark  &\checkmark & &\checkmark & & & \checkmark & \\
-\cite{NicolaLPT14}& &\checkmark & &\checkmark &  & \checkmark & \checkmark&  &\checkmark & & \checkmark &\\
-\cite{HennickerK14}& &\checkmark & &\checkmark &  & & &  &\checkmark & & \checkmark &\\
-\cite{niemczyk2015adaptive}& &\checkmark & &\checkmark &  & &  & \checkmark  && \checkmark & & \checkmark \\
-\cite{zhong2011runtime}& &\checkmark & &\checkmark & \checkmark &  & \checkmark &   &\checkmark &  & & \checkmark \\
-\cite{Yu2010} & & \checkmark & & \checkmark  & & \checkmark & \checkmark & & & \checkmark & & \\
-\cite{Yu09} & & \checkmark & & \checkmark & & \checkmark
-& & \checkmark & & \checkmark & & \\
-\cite{WeynsMACODO10} & & \checkmark & & \checkmark & & \checkmark & & \checkmark & \checkmark & & & \\
-\cite{Oliveira6676505} & \checkmark & & & \checkmark & & \checkmark & \checkmark & & & \checkmark & & \\
-\cite{grassi2013qos} & \checkmark & & & \checkmark & & \checkmark & \checkmark & & & \checkmark & & \checkmark \\
-\cite{Edwards2009} & \checkmark & & & \checkmark & & \checkmark  & & & \checkmark &  & \checkmark & \\
-\cite{Sykes2011} & & \checkmark & & \checkmark & & \checkmark & \checkmark & & & \checkmark & \checkmark & \\
+\cite{cui2014refresh} & Heterogenous & N/A & dynamic & N/A & N/A & N/A & cooperative & NO & YES & BOTH & NO\\
+\cite{parker1998alliance} & Heterogenous & YES & N/A & N/A & NO &  dynamic & local & NO & YES & isolated & NO \\
+\cite{morais2015distributed}& Heterogenous & NO & N/A & N/A &  N/A & dynamic & cooperative & NO & YES & colective & NO  \\
+
+\cite{khan2015framework} & Heterogenous & NO & dynamic & distributed & NO & static & cooperative & NO  & YES & isolated & NO\\
+\cite{castello2016adaptive} & Homogeneous & NO & N/A & N/A & NO  & static & local & NO & YES & isolated & NO\\
+\cite{desai2017drona} & Homogeneous & NO & N/A & N/A & NO & static & cooperative & NO & NO & N/A & NO \\
+\cite{decastro2018collision} &  Heterogenous & NO & N/A & N/A &  NO & dynamic & local & NO & YES & isolated & N/A \\
+
+ 
 
 
 \hline
@@ -3028,11 +3019,11 @@ For each of them, we categorize the approaches as follows.
 %\label{lbl:type} 
 
 
-\item \textbf{Ensemble type}: whether the proposed ensemble structure is static or can change at run-time(dynamic). %For example, all the works focusing on a particular application scenario (e.g. supply-chain, grid market) will be considered as treating homogeneous agents.\\
+\item \textbf{Ensemble type}: whether the proposed approach supports formation of an ensemble(group of agents) and if yes, is the ensemble structure static or dynamic meaning is it possible for the ensemble structure to change at run-time. %For example, all the works focusing on a particular application scenario (e.g. supply-chain, grid market) will be considered as treating homogeneous agents.\\
 	%\item \label{lbl:beha}
 %\textbf{Agent Cooperation}: whether agents in the system act in a selfish or cooperative way.
 	\item \label{lbl:confl}
-\textbf{Ensemble management}: whether an ensemble is managed in a centralised or in distributed way. %(ex. if there is a central entity that manages the ensemble)
+\textbf{Ensemble management}: whether an ensemble is managed in a centralised or in a distributed way. %(ex. if there is a central entity that manages the ensemble)
 	\item \label{lbl:hierarchy}
 \textbf{Hierarchy}: whether the approach provides a mechanism for hierarchical structure of ensembles (e.g. an ensemble of ensembles).
 \item \textbf{Environment} (dynamic vs. static): whether the approach supports modeling of systems that operate in environment that can change at run-time (e.g., moving obstacles, some other elements outside of the system can change their status) .
