@@ -586,11 +586,11 @@ IEEEtran, journal, \LaTeX, paper, template.
 
  MMRSs should be able to operate under dynamic, uncontrollable and partially or fully unknown environments.
 %\ivano{add a couple of examples}). 
-That introduces a set of uncertainties resulting from the incomplete knowledge of the run-time structure of MMRS (ex. number of agents performing a particular task in a specific moment) and the environment in which the MMRS operates. Incomplete knowledge of the run-time structure of MMRS comes from its openness. By "openness" we mean that new entities can join or leave the system at run-time. Incomplete knowledge of the environment comes from its dynamics and uncontrollability (e.g., a bird flying in the environment). The consideration of the environment when specifying the system comes due to the fact that a mission is always associated with a physical context where it is happening, so how a system will perform a mission strongly depends on the environment where it operates (e.g., the system will operate differently in environments with smooth vs. rough surface, environments  with a lot of static obstacles vs environments with a small number of obstacles etc). 
+That introduces a set of uncertainties resulting from the incomplete knowledge of the run-time structure of MMRS (ex. number of agents performing a particular task in a specific moment) and the environment in which the MMRS operates. Incomplete knowledge of the run-time structure of MMRS comes from its openness. By \chg{"}{``}openness" we mean that new entities can join or leave the system at run-time. Incomplete knowledge of the environment comes from its dynamics and uncontrollability (e.g., a bird flying in the environment). The consideration of the environment when specifying the system comes due to the fact that a mission is always associated with a physical context where it is happening, so how a system will perform a mission strongly depends on the environment where it operates (e.g., the system will operate differently in environments with smooth vs. rough surface, environments  with a lot of static obstacles vs environments with a small number of obstacles etc). 
 %We consider the environment at design-time we define mission because (usually) a house does not move at runtime, so the planning of the trajectories can benefit from knowing this info beforehand) as to define a mission we always locate it in a specific  in our de part of the )\ivano{explain why the knowledge is incomplete at run-time, and why it will always be like that, that is: there is some information that is not known at design time by definition (e.g., a bird flying into a drone)} and the environment at design time \ivano{what do you mean by environment here? The physical environment? If it is like that, then you have to explain why you consider the environment also at design time since many approaches do not make any assumptions on it at design time. We do it because (usually) a house does not move at runtime, so the planning of the trajectories can benefit from knowing this info beforehand)}.
 
 Handling uncertainty upfront is often infeasible (or expensive). This means we need to deal with it when the knowledge becomes available at runtime. 
-Hence, the construction of MMRSs is significantly more challenging than traditional systems due to  their mission-criticality (meaning a loss of resources can lead to possible reduction in mission effectiveness) and their safety-criticality (meaning a failure or defective design could cause a risk to human life and the environment). Commercialisation and adoption of MMRSs in dynamic environments will only occur if safety aspects are considered and incorporated as first class concerns in the design of the system. Certification bodies should assure some type of safety certification that relies on a complete understanding of the system. However, for mobile robots that operate in dynamic environments its quite challenging to consider all variants of the overall system due to their adaptive behaviour. Hence, having the ability to analyse and reason about safety independently from the mission 
+Hence, the construction of MMRSs is significantly more challenging than traditional systems due to  their mission-criticality (meaning a loss of resources can lead to possible reduction in mission effectiveness) and their safety-criticality (meaning a failure or defective design could cause a risk to human life and the environment). Commercialisation and adoption of MMRSs in dynamic environments will only occur if safety aspects are considered and incorporated as first class concerns in the design of the system. Certification bodies should assure some type of safety certification that relies on a complete understanding of the system. However, for mobile robots that operate in dynamic environments \chg{its}{it is} quite challenging to consider all variants of the overall system due to their adaptive behaviour. Hence, having the ability to analyse and reason about safety independently from the mission 
 %However, that way we do not have any utilization of the system, so finding the right trade-off between how much safe a system should be and how much and which part of the mission is completed 
 requires a clear separation of concerns between safety and mission related issues. 
 
@@ -645,11 +645,11 @@ Figure~\ref{fig:Scenario} shows a mission in which three robots, specifically th
 Starting from this very high-level description of the mission, the configurations and flight plans for the  UAVs can be automatically generated. Once configured, these UAVs perform the mission by flying from their initial position to the border of the monitoring area. Then, each UAV starts monitoring a specific sub-area so that the whole team can cover the entire area in parallel. A sub-area can be decomposed in number of blocks.
  A block is the smallest measurable unit for the mission region. Each block is assigned a unique identifier. We represent the size of an area using the number of blocks along each dimension. 
 
-On Figure~\ref{fig:Scenario} a Mission execution of three UAVs is shown. Each UAV is executing its corresponding behaviour to cover  its part of the mission. The green region is a region for which the corresponding UAVs performed their mission i.e. they visited that particular area. The other regions that have different colour are the regions for which the UAVs should perform the mission in the future, where the colour of the UAV is the same with the colour of the region it should visit.
+\chg{On Figure~\ref{fig:Scenario} a Mission execution of three UAVs is shown.}{The bottom side of Figure~\ref{fig:Scenario} shows the mission execution of three UAVs.} Each UAV is executing its corresponding behaviour to cover  its part of the mission. {\ugh The green region is a region for which the corresponding UAVs performed their mission i.e. they visited that particular area.}\patrizio{please rewrite} The other regions that have different colour are the regions for which the UAVs should perform the mission in the future, where the colour of the UAV is the same with the colour of the region it should visit.\patrizio{this sentence can be simplified. Moreover, it's not a good idea to use colors to distinguish the areas. This will be not readable when printed black and white.}
 %information which region should visit.
 %while the other colours information which UAV should visit region. 
 
-Let us assume that a UAV $u_x$ (blue UAV on Figure~\ref{fig:Scenario}) of the team $U$ must reach a target geographical position $p$ and it identifies an obstacle along its trajectory towards $p$; if the obstacle is avoidable (e.g., a tree), then $u_x$ adapts its trajectory so that it avoids the obstacle to reach $p$; if the obstacle cannot be easily avoided (e.g., a large object on Figure~\ref{fig:Scenario}), then the behaviours of $u_x$ and some other UAVs in $U$ are adapted so that the position $p$ is still covered by another UAV $u_i \in U$ and $u_x$ can cover some other points within the area.  
+Let us assume that a UAV $u_x$ (blue UAV on Figure~\ref{fig:Scenario}) of the team $U$ must reach a \ugh{target geographical position $p$} and it identifies an obstacle along its trajectory towards $p$; if the obstacle is avoidable (e.g., a tree), then $u_x$ adapts its trajectory so that it avoids the obstacle to reach $p$; if the obstacle cannot be easily avoided (e.g., a large object on Figure~\ref{fig:Scenario}\patrizio{I don't see this object in the figure}), then the behaviours of $u_x$ and some other UAVs in $U$ are adapted so that the position $p$ is still covered by another UAV $u_i \in U$ and $u_x$ can cover some other points within the area.  
 
 \begin{figure}[h]
 
@@ -670,14 +670,14 @@ Let us assume that a UAV $u_x$ (blue UAV on Figure~\ref{fig:Scenario}) of the te
 %\subsection{Preliminaries}
 
 In order to explain our framework we
-start introducing the notion of some basic concepts that are used through out the paper.
+start introducing \ugh{the notion of some basic concepts} that are used through out the paper.
 In this section, we formalize the definitions needed for the rest of
-the paper and represent concepts that will be used later on.
+the paper and represent concepts that will be used later on.\patrizio{two sentences that say almost the same}
 
 \subsection{Design-time Elements: Terminology \& Definitions}
 
 
-Let $Coordinates = \{(x,y,z) | x,y,z \in R\}$  be the universal set of geographical coordinates where the mission takes place; for $C \in Coordinates$, $c.x$ denotes the longitude of c, $c.y$ is the latitude,
+Let $Coordinates = \{(x,y,z) | x,y,z \in R\}$  be the universal set of geographical coordinates where the mission takes place; for $C \in Coordinates$, \patrizio{should $C$ be $c$?} $c.x$ denotes the longitude of c, $c.y$ is the latitude,
 and $c.z$ is the altitude. 
 To represent the mission and the context in which a MMRS performs the mission we define a region as a generic term for defining geometric shapes in the environment. 
 
@@ -686,7 +686,7 @@ To represent the mission and the context in which a MMRS performs the mission we
 A region $R=(P, t)$ is a pair where $P \in Coordinates$ 
 %subset of Coordinates
 %in the three dimensional xyz-plane
-denotes a geometric shape in the environment (ex. it can identify a polygon in the 2D environment or a polyhedron in the 3D one) and $t$  defines the type of the region (ex. obstacle,  no-pass zone, mission region etc).
+denotes a geometric shape in the environment (ex. it can identify a polygon in the 2D environment or a polyhedron in the 3D one) and $t$  defines the type of the region (ex. obstacle,  no-pass zone, mission region, etc).
 %logical structure that  for which some condition $\Diamond $ is specified.
 %$ R = \{(x,y,z) | x \Diamond y \Diamond z \} $
 \end{definition}
@@ -694,7 +694,7 @@ denotes a geometric shape in the environment (ex. it can identify a polygon in t
 In our work, we use regions to represent the geographical area of the mission and its context, more specifically to represent three types of logical structures in the definition of the mission: (i) an \textit{obstacle}, (ii) a \textit{no-pass zone}, (ii) \textit{mission region}.
 We define an \textit{obstacle} as a region in the environment that should not intersect with the region of operation of an active agent because has negative impact on safety.  \textit{No-pass} zone is a region in the environment that should not intersect with the region of operation of an active agent because of law regulations, but does not have impact on safety.  \textit{Mission region} is the minimum bounding box of the areas of all tasks. 
 
-Now, we formally define the context in which mission takes place.
+Now, we formally define the context in which mission\patrizio{a mission takes or missions take} takes place.
 
 \begin{definition}[Context]
 A context $C=(Nz, O)$ is a pair
@@ -707,7 +707,7 @@ is a list of regions representing obstacles.
 
 In  the  following  we  focus  on  the  concept  of  an agent,  see Definition 4. 
 Informally, we represent an agent through its state (a set of  properties representing its configuration %representing its state
-and environment where it operates). Each property describes a particular aspect of the agent's state(e.g., an agent location, current speed, current battery level, set of resources or information of its  environment). An agent observes the environment and collects information about its local operational context (Ex. an agent can identify obstacles or other agents in its local environment).
+and environment where it operates). Each property describes a particular aspect of the agent's state (e.g., an agent location, current speed, current battery level, set of resources or information of its  environment). An agent observes the environment and collects information about its local operational context (\chg{Ex.}{e.g.} an agent can identify obstacles or other agents in its local environment).
 
 We define property for an agent as follows.
 
@@ -727,37 +727,37 @@ Now, we  formally define an agent.
 A generic agent $a_i=(CP, EP)$ is defined as a tuple %\patrizio{how an agent configuration relates to an agent?}:%
 where:
 \begin{itemize}
-\item $CP$ is the agent's configuration expressed as a set of uniquely identified \textit{configuration properties} (ex. current speed, current battery level etc.)
-\item $EP$ is a set of uniquely identified \textit{environmental properties} each describing a particular aspect of agent's environment. (ex. obstacles, other agents in the local environment etc.). 
+\item $CP$ is the agent's configuration expressed as a set of uniquely identified \textit{configuration properties} (\chg{ex.}{e.g.} current speed, current battery level etc.)
+\item $EP$ is a set of uniquely identified \textit{environmental properties} each describing a particular aspect of agent's environment. (\chg{ex.}{e.g.} obstacles, other agents in the local environment etc.). 
 \end{itemize}
 \end{definition}
 
 In the following we focus on the concept of task, see Definition
-5. Informally, a concrete Task specifies (i) 
+5\patrizio{please never do that! Do references to defitions, sections, etc. in the proper way!}. Informally, a concrete Task specifies (i) 
 the region defined as a \textit{goal space} in which the involved robots have to perform behaviours 
-(ii) the strategy according to which the region will be be  decomposed  in sub-regions 
-(ii) the action performed by the robots.
+(ii) the strategy according to which the region will be decomposed  in sub-regions\chg{ 
+(ii)}{, and (iii)} the action performed by the robots.
 
-Let STR be the universal set of strategies for Region decomposition, and let ACT be the universal set of actions that realize concrete robot actions
+Let STR be the universal set of strategies for Region decomposition, and let ACT\patrizio{decide if should be ACT or $ACT$, and be consistent. The same for STR before} be the universal set of actions that realize concrete robot actions
 (like taking a picture with a given resolution, detecting the
-presence of carbon dioxide, etc.). $\bot \in ACT$ denotes null action meaning that it is ineffectual. A task is defined as follows.
+presence of carbon dioxide, etc.). $\bot \in ACT$ denotes \ins{the} null action meaning that it is ineffectual. A task is defined as follows.
 
 \begin{definition}[Task] 
 A task $t=(G,S,act)$ is a tuple where:
 \begin{itemize}
-\item $G$ is the region named as a \textit{goal space} in which the involved robots have to perform behaviours 
-\item $S \in STR$ is the strategy according to which the goal space will be be  decomposed on subregions 
+\item $G$ is the region named as a \textit{goal space} in which the involved robots have to perform behaviours; 
+\item $S \in STR$ is the strategy according to which the goal space will be  decomposed on subregions;
 %$SR \in R$ \ivano{$SR$ is not defined here, maybe it is better to say that the goal space of $t$ will be decomposed into a set of subregions $\{S^t_1 \dots, S^t_n\}$ where all their coordinates identify geometric subset of $G$. Should the union of all the subregions correspond to the whole $G$? I think so. Should the subregions overlap? I think no.} 
-\item  $act \in ACT \times \{i, c\}$ specifies the concrete action to be performed by the robots involved in the task. $\{i, c\}$ identifies if the action
+\item  $act \in ACT \times \{i, c\}$ specifies the concrete action to be performed by the robots involved in the task. $\{i, c\}$ identifies \chg{if}{whether} the action
 is instantaneous, like taking a picture, or continuous, like taking a
-video. An instantaneous action i is executed for each goal location. A continuous action is started at the beginning of the task and terminated at the end. In case of $\bot$, the continuous/instantaneous flag
-does not matter
+video. An instantaneous action i\patrizio{decide if should be i or $i$, and be consistent.} is executed for each goal location. A continuous action is started at the beginning of the task and terminated at the end. In case of $\bot$, the continuous/instantaneous flag
+does not matter.
 \end{itemize}
 \end{definition}
 
 Let $SR = \{SR^t_1, \dots, SR^t_n \}$ is a set of subregions on which the goal space $G$ of a task $t$ is decomposed according to a strategy S. 
 Hence, we have $\{SR^t_1 \cup \dots \cup SR^t_n\} = G$ and 
-$ \{SR^t_1 \cap \dots \cap SR^t_n\} = \emptyset$ meaning that the union of all subregions correspond to the whole space $G$, and there isn't an overlap between different subregions.
+$ \{SR^t_1 \cap \dots \cap SR^t_n\} = \emptyset$ meaning that the union of all subregions \chg{correspond}{corresponds} to the whole space $G$, and there \chg{isn't}{is not} an overlap between different subregions.
 
 %the strategy according to which the goal space will be be  decomposed on subregions $SR \in R$ \ivano{$SR$ is not defined here, maybe it is better to say that the goal space of $t$ will be decomposed into a set of subregions $\{S^t_1 \dots, S^t_n\}$ where all their coordinates identify geometric subset of $G$. Should the union of all the subregions correspond to the whole $G$? I think so. Should the subregions overlap? I think no.} 
 
@@ -771,7 +771,7 @@ $ \{SR^t_1 \cap \dots \cap SR^t_n\} = \emptyset$ meaning that the union of all s
 %\item CM represents the agent's \textbf{context model}.
 %\end{itemize} 
 
-At design time we assigned the goal space $G$ for a task $t$ to a set of agents $A$. On Figure~\ref{fig:Scenario} the goal space G is assigned to three agents $a_1$, $a_2$ and $a_3$. A subregion $SR^t_i$ of a task $t$ can be decomposed in number of blocks with different dimensions with various different strategies (ex. the decomposed mission area on Figure~\ref{fig:Scenario}). We showed in \cite{bozhinoski2015flyaq, di2013engineering} how we decompose the regions on blocks.  
+At design time we assigned the goal space $G$ for a task $t$ to a set of agents $A$. On Figure~\ref{fig:Scenario} the goal space G is assigned to three agents $a_1$, $a_2$, and $a_3$. A subregion $SR^t_i$ of a task $t$ can be decomposed in number of blocks with different dimensions with various different strategies (ex. the decomposed mission area on Figure~\ref{fig:Scenario}). We showed in~\cite{bozhinoski2015flyaq, di2013engineering} how we decompose the regions on blocks.  
 Then, for each block we assigned a unique identifier and associate a goal location $G_i \in Coordinates$ where the $act$ action should be performed.
 
 
@@ -780,16 +780,16 @@ Then, for each block we assigned a unique identifier and associate a goal locati
 
 
 In the following we define a \textbf{Mission}.
-Let \textit{Tasks} denotes the universal set of all tasks (definition 5) and let A is the set of all agents (definition 4).
+Let \textit{Tasks} denotes the universal set of all tasks (definition 5\patrizio{please fix the ref!}) and let A is the set of all agents (definition 4).
 \begin{definition}[Mission]
 A mission $M=\{t_1, ... , t_n \ \vert t_1, ..., t_n \in Task \}$  is defined as a set of tasks that need to be executed.
 \end{definition}
 
 In this work we consider that the priority of all tasks in a mission is the same. Hence, we assume that there is not any ordering of tasks and each task can be performed at the same time as any other. 
-Now we formally define a MMRS system. 
+Now we formally define an MMRS system. 
 
 \begin{definition}[MMRS]
-A \textbf{MMRS} 
+An \textbf{MMRS} 
 $S=\{(a_1, \{t_1,...,t_k\}),... , \\(a_n,\{t_1,...,t_n\}) \vert a_1, ... , a_n \in A  \land t_1,...t_k,...,t_n  \in TASK\}$ is a set representing the agents participating in the mission's tasks.
 \end{definition}
 
@@ -797,7 +797,7 @@ $S=\{(a_1, \{t_1,...,t_k\}),... , \\(a_n,\{t_1,...,t_n\}) \vert a_1, ... , a_n \
 
 
 %We assume that there is not an ordering of tasks and each task can be performed at the same time as any other task. 
-Agent is the basic unit around which a MMRS  is defined. Examples of agents in MMRSs are entities like robots, ground stations, humans, etc.\\
+Agent is the basic unit around which an MMRS  is defined. Examples of agents in MMRSs are entities like robots, ground stations, humans, etc.\\
 
 
 %\subsection{Run-time Elements}
@@ -816,14 +816,14 @@ Agent is the basic unit around which a MMRS  is defined. Examples of agents in M
 
 %We discretize each of the subregions to discrete \textit{goal locations} $G_i \in Coordinates$
 
-Now, we formally define agent's behaviour. We denote by  $S$ the set of all available states for an agent, while with $OP$ the set of all atomic operations of an agent. When an agent performs an operation $op \in OP$, we can see the  impact in two aspects: (i) in the physical location where the action takes place and (ii) in the the agent's state.
-That is why, we represent  OP=($\Gamma$, $\Omega$) as a tuple of two disjoint subsets where:
+Now, we formally define agent's behaviour. We denote by  $S$ the set of all available states for an agent, while with $OP$ the set of all atomic operations of an agent. When an agent performs an operation $op \in OP$, we can see the  impact in two aspects: (i) in the physical location where the action takes place and (ii) in  the agent's state.
+That is why, we represent  OP=($\Gamma$, $\Omega$)\patrizio{decide if should be OP or $OP$, and be consistent.} as a tuple of two disjoint subsets where:
 \begin{itemize}
     \item $\Gamma$ is the set of all ``atomic" movements available for a robot
     \item $\Omega$ is the set of all ``atomic" actions available for a robot
 \end{itemize}
 
-In this work, a combination of an ``atomic" movement and ``atomic" action  performed at a same time is considered as an ``atomic" operation. Ex. a robot can move from a starting location to a goal location and record a video. Here, \textit{moving} is an ``atomic" movement, while \textit{recording} a video is an ``atomic" action. We consider that the combination of both of them happening at a same time is an ``atomic" operation that cannot be split on smaller parts. 
+In this work, a combination of an ``atomic" movement and ``atomic" action  performed at a same time is considered as an ``atomic" operation\chg{. Ex.}{, e.g.,} a robot can move from a starting location to a goal location and record a video. Here, \textit{moving} is an ``atomic" movement, while \textit{recording} a video is an ``atomic" action. We consider that the combination of both of them happening at a same time is an ``atomic" operation that cannot be split on smaller parts. 
 
 
 %all available configurations for an agent. 
@@ -834,20 +834,20 @@ The following definition describes the behaviour state space for an agent $a_t$ 
 \begin{definition}[Behaviour state space]
 A \textbf{Behaviour state space} of an agent $a_i$ is a tuple $B_i$ = ($S$, $\Sigma$, $\Delta $, $S_{0}$)  where: 
 \begin{itemize}
-\item $S$ is a finite, non-empty set of agents' states ;
+\item $S$ is a finite, non-empty set of agents' states;
 \item $\Sigma$ is a finite, non-empty set of transitions;
 \item $ \Delta $ is the transition function,
 and $(S_p,\lambda,S_k,I) \in \Delta $ is a transition
-that define the key characteristics of a Behaviour execution
+that \chg{define}{defines} the key characteristics of a Behaviour execution
 where:
 \begin{itemize}
-\item  $S_p$ is the source state of the transition
-\item  $S_k$ is the the target state of the transition
+\item  $S_p$ is the source state of the transition;
+\item  $S_k$ is the the target state of the transition;
 \item  $\lambda \in \Sigma$ is a concrete atomic transition that is performed;
 \item I is a set of conditions that must be satisfied for a transition to be performed. The conditions are agent's properties that capture the key characteristics of the agent state and its environment.
 %and its behaviour plan execution. 
 %and must be valid during all the time of the execution of op 
-(ex. $battery level > x$ etc.);
+(\chg{ex.}{e.g.,} $battery level > x$, etc.);
 \end{itemize}
 \item $S_{0} \in S$ is an initial state;
 %\item $G_i$ is the discrete lower-level Goal that will be reached if the Behaviour is executed correctly. It corresponds to the goal location $G_i$;
@@ -857,10 +857,11 @@ where:
 %In this work we assume that if a goal location $G_i$ is reached the associated corresponding Behaviour is completed successfully.
 
 We explore further the transition function. 
-For an agent state $S_i \in S$ and an operation $ op \in  OP$, we denote by $tran(S_i,op )$ the state where the agent transits when successfully performed an operation $ op $ at state $S_i$. We use $ interTrans(S_i,op) $ to denote the set of intermediate states through which the agent traverse when performing $ op $ at a state $S_i$ (including $S_i$ and $tran(S_i,op)$). 
+For an agent state $S_i \in S$ and an operation $ op \in  OP$, we denote by $tran(S_i,op )$ the state where the agent transits when successfully performed an operation $ op $ at state $S_i$. We use $ interTrans(S_i,op) $ to denote the set of intermediate states through which the agent \chg{traverse}{traverses} when performing $ op $ at a state $S_i$ (including $S_i$ and $tran(S_i,op)$). 
 Now we formally define a behaviour plan.
 
-\begin{definition}[Behaviour Plan]  A behaviour plan is defined as a sequence of atomic operations to be applied to an agent $A_m$ to transit from its current state $S_k$ to a goal state $S_j$.  A behaviour plan is denoted by $BP_i= (op_1, op_2 ... op_p)$, where $op_n \in OP $ for $ n \in \{1,2 ... p\} $
+\begin{definition}[Behaviour Plan]  A behaviour plan is defined as a sequence of atomic operations to be applied to an agent $A_m$ to transit from its current state $S_k$ to a goal state $S_j$.  A behaviour plan is denoted by \chg{$BP_i= (op_1, op_2 ... op_p)$}{$BP_i= (op_1, op_2, \dots, op_p)$}, where $op_n \in OP $ for 
+\chg{$ n \in \{1,2 ... p\} $}{$ n \in \{1,2, \dots, p\} $}  
 \end{definition}
 
 
@@ -895,7 +896,7 @@ In this section, we will present the Behaviour Tree Architecture which we use fo
 From \cite{dromey2003requirements}, A Behavior Tree is a formal, tree-like graphical form that
 represents behaviour of individual entities
 which change states, make decisions, respond-to/cause events, and interact by exchanging information and/or passing control.
-A \textbf{Behaviour Tree (BT)} is represented as a directed tree in which the nodes are classified as root, control flow nodes, or execution nodes(leafs). For each pair of connected nodes the outgoing node is the parent and the incoming node is the child node. The root has no parents and exactly one child, the control flow nodes have one parent and at least one child, and the execution nodes have one parent and no children. 
+A \textbf{Behaviour Tree (BT)}\patrizio{it's enough to introduce the acronym only the first time} is represented as a directed tree in which the nodes are classified as root, control flow nodes, or execution nodes (leafs). For each pair of connected nodes the outgoing node is the parent and the incoming node is the child node. The root has no parents and exactly one child, the control flow nodes have one parent and at least one child, and the execution nodes have one parent and no children. 
  %Figure xx shows a table giving information about the different type of  nodes a behaviour tree has (their symbols and their semantics).
  %\patrizio{behaviour trees should be introduced in the backgroud section, not here}\\
 
@@ -926,21 +927,23 @@ A \textbf{Behaviour Tree (BT)} is represented as a directed tree in which the no
 Condition n & $\bigcirc$ & $X_n(t) \in S_n$  & $X_n(t) \in S_n$  & never \\
 \hline
 \end{tabular}
-\caption{The seven node types of a BT. \textit{Ch} $\equiv$ children; \textit{S} $\equiv$ succeeded; \textit{F} $\equiv$ failed; \textit{R} $\equiv$ running; \textit{N} $\equiv$ children; \textit{S}, \textit{F} $\in \mathbb{N}$ }
+\caption{The seven node types of a BT. \textit{Ch} $\equiv$ children; \textit{S} $\equiv$ succeeded; \textit{F} $\equiv$ failed; \textit{R} $\equiv$ running; \textit{N} $\equiv$ children; \textit{S}, \textit{F} $\in \mathbb{N}$\patrizio{what about \textit{R} and \textit{N}?} }
 \label{tab:BTnodes}
 \end{table}
 
 
-In a BT, each node belongs to one of the seven categories listed in Table~\ref{tab:BTnodes}: we have one root node; leaf nodes are either Actions or Conditions, while control flow nodes are either Fallbacks, Sequences, Parallels or Decorators.
-The execution of a BT starts from the root which sends ticks with a certain frequency to its child. A tick is an enabling signal that allows the execution of a child. When the execution of a node in the BT is allowed, it returns to the parent a status running if its execution has not finished yet, success if it has achieved its goal, or failure if is unable to continue with execution. A minimalistic example of a behaviour tree is presented on Figure~\ref{fig:Example}. It represents the  behaviour of the agent in the motivating scenario: an agent checks if there isn't an obstacle along its trajectory. If there isn't an obstacle, it performs a movement towards p.
+In a BT, each node belongs to one of the seven categories listed in Table~\ref{tab:BTnodes}: we have one root node; leaf nodes are either Actions or Conditions, while control flow nodes are \del{either} Fallbacks, Sequences, Parallels, or Decorators.
+The execution of a BT starts from the root which sends ticks with a certain frequency to its child. A tick is an enabling signal that allows the execution of a child. When the execution of a node in the BT is allowed, it returns to the parent a status running if its execution has not finished yet, success if it has achieved its goal, or failure if is unable to continue with execution. A minimalistic example of a behaviour tree is presented on Figure~\ref{fig:Example}. It represents the  behaviour of the agent in the motivating scenario: an agent checks if there isn't an obstacle along its trajectory. If there isn't an obstacle, it performs a movement towards p.\patrizio{p or $p$?}
 %condition x is satisfied, behaviour plan 1 should be executed.
 %When a behaviour plan 1 successfully finished,  behaviour plan 2 should start its execution. When behaviour plan 2 successfully executed, we start executing behaviour plan 3. 
 If the agent successfully executed the movement towards point p, the behaviour tree would return success. If the agent did not reach the point p, the behaviour unit describing that behaviour plan returns failure which will be propagated to the root. In this case, an \textit{adaptation}  is needed.
 %will be performed.
 
 \begin{figure}[h]
-\includegraphics[width=2.25in]{Figures/BP2.pdf}
+\begin{center}
+\includegraphics[width=1.85in]{Figures/BP2.pdf}
 \caption{Behaviour plan for an agent }\label{fig:Example}
+\end{center}
 \end{figure}
 
 
@@ -989,7 +992,7 @@ If the agent successfully executed the movement towards point p, the behaviour t
 
 
 \section{Overview of Solution}
-
+\patrizio{recall what the problem is. It would be nice to have a more significant name of this section.}
 
 
 MMRs are both mission-critical and safety-critical systems. Missions are defined at
@@ -1022,17 +1025,16 @@ operate are often unpredictable and unknown.
            \includegraphics[ width=.35\textwidth]{Figures/Execution_Framework.png}
         }
 \vspace{-.2cm}
- \caption{Overview of the proposed approach}
+ \caption{Overview of the proposed approach\patrizio{where this figure is referenced and explained? I was expecting a figure that refers to the two algorithms mentioned in the section showing what these algorithms take as input, how these algorithms work together, etc.}}
  \vspace{-.2cm}
 \label{overall} 
 \end{figure*}
 
 
-\patrizio{missing a figure here}
 In this work we propose a framework for supporting \textbf{execution} of MMRSs missions. 
 Most of the existing works are based on the assumptions that the environment is static and that each agent has either a global communication range (can communicate with each other agent in the system) or that each agent can obtain a full knowledge of the system and the environment at any time. These
 assumptions, however, do not usually hold in real-world scenarios \cite{lahijanian2016iterative}.
-In our framework, an adaptation is performed on the fly every time an unexpected system or environmental feature is observed in a part of the system. That being said, a new behavioural plan is computed for one or a group of agents that are affected by it. Our framework supports on the fly adaptation that enables MMRSs to complete the defined mission while guaranteeing the preservation of safety constraints.
+In our framework, an adaptation is performed on-the-fly every time an unexpected system or environmental feature is observed in a part of the system. That being said, a new behavioural plan is computed for one or a group of agents that are affected by it. Our framework supports on-the-fly adaptation that enables MMRSs to complete the defined mission while guaranteeing the preservation of safety constraints.
 When designing the framework we took in consideration the following types of uncertainty:
 \begin{itemize}
 \item \textbf{Changing Availability of resources:} The availability of resources for an agent can change over time (e.g., the battery level of a robot is less then a certain value, so the robot cannot finish a task);
@@ -1046,29 +1048,29 @@ advantages with respect to having single entities working independently. Adheren
 rules temporarily reduces the flexibility of collaborating entities, but has huge impact on a particular quality of the system. We can consider what happens if there is a fault on a drone and the drone can't continue with its behaviour. In this case, all the tasks that the drone did not manage to complete need to be redistributed to other entities for successful mission completion, while the faulty drone needs to adapt its behaviour plan to safely exit the mission. Another issue we can consider is a collision between drones. In that case an immediate and collective reaction by a group of drones is needed for a collision to be avoided. Here, multiple entities must adapt altogether and transactionally to perform a particular collision avoidance protocol. 
 This demonstrates that in MMRSs two levels of adaptation are possible: 
 \begin{itemize}
-\item \textit{Isolated adaptation:} change of a single agent’s behavior with pre-defined behavior templates independently from the rest of the system
-\item \textit{Collective adaptation:} collective change of the behaviour of a set of agent's teamed up in an ensemble working towards a  particular goal
+\item \textit{Isolated adaptation:} change of a single agent’s behavior with pre-defined behavior templates independently from the rest of the system;
+\item \textit{Collective adaptation:} collective change of the behaviour of a set of agent's teamed up in an ensemble working towards a  particular goal.
 \end{itemize}
 
 In this work, we mostly focus on collective adaptation, even though the framework has capabilities to perform isolated adaptation by providing a simple solution to a specific issue.
 The framework performs on the fly collective adaptation in a decentralized fashion in order to satisfy specific mission and safety objectives.
-However, there are few major challenges in performing adaptation on the fly i.e. computing agents' behaviours on the fly. One challenge is to deal with the question of which part of the system should be engaged in an adaptation. This is not trivial at all, since solutions for the same problem
+However, there are few major challenges in performing adaptation on-the-fly, i.e., computing agents' behaviours on-the-fly. One challenge is to deal with the question of which part of the system should be engaged in an adaptation. This is not trivial at all, since solutions for the same problem
 may be generated at different levels. For instance, an issue of
 a robot (i.e., a drop of the battery level of a UAV below a
 safety threshold) can be resolved in the scope of its mission,
 by re-calculating its navigation plan (isolated adaptation), or in the wider scope
 with the engagement of other robots and supporting systems
 (e.g., a UAV trajectory manager) (collective adaptation). The challenge here is to
-understand these levels and create a mechanism which decides the right scope for an adaptation for a given issue.
+understand these levels and create a mechanism, which decides the right scope for an adaptation for a given issue.
 The other challenge is to understand how  multiple
 entities in a collective adaptation can adapt altogether and transactionally and what type of negotiation must take place to decide the right behavioural changes that should be applied on each side.
 Our framework has mechanisms that dynamically understand  which  parts of the system  should be  selected  for adaptation and can produce a solution for a specific issue. 
- In this work, a MMRS might need 
+ In this work, an MMRS might need 
  %In this work, the need for 
  an adaptation due to the following:
 \begin{itemize}
 \item the system cannot successfully complete the defined mission;
-\item agent(s) performing the current mission may physically collide 
+\item agent(s) performing the current mission may physically collide. 
 \end{itemize}
 
 The adaptation mechanisms decide the right scope  for  %organizing the different parts of MMRSs into groups 
@@ -1122,7 +1124,7 @@ In the following, we will introduce each of these concepts in more details. \iva
 
 
 In the following sections we will describe the structure of the execution framework, how we generate modular reusable behaviours and how agents adapt when facing with mission and safety-critical issues. We use two different adaptation strategies to solve the different types of issues.
-
+\patrizio{what do you want to write in this section? Implementation aspects should be explained later, not here.}
 
 %Then is when adaptation should be performed. 
 %In the following sections we will describe  a motivation scenario and two different types of adaptation strategies depending on the type of problems the system is facing.
@@ -1192,7 +1194,7 @@ In the following sections we will describe the structure of the execution framew
 
 
 
-Missions are specified at design-time by in-the-field operators. The operators are users that are non-expert in ICT, but have specific expertise in the mission domain (like  fire fighters, policemen etc.). Within the panorama of missions \cite{skrzypietz2012unmanned}, typical mission scenarios concern: (i) Disaster Prevention and Management, like damage
+Missions are specified at design-time by in-the-field operators. The operators are users that are non-expert in ICT, but have specific expertise in the mission domain (like  fire fighters, policemen etc.). Within the panorama of missions~\cite{skrzypietz2012unmanned}, typical mission scenarios concern: (i) Disaster Prevention and Management, like damage
 assessment after earthquakes, searching for survivors after
 airplane accidents and disasters; (ii) Homeland Security, such
 as coastal surveillance, securing large public events; (iii) Protection
@@ -1201,27 +1203,27 @@ gas pipelines, protecting maritime transportation from piracy,
 observing traffic flows; (iv) Communications, like broadband
 communication, telecommunication relays; (v) Environmental
 Protection, such as pollution emission, protection of water
-resources etc.
+resources etc. \patrizio{I am not sure this is the right place for this text. Here we should be direct to the point, direct to the solution}
 
 
 
 Here we focus on the run-time phase.  
 A possible design-time phase for our execution framework can build on top of
-the FLYAQ \cite{bozhinoski2015flyaq, di2013engineering} platform for the specification of missions of autonomous multicopters through a high-level and graphical domain specific language tailored to the specific application
-domains. In FLYAQ\cite{bozhinoski2015flyaq, di2013engineering} the tool generates behaviour plans at design-time for each of the robots (specific types of agents) involved in the mission. The tool associates an agent(robot) $a_i$ with a subregion $SR$ for each of the mission tasks $t$. The correctness of the algorithms employed in the FLYAQ framework regarding preserving safety is proved in \cite{ruscio2016automatic}.
+the FLYAQ~\cite{bozhinoski2015flyaq, di2013engineering} platform for the specification of missions of autonomous multicopters through a high-level and graphical domain specific language tailored to the specific application
+domains. In FLYAQ~\cite{bozhinoski2015flyaq, di2013engineering} the tool generates behaviour plans at design-time for each of the robots (specific types of agents) involved in the mission. The tool associates an agent (robot) $a_i$ with a subregion $SR$ for each of the mission tasks $t$. The correctness of the algorithms employed in the FLYAQ framework regarding preserving safety is proved in~\cite{ruscio2016automatic}.
 
 
-As in FLYAQ\cite{bozhinoski2015flyaq, di2013engineering}, at design-time safe behaviour plans are generated for the agents involved in the mission  according to the initial set of active agents and the mission specification. 
+As in FLYAQ~\cite{bozhinoski2015flyaq, di2013engineering}, at design-time safe behaviour plans are generated for the agents involved in the mission  according to the initial set of active agents and the mission specification. 
 %For our specific mission scenarios, we use the algorithms employed in the FLYAQ platform to generate behaviour plans for the different agents. 
 Our assumption is that the algorithms the mission designers use to generate the behaviour plans for the agents in our framework is correct as in FLYAQ. 
 Now, we focus on the run-time phase.
 During mission execution, at each point of time the system can follow the state of the mission. We define a mission state as follows.
 
 \begin{definition}
-A \textbf{Mission State} is a tuple $MS = ( C, M, S, \tau  )$ where: C is the context, M is the mission that should be performed and S is the MMRS system performing it at time $\tau$.
+A \textbf{Mission State} is a tuple $MS = ( C, M, S, \tau  )$ where: \chg{C}{$C$} is the context, \chg{M}{$M$} is the mission that should be performed and \chg{S}{$S$} is the MMRS system performing it at time $\tau$.
 \end{definition}
 
-Furthemore, we focus on the execution of behaviour plans.
+Furthermore, we focus on the execution of behaviour plans.
 %If the Behaviours are executed as specified and if the execution is correct.
 We define an execution of a behaviour plan for an agent $a_i$ as follows.
 
@@ -1242,14 +1244,14 @@ We define an \textit{execution of a Behaviour Plan} for an agent $a_i$ at time $
 \end{definition}
 
 
-The behaviour state space $B_i$ for an agent is partitioned in three partitions: \textit{success}, \textit{failure}, \textit{running} when an agent $a_i$ is executing a behavior plan $BP_i$ (Figure \ref{fig:BS}). The return status of the Behaviour Plan ${R, S, F}$ at time $\tau$ describes in which partition an agent's state is. The states defined in the \textit{success} partition describe that the agent successfully completed its behavior plan. 
-The states defined in the \textit{running} partition describe that the agent $a_i$ correctly executes its behavior plan at time $\tau$. We say that an agent $a_i$ is correctly executing a Behaviour plan $BP_i$ at time $\tau$ if from the current configuration $C_l$ the agent can continue performing its Behaviour Plan i.e. the set of conditions for the current operation $op \in BP_i$ are satisfied. %capture the configuration properties
-The states defined in the \textit{failure} partition describe that the behavior plan is failing at time $\tau$. In that point the agent should adapt i.e. change its behaviour plan, so it reaches a state in the \textit{running} region from which it can continue executing the mission or just safely exit the mission as described in \cite{di2013engineering}.
+The behaviour state space $B_i$ for an agent is partitioned in three partitions: \textit{success}, \textit{failure}, \textit{running} when an agent $a_i$ is executing a behavior plan $BP_i$ (Figure~\ref{fig:BS}). The return status of the Behaviour Plan ${R, S, F}$ at time $\tau$ describes in which partition an agent's state is. The states defined in the \textit{success} partition describe that the agent successfully completed its behavior plan. 
+The states defined in the \textit{running} partition describe that the agent $a_i$ correctly executes its behavior plan at time $\tau$. We say that an agent $a_i$ is correctly executing a Behaviour plan $BP_i$ at time $\tau$ if from the current configuration $C_l$ the agent can continue performing its Behaviour Plan i.e., the set of conditions for the current operation $op \in BP_i$ are satisfied. %capture the configuration properties
+The states defined in the \textit{failure} partition describe that the behavior plan is failing at time $\tau$. In that point the agent should adapt i.e. change its behaviour plan, so it reaches a state in the \textit{running} region from which it can continue executing the mission or just safely exit the mission as described in~\cite{di2013engineering}.
 
 
 \begin{figure}[h]
 \includegraphics[width=.5\textwidth]{Figures/BS3.pdf}
-\caption{Partitioning behaviour state space}\label{fig:BS}
+\caption{Partitioning behaviour state space\patrizio{explain better the figure. also states S903 and S960 are disconnected; are these states reachable? What's the meaning? Finally, ``behaviour plan execution state transition'' is not clear. Explain better.}}\label{fig:BS}
 \end{figure}
 
 
@@ -1260,9 +1262,9 @@ The states defined in the \textit{failure} partition describe that the behavior 
 To model the behaviour plans of an agent $a_i$ we will be using the Behaviour Tree Architecture because it provides a flexible mechanism for an agent to switch between different behaviour plans.
 As we mentioned earlier, Behaviour Tree (BT) is an organizational execution structure that groups behaviour units that one agent should execute as part of its mission. 
 Each behaviour plan of an agent is modeled as a separate behavioural unit.
- A \textit{Behaviour unit} is one of the basic concepts around which we define our framework. It's an executing structure for explaining what a single agent in the system should do as part of a task. A behavioural unit is modular, parametric structure that can be used across missions,projects and organizations.
-We believe that modularity is important when designing, testing and reusing complex task behaviour in robotics. Individual behaviour units allow individual
-behavior plans to be easily reused by other robots in other context, without the need to specify how they relate to the whole mission behavior \cite{colledanchise2017behavior}. %Behaviour Trees (BTs) were developed in the computer gaming industry, as a tool to increase modularity in
+ A \textit{Behaviour unit} is one of the basic concepts around which we define our framework. It's an executing structure for explaining what a single agent in the system should do as part of a task. A behavioural unit is modular, parametric structure that can be used across missions, projects, and organizations.
+We believe that modularity is important when designing, testing, and reusing complex task behaviour in robotics. Individual behaviour units allow individual
+behavior plans to be easily reused by other robots in other context, without the need to specify how they relate to the whole mission behavior~\cite{colledanchise2017behavior}. %Behaviour Trees (BTs) were developed in the computer gaming industry, as a tool to increase modularity in
 %the control structures of in-game opponents \cite{colledanchise2017behavior} and many works propose their usage in robotic systems as well.
 
 
@@ -1314,7 +1316,7 @@ behavior plans to be easily reused by other robots in other context, without the
 
 
 \section{Problem Resolution}
-
+\patrizio{better using a more clear title. What's problem?}
 
  In this section, we will discuss how our framework manages mission and safety issues. We present an iterative collective adaptation resolution method for partial satisfaction of mission objectives and full satisfaction of safety objectives. 
  
@@ -1370,7 +1372,7 @@ During normal conditions, each agent will perform its behaviours generated at de
 
 %When a behaviour reaches the SUCCESS region its GOAL is reached.
 
-However, when an agent executes a behaviour plan and reaches a state in the failure region, the behaviour is not executing correctly. When an agent is not "executing correctly" a behaviour plan, a \textit{problem} is triggered.
+However, when an agent executes a behaviour plan and reaches a state in the failure region, the behaviour is not executing correctly. When an agent is not ``executing correctly" a behaviour plan, a \textit{problem} is triggered.
 
 A problem is a generic structure that corresponds to different critical situations that can happen to an agent when executing a particular behaviour plan. It is generated as a result of the inadequacy between the agent configuration model and the model of its behaviour plan. It can represent situations like a state of an agent that can't cover a particular mission region because of lack of resources or a state of an agent that represents a situation of possible collision.
 %which actions should be performed for an agent to avoid collision avoidance.
@@ -1380,9 +1382,9 @@ We will discuss about the problem space  we are covering in more details in the 
 \begin{definition}[Problem]
 A Problem is a tuple $P= (PS, f)$ where 
 \begin{itemize}
-\item $PS$ is a generic type of problems
+\item $PS$ is a generic type of problems;
 %\item $CP$ is a subset of the Agent's configuration parameters important for reaching $G$ 
-\item  $f: P ->  V$ is an assignment function that assigns values for problem's properties to define the boundaries of the problem
+\item  $f: P ->  V$ is an assignment function that assigns values for problem's properties to define the boundaries of the problem.
 \end{itemize}
 \end{definition}
 
@@ -1395,7 +1397,7 @@ A Solver is a structure that as input receives an instance of a problem and prod
 %be written as:  Solver Type: P -> S, where P is the set of all possible Problem Cases and S is the set of all possible solutions.
 
 \begin{definition}[Solver]
-A Solver is a tuple $S=(P_0, PS, SS, \theta)$ where
+A Solver is a tuple $S=(P_0, PS, SS, \theta)$ where:
 \begin{itemize}
 \item $P_0$ is the initial problem that should be solved.
 \item $PS$ is the set of all possible Problems the solver is able to solve
@@ -1450,26 +1452,26 @@ A role represents the type of collaborative interaction a particular agent can p
  
 \begin{definition}[Role] A Role is a tuple $R_i=(P, S)$ where:
 \begin{itemize}
-\item $P$ is a a set of problems it can produce
-\item $S$ is a a set of solvers it provides
+\item $P$ is a set of problems it can produce;
+\item $S$ is a set of solvers it provides.
 \end{itemize}
 \end{definition}
 
 %Problems generally correspond to different critical situations
 %that can happen to an entity.
 
-The model of an \textit{entity} is primarily determined by the ways it collaborates with other entities as part of an \textit{ensemble}.  In isolated adaptation the entity that triggered the problem is the same as the one that provides a solution, but in collective adaptation a solution is provided by other entities in the ensemble. An ensemble is primarily determined by the entities that collaborate to solve a particular problem. In isolated adaptation, the ensemble contains one entity, while in collective adaptation, the ensemble consists of multiple entities. In collective adaptation, the ensemble facilitate cooperation between entities by means of an information exchange at run-time. The collaboration between two entities is possible only if the entities can communicate between each other.
+The model of an \textit{entity} is primarily determined by the ways it collaborates with other entities as part of an \textit{ensemble}.  In isolated adaptation the entity that triggered the problem is the same as the one that provides a solution, but in collective adaptation a solution is provided by other entities in the ensemble. An ensemble is primarily determined by the entities that collaborate to solve a particular problem. In isolated adaptation, the ensemble contains one entity, while in collective adaptation, the ensemble consists of multiple entities. In collective adaptation, the ensemble \chg{facilitate}{facilitates} cooperation between entities by means of an information exchange at run-time. The collaboration between two entities is possible only if the entities can communicate between each other.
 %themselves i.e. the communication range of one entity includes the location of the other one and vice versa.
 %are in a are there  has strong dependence of the communication range between entities has a strong influence in their collaboration. 
 Formally, an ensemble is defined as follows.
 
 \begin{definition}
-An Ensemble is a dynamic run-time structure represented as a tuple $E=(A, R, \lambda)$ where
+An Ensemble is a dynamic run-time structure represented as a tuple $E=(A, R, \lambda)$ where:
  \begin{itemize}
-\item $A$ is a set of agents grouped together 
-\item $R$ is a set of roles the agents are playing
+\item $A$ is a set of agents grouped together;
+\item $R$ is a set of roles the agents are playing;
 %\item $P_i$ is the problem case they are trying to solve
-\item $\lambda: E \rightarrow R $ is an assignment function for which the agents are assigned their respective roles (entity definition)
+\item $\lambda: E \rightarrow R $ is an assignment function for which the agents are assigned their respective roles (entity definition).
  \end{itemize}
 \end{definition}
 
@@ -1492,9 +1494,10 @@ In Figure \ref{fig:agentsArchitecture} is represented a run-time perspective of 
 In this section, we will describe each of the MAPE-K loop components for the individual entities. The MAPE-K loop comprises of 4 
 components operating over a Knowledge base. In order to illustrate the separation of concerns between mission-related and safety-related mechanisms for self-adaptation,
 there are two sub-components  running in parallel at each stage of the loop, one managing the mission, while the other the safety (Figure~\ref{fig:agentsArchitecture}). 
+\patrizio{explain better the interplay between the safety and mission part. For instance, if in the monitor part we are in the safety part, then we will keep the saftey part for the other three components? Or?}
 
 In the \textit{Knowledge} base we define three different type of models that an entity contains. The first model is the Behaviour Tree model (BTM). The BTM contains all behaviour plans associated with the mission. Each entity has a set of behaviour plans defined at design-time, but only one behaviour plan can be \textit{active} in one point of time during mission execution (depending on its priority).
-The second model is the current configuration of the entity \textit{Conf}. This model gives information about the current resources of an entity containing information like position of the robot in the map, current level of battery etc.
+The second model is the current configuration of the entity \textit{Conf}. This model gives information about the current resources of an entity containing information like position of the robot in the map, current level of battery, etc.
 The third model is a repository of the solvers it can provide i.e. \textit{Mission Solvers} and \textit{Safety Solvers}.
 %and the problems it can trigger i.e. the roles it can play as part of the mission.
 
@@ -1510,14 +1513,14 @@ The stimuli are values associated with specific safety-related or mission-relate
 
 \textbf{Analysis component}: This component makes analysis if 
 %gets information from the \textit{knowledge} component if the status of 
-the \textit{active} behaviour either \textit{failed}, \textit{succeeded} or \textit{running}. It has two sub-components Mission analyzer and Safety analyzer each making appropriate checking.
+the \textit{active} behaviour either \textit{failed}, \textit{succeeded}, or \textit{running}. It has two sub-components Mission analyzer and Safety analyzer, each making appropriate checking.
 %Furthermore, it checks if there is a new ``READY" behaviour which has higher priority then the current ACTIVE one. 
 Depending on the analysis of the \textit{active} behaviour it does the following:
 \begin{enumerate}
 \item  Success: 
 %It transfer the call to the higher MAPE-K loop (MAPE-K loop of the ensemble). 
-It references the \textit{active} behaviour with the "next" behaviour plan in the behaviour tree model. Then, it triggers the \textit{execution} component.
-\item Failed:  it triggers the \textit{planning} component.
+It references the \textit{active} behaviour with the ``next" behaviour plan in the behaviour tree model. Then, it triggers the \textit{execution} component;
+\item Failed:  it triggers the \textit{planning} component;
 %It transfers the call to the higher MAPE-K loop (MAPE-K loop of the ensemble) .
 %\item new READY behaviour with higher priority: It triggers the Planning component of the agent to start ADAPTATION
 \item Running: it triggers the \textit{execution} component.
@@ -1541,7 +1544,7 @@ More details about the adaptation process will be provided in the next section w
 
 %taking it from the Knowledge component. , updates the KNOWLEDGE model with the return status of the ACTIVE BEHAVIOUR (Running, Success, Failed) and it triggers the Monitoring component.
 
-
+\patrizio{at this point I missed the part about creation of ensambles mentioned before. When this happen?}
 
 
 
@@ -1582,7 +1585,7 @@ In an initial work \cite{bozhinoski2016leveraging}, we provided a generic approa
 Our framework implements a \textit{Mission Manager component} as part of the Planning component in the MAPE-K loop for each entity. 
 %If the entity can perform isolated adaptation i.e. contains solvers which can generate a solution
 %behavior for completing parts of the mission. These are mission-specific and employed  before the start of the mission.
- The mission manager receives information about the eligible mission related solvers in the Knowledge base. These are mission-specific and defined before the start of the mission. Mission-specific solvers have a set of solver constraints (configuration parameters) that reduce the space of acceptable problems (ex. a solver for covering a geographical area might require an entity to have an active camera, enough level of battery etc. to be  able to resolve a particular problem).  If an entity %activate an perform isolated adaptation
+ The mission manager receives information about the eligible mission related solvers in the Knowledge base. These are mission-specific and defined before the start of the mission. Mission-specific solvers have a set of solver constraints (configuration parameters) that reduce the space of acceptable problems (\chg{ex.}{e.g.,} a solver for covering a geographical area might require an entity to have an active camera, enough level of battery etc. to be  able to resolve a particular problem).  If an entity %activate an perform isolated adaptation
  activates an eligible solver, it generates a solution i.e. behaviour plan to complete parts of the mission.
  The generated solution (behaviour plan) brings the agent into a state from which it can continue executing the mission.
 %\darko{what are the consequences of behaviour plans execution}
@@ -1591,7 +1594,7 @@ Our framework implements a \textit{Mission Manager component} as part of the Pla
 
 %partitioning the different types of problems and solvers and 
 \subsection{Collective adaptation}
-At design time we assigned the goal space $G$ for a task $t$ to a set of agents $A$. On Figure~\ref{Fig:Synthesis} the goal space G is assigned to two agents $a_1$ and $a_2$. A subregion $SR^t_i$ of a task $t$ that a specific agent $a_i$  was assigned to do is decomposed in number of blocks (ex. the rectangle delimited by q11, q16, q15, and q12 in Figure~\ref{Fig:Synthesis} is one block).
+At design time we assigned the goal space $G$ for a task $t$ to a set of agents $A$. On Figure~\ref{Fig:Synthesis} the goal space G\patrizio{G or $G$?} is assigned to two agents $a_1$ and $a_2$. A subregion $SR^t_i$ of a task $t$ that a specific agent $a_i$  was assigned to do is decomposed in number of blocks (\chg{ex.}{e.g.:} the rectangle delimited by q11\patrizio{better $q11$}, q16, q15, and q12 in Figure~\ref{Fig:Synthesis} is one block).
 %We showed in \cite{bozhinoski2015flyaq, di2013engineering} how we decompose the regions on blocks.  
 Then, for each block we assigned a unique identifier and associate a goal location $G_i \in Coordinates$. 
 For each agent $a_i \in A$ involved in a specific task $t$ we generate a  behaviour plan $BP^t_i$ covering a sub-region $SR^t_i \in G$ from its home location $G^i_{home}$ to the last goal location $G^i_n$. 
@@ -1611,7 +1614,7 @@ Accordingly, we focus only on one type of mission-specific solvers which represe
 %coverage path planning problem. 
 
 As we work particularly with regions, a mission related problem can be decomposed on smaller problems(sub-regions). 
-To be able to annotate the progress of task execution, we define a measure of satisfiability for a task $t$ that gives information how much percentage of the task goal space $G_t$ is covered. %\darko{more details}
+To be able to annotate the progress of task execution, we define a measure of satisfiability for a task $t$ that gives information on how much percentage of the task goal space $G_t$ is covered. %\darko{more details}
 We denote that a task $t$ is completed if all blocks of its goal space $G$ are covered i.e. all generated lower-level goals $G_i$ are reached. Correspondingly, we  say  that  a  mission is \textit{fully completed} if all tasks are completed. 
 In contrast, a mission is partially completed if there is a task $t$ which is not completed i.e. there is a task $t$ with a subregion $SR^t_i$ that contains blocks which are not covered.
 %subset of all regions' blocks are covered. 
@@ -1749,8 +1752,8 @@ structure of the ensemble is defined by declaring the ensemble
 roles that the entities can play.
 In our case, an agent can play one of the following roles in the mission resolution ensemble:
 \begin{itemize}
-\item Leader: an entity that triggers a problem $P_k$ and leads the ensemble formation
-\item Solver\_Agent: an entity that participate in the solution creation of the aforementioned problem $P_k$
+\item Leader: an entity that triggers a problem $P_k$ and leads the ensemble formation;
+\item Solver\_Agent: an entity that participate in the solution creation of the aforementioned problem $P_k$.
 %\_1, Solver\_Agent\_2, ... , Solver\_Agent\_N  
 %(roles of agents that participate in the solution creation of the aforementioned problem)
 %\item LEADER (an agent that provides a final solution to a triggered top-level problem case). In situations where the ROOT\_AGENT provides a partial solution to its triggered problem case, the agent that has the role ROOT\_AGENT has also the role ROOT LEADER ENSEMBLE
@@ -1783,7 +1786,7 @@ An agent can play more then one role in the ensemble i.e. it can be a leader and
 %\item G is the GOAL they are workings towards
 %\end{itemize}
  
-Next, we place semantic constraints, represented by the constraint expression. In our scenario a constraint for an entity to be part of the ensemble is that there must be a \textit{communication path} between the corresponding entity and its leader. What we mean by communication path is that if the ensemble leader sends message in the environment, the information can be transferred from one entity to another, and all entities that are able to receive the information are in the communication path of the leader.
+Next, we place semantic constraints, represented by the constraint expression. In our scenario a constraint for an entity to be part of the ensemble is that there must be a \textit{communication path} between the corresponding entity and its leader. What we mean by communication path is that if the ensemble leader sends \ins{a} message in the environment, the information can be transferred from one entity to another, and all entities that are able to receive the information are in the communication path of the leader.
 %transit and the corresponding agent is able to receive it after infinite time. all the agents that can receive that information after infinite time in the environment
 In other words, each entity in the ensemble should have a neighborhood region that is overlapping with the neighborhood region 
 %in its neighborhood region 
@@ -2375,7 +2378,7 @@ Taking some additional assumptions, we prove correctness and completeness of the
 \subsubsection{Correctness} 
 
 In order to prove that our algorithm is correct, we assume that the solvers provided by the different entities are correct. 
-Correctness of a solver means that an entity's solver can generate a behaviour(solution) to resolve a particular mission related problem with a quality $q_a$. If that behaviour is executed correctly we have a correct adaptation.
+Correctness of a solver means that an entity's solver can generate a behaviour (solution) to resolve a particular mission related problem with a quality $q_a$. If that behaviour is executed correctly we have a correct adaptation.
 We define a quality $q$ of a solution  $S_i$  based on two factors: (i) \textit{closeness} to the agent that triggered the problem, (ii) intrinsic quality given by the entity.
 What we mean by closeness to the agent is the following: in one instance of the problem resolution tree, if there is an entity $e_k$ that has a \textit{higher order in the hierarchy} in the problem resolution tree 
 %is \textit{hierarchically closer} 
@@ -2388,8 +2391,8 @@ The leader when calculating the best solution, doesn't have the exact informatio
 For example a leader might be able to communicate with two entities that can provide some solution to the initial problem. Each of those two entities might have formed a temporary sub-ensemble. 
 The two temporary sub-ensembles are on the same hierarchical level and they might have one entity in-common, however they belong to different instances of the resolution process and can be represented with two different problem resolution trees. When the leader decides for the final solution it might consider a combination of both sub-ensembles which create the final solution and chooses a final \textit{stable ensemble} that is a combination of both sub-ensembles. We can represent the stable ensemble in one instance of the problem resolution tree as in Figure~\ref{fig:MissionTree}.
 
-The only guarantees we can make about this resolution process is that the commited solution (if everything goes well) will be executed. That being said, the assumption is that there should not be a noticeable difference in the solution quality between the moment a solution is proposed and a solution is chosen. Solution quality will remain the same if there isn't any change in the \textit{entity's resources} and in the \textit{connectivity formation} of the ensemble.
-That is why we assume that the time between a solution is proposed and a solution is commited is really small so that there isn't any change in the \textit{connectivity formation} of the ensemble (\textbf{Assumption 1}).
+The only guarantees we can make about this resolution process is that the committed solution (if everything goes well) will be executed. That being said, the assumption is that there should not be a noticeable difference in the solution quality between the moment a solution is proposed and a solution is chosen. Solution quality will remain the same if there isn't any change in the \textit{entity's resources} and in the \textit{connectivity formation} of the ensemble.
+That is why we assume that the time between a solution is proposed and a solution is committed is really small so that there isn't any change in the \textit{connectivity formation} of the ensemble (\textbf{Assumption 1}).
 %that  of the ensemble. Hence, we can say that the solution quality depends on these 
 However, change in the resources for the proposed solution might come if an entity participate in two different resolution processes triggered by different leaders. During problem resolution, entities might propose solutions for different problems in different ensembles. As the resources of the entities are limited, we made the assumption that
 %the quality of the commited solution is equal to the quality of the proposed solution meaning that
@@ -2398,7 +2401,7 @@ if an entity participates in two different resolution processes from different l
 However, there is another case that impacts the quality of the solution and that is when an entity tries to propose multiple solutions in one problem resolution process. Here, we will proof that with our algorithm that won't be possible. 
 Thus, we define correctness as follows.
 
-In these cases, we say that the commited solution quality is equal to the chosen solution quality. 
+In these cases, we say that the committed solution quality is equal to the chosen solution quality. 
 %Recollect that when computing a trajectory for a robotri
 %, the execution
 %of MRMP is decomposed into two phases: rst the coordination
@@ -2422,7 +2425,7 @@ If an entity $e$ triggers a problem $P_i$ and Assumption 1 and Assumption 2 are 
 
 
 \begin{proof}
-As we mentioned earlier we assume that all mission related problems can be decomposed. Let's say we have an entity $e$ that triggered the problem $Pi$. $Pi$ can be decomposed on $m$ different different ways. For each different decomposition there is a sequence of local solutions proposed by an ensemble $E_m$  that combined together give a global solution $S_m$. The global solution $S_m$ is a sequence of local solutions $s_0, s_1, ..., s_k$, each of them with a particular quality $q_0, q_q, ..., q_k$ correspondingly. Let's assume there exists an ensemble consisting of \textit{n} entities for which there is a communication path between them and the leader(the ensemble might include the leader) and that they can provide the best final solution $S_i$ to a problem $P_i$. Correspondingly, we can decompose the solution to a sequence of local solutions $S_i=(s_0, s_1, s_2, ..., s_n)$ each with a particular quality  $q_0, q_q, ..., q_n$.  We can represent that ensemble using the problem resolution tree (Figure~\ref{fig:MissionTree}). 
+As we mentioned earlier we assume that all mission related problems can be decomposed. Let's say we have an entity $e$ that triggered the problem $Pi$. $Pi$ can be decomposed on $m$ different different ways. For each different decomposition there is a sequence of local solutions proposed by an ensemble $E_m$  that combined together give a global solution $S_m$. The global solution $S_m$ is a sequence of local solutions $s_0, s_1, ..., s_k$, each of them with a particular quality $q_0, q_q, ..., q_k$ correspondingly. Let's assume there exists an ensemble consisting of \textit{n} entities for which there is a communication path between them and the leader (the ensemble might include the leader) and that they can provide the best final solution $S_i$ to a problem $P_i$. Correspondingly, we can decompose the solution to a sequence of local solutions $S_i=(s_0, s_1, s_2, ..., s_n)$ each with a particular quality  $q_0, q_q, ..., q_n$.  We can represent that ensemble using the problem resolution tree (Figure~\ref{fig:MissionTree}). 
 In order to prove that the algorithm is correct, 
 %we need computes the best quality solution 
 we need to prove that the computed solution $S_i$ by the leader of the stable ensemble $E_n$ is the best for the problem $P_i$.
@@ -2490,7 +2493,7 @@ Proving that the algorithm will always find a solution, and that all participant
 
 \section{Safety Problem Resolution} 
 
-In this paragraph, we discuss about the adaptation resolution problem related to safety problems. To be able to model specific safety related behaviours, we discuss few properties of agents and how they are connected to safety.
+In this \ugh{paragraph}, we discuss about the adaptation resolution problem related to safety problems. To be able to model specific safety related behaviours, we discuss few properties of agents and how they are connected to safety. \patrizio{what will be in this section?}
 
 \section{Modeling Safety}
 
