@@ -1,0 +1,62 @@
+machine MissionResolution{
+  start state Discover{
+    on TriggerMissionProblem($P_i$) do{
+      $sol$ = callSolvers($P_i$);
+      $timerV$ = new Timer(this);
+      StartTimer($timerV$);
+      goto ConstructSolution;
+    }
+    on ReqForSolver($P_j$, $r_j$, $d$) do{
+      if ($P_j \notin P$) then
+        $sol$ = callSolver($P_j$);
+        if ($sol \neq \emptyset \land t \leq d$) then
+            $P = P \cup P_j$;
+            send($r_j$, solutionfound, $sol$);
+        end if
+      end if
+    } 
+    on Commit($sol$, $r_j$){
+      $sol$=check($sol$);
+      update($sol$);
+      send($r_j$, confirm, ($r_j$, $sol$))
+    }
+  }
+  state ConstructSolution{  
+    defer ReqForSolver, Commit;
+    entry {
+      if ($sol \neq \emptyset$)
+        $Target$ = $r_i$;
+        $S = sol$;
+        $P_j = P_i \setminus p(sol)$
+        if ($P_j == \emptyset$) then
+          goto RequestCommit;
+        end if
+      else
+        broadcast (ReqForSolver, ($P_j$, $r_i$));
+      end if
+    }
+    on SolutionFound($r_j$, $sol$) do{
+      $Target = Target \cup {r_j}$
+      $S = S \cup {sol}$    
+    }
+    on TIMEOUT push RequestCommit;
+  }
+  state RequestCommit{
+    entry{
+      $<Sbest, Target>$ = find_best_solution($S$,$Target$)
+      $S = \emptyset$;
+      $Rrecv = \emptyset$;
+      foreach $t \in Target$
+        send($t$, commit, (Sbest($t$), $r_i$))
+      end
+    }
+    on Confirm($r_j$, $solution$){
+      $S = S \cup solution$;
+      $R_{recv} = R_{recv} \cup {r_j}$;
+      if (sizeof($R_{recv}$) = |$Target$|) then
+        update($sol$);
+        goto Discover;
+      end if
+    }
+  }
+}

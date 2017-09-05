@@ -1,0 +1,15 @@
+ensemble SafetyResolution
+    id ensemble_id: Entity
+    membership
+        roles
+           Leader : Entity
+           Solver_Agent [1..n]: Entity
+    constraints
+        constraint Solver_Agent.hascommpath(Leader)==$\top$
+        constraint $\exists$ Solver_Agent.solver 
+        compatible(Solver_Agent.solver, Leader.solver)==$\top$
+    fitness Leader.solution.quality
+    knowledge exchange
+        Leader.Problem=Solver_Agent.Problem(conflict_r)
+        Solver_Agent.solver = Leader.solver(A, attr)
+        Leader.solution=Solver_Agent.solution

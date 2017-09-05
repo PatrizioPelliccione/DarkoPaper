@@ -91,6 +91,7 @@
 \usepackage{graphicx, subfigure}
 \usepackage{caption}
 
+\usepackage{algpseudocode}
  
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -645,15 +646,21 @@ Figure~\ref{fig:Scenario} shows a mission in which three robots, specifically th
 Starting from this very high-level description of the mission, the configurations and flight plans for the  UAVs can be automatically generated. Once configured, these UAVs perform the mission by flying from their initial position to the border of the monitoring area. Then, each UAV starts monitoring a specific sub-area so that the whole team can cover the entire area in parallel. A sub-area can be decomposed in number of blocks.
  A block is the smallest measurable unit for the mission region. Each block is assigned a unique identifier. We represent the size of an area using the number of blocks along each dimension. 
 
-\chg{On Figure~\ref{fig:Scenario} a Mission execution of three UAVs is shown.}{The bottom side of Figure~\ref{fig:Scenario} shows the mission execution of three UAVs.} Each UAV is executing its corresponding behaviour to cover  its part of the mission. {\ugh The green region is a region for which the corresponding UAVs performed their mission i.e. they visited that particular area.}\patrizio{please rewrite} The other regions that have different colour are the regions for which the UAVs should perform the mission in the future, where the colour of the UAV is the same with the colour of the region it should visit.\patrizio{this sentence can be simplified. Moreover, it's not a good idea to use colors to distinguish the areas. This will be not readable when printed black and white.}
+The bottom side of Figure~\ref{fig:Scenario} shows the mission execution of three UAVs. Each UAV is executing its corresponding behaviour to cover  its part of the mission. The black region is the region that has been monitored by the corresponding UAVs.
+%performed their mission i.e. they visited that particular area.}
+The region with dots represents the region that should be monitored by the UAV with dots, the region with horizontal stripes is the region that should be monitored by the UAV  with horizontal stripes and the  region with vertical stripes is the region that should be monitored by the UAV with vertical stripes. 
+
+%\patrizio{please rewrite} The other regions that have different colour are the regions for which the UAVs should perform the mission in the future, where the colour of the UAV is the same with the colour of the region it should visit.\patrizio{this sentence can be simplified. Moreover, it's not a good idea to use colors to distinguish the areas. This will be not readable when printed black and white.}
 %information which region should visit.
 %while the other colours information which UAV should visit region. 
 
-Let us assume that a UAV $u_x$ (blue UAV on Figure~\ref{fig:Scenario}) of the team $U$ must reach a \ugh{target geographical position $p$} and it identifies an obstacle along its trajectory towards $p$; if the obstacle is avoidable (e.g., a tree), then $u_x$ adapts its trajectory so that it avoids the obstacle to reach $p$; if the obstacle cannot be easily avoided (e.g., a large object on Figure~\ref{fig:Scenario}\patrizio{I don't see this object in the figure}), then the behaviours of $u_x$ and some other UAVs in $U$ are adapted so that the position $p$ is still covered by another UAV $u_i \in U$ and $u_x$ can cover some other points within the area.  
+Let us assume that a UAV $u_x$ (the UAV with dots on Figure~\ref{fig:Scenario}) of the team $U$ must reach a target geographical position $p$ and it identifies an obstacle along its trajectory towards $p$; if the obstacle is avoidable (e.g., a tree), then $u_x$ adapts its trajectory so that it avoids the obstacle to reach $p$; if the obstacle cannot be easily avoided (e.g., the large white object on Figure~\ref{fig:Scenario},
+%\patrizio{I don't see this object in the figure})
+then the behaviours of $u_x$ and some other UAVs in $U$ are adapted so that the position $p$ is still covered by another UAV $u_i \in U$ and $u_x$ can cover some other points within the area.  
 
 \begin{figure}[h]
 
-\includegraphics[width=3.25in]{Figures/MScenario_F.png}
+\includegraphics[width=3.25in]{Figures/Scenario_M.png}
 \label{fig:second}
 \caption{Motivating Scenario}\label{fig:Scenario}
 \end{figure}
@@ -670,14 +677,16 @@ Let us assume that a UAV $u_x$ (blue UAV on Figure~\ref{fig:Scenario}) of the te
 %\subsection{Preliminaries}
 
 In order to explain our framework we
-start introducing \ugh{the notion of some basic concepts} that are used through out the paper.
-In this section, we formalize the definitions needed for the rest of
-the paper and represent concepts that will be used later on.\patrizio{two sentences that say almost the same}
+start introducing some basic concepts
+%\ugh{the notion of some basic concepts} 
+that are used through out the paper.
+%In this section, we formalize the definitions needed for the rest of
+%the paper and represent concepts that will be used later on.\patrizio{two sentences that say almost the same}
 
 \subsection{Design-time Elements: Terminology \& Definitions}
 
 
-Let $Coordinates = \{(x,y,z) | x,y,z \in R\}$  be the universal set of geographical coordinates where the mission takes place; for $C \in Coordinates$, \patrizio{should $C$ be $c$?} $c.x$ denotes the longitude of c, $c.y$ is the latitude,
+Let $Coordinates = \{(x,y,z) | x,y,z \in R\}$  be the universal set of geographical coordinates where the mission takes place; for $c \in Coordinates$, $c.x$ denotes the longitude of c, $c.y$ is the latitude,
 and $c.z$ is the altitude. 
 To represent the mission and the context in which a MMRS performs the mission we define a region as a generic term for defining geometric shapes in the environment. 
 
@@ -694,7 +703,7 @@ denotes a geometric shape in the environment (ex. it can identify a polygon in t
 In our work, we use regions to represent the geographical area of the mission and its context, more specifically to represent three types of logical structures in the definition of the mission: (i) an \textit{obstacle}, (ii) a \textit{no-pass zone}, (ii) \textit{mission region}.
 We define an \textit{obstacle} as a region in the environment that should not intersect with the region of operation of an active agent because has negative impact on safety.  \textit{No-pass} zone is a region in the environment that should not intersect with the region of operation of an active agent because of law regulations, but does not have impact on safety.  \textit{Mission region} is the minimum bounding box of the areas of all tasks. 
 
-Now, we formally define the context in which mission\patrizio{a mission takes or missions take} takes place.
+Now, we formally define the context in which a mission takes place.
 
 \begin{definition}[Context]
 A context $C=(Nz, O)$ is a pair
@@ -705,9 +714,9 @@ is a list of regions representing obstacles.
 
 
 
-In  the  following  we  focus  on  the  concept  of  an agent,  see Definition 4. 
+In  the  following  we  focus  on  the  concept  of  an agent,  see Definition~\ref{def:Agent}. 
 Informally, we represent an agent through its state (a set of  properties representing its configuration %representing its state
-and environment where it operates). Each property describes a particular aspect of the agent's state (e.g., an agent location, current speed, current battery level, set of resources or information of its  environment). An agent observes the environment and collects information about its local operational context (\chg{Ex.}{e.g.} an agent can identify obstacles or other agents in its local environment).
+and environment where it operates). Each property describes a particular aspect of the agent's state (e.g., an agent location, current speed, current battery level, set of resources or information of its  environment). An agent observes the environment and collects information about its local operational context (e.g. an agent can identify obstacles or other agents in its local environment).
 
 We define property for an agent as follows.
 
@@ -722,42 +731,42 @@ A generic property $P_i=(ID, V)$ is defined as a tuple where:
 
 Now, we  formally define an agent. 
 
-\begin{definition}[Agent]
+\begin{definition}[Agent]\label{def:Agent} 
 %\ivano{I like this definition, especially the distinction between internal and contextual properties. Here it is better to specify that $CP$ and $EP$ are sets of uniquely identified properties. }
 A generic agent $a_i=(CP, EP)$ is defined as a tuple %\patrizio{how an agent configuration relates to an agent?}:%
 where:
 \begin{itemize}
-\item $CP$ is the agent's configuration expressed as a set of uniquely identified \textit{configuration properties} (\chg{ex.}{e.g.} current speed, current battery level etc.)
-\item $EP$ is a set of uniquely identified \textit{environmental properties} each describing a particular aspect of agent's environment. (\chg{ex.}{e.g.} obstacles, other agents in the local environment etc.). 
+\item $CP$ is the agent's configuration expressed as a set of uniquely identified \textit{configuration properties} (e.g. current speed, current battery level etc.)
+\item $EP$ is a set of uniquely identified \textit{environmental properties} each describing a particular aspect of agent's environment. (e.g. obstacles, other agents in the local environment etc.). 
 \end{itemize}
 \end{definition}
 
-In the following we focus on the concept of task, see Definition
-5\patrizio{please never do that! Do references to defitions, sections, etc. in the proper way!}. Informally, a concrete Task specifies (i) 
+In the following we focus on the concept of task, see Definition~\ref{Def:Task}. Informally, a concrete Task specifies (i) 
 the region defined as a \textit{goal space} in which the involved robots have to perform behaviours 
-(ii) the strategy according to which the region will be decomposed  in sub-regions\chg{ 
-(ii)}{, and (iii)} the action performed by the robots.
+(ii) the strategy according to which the region will be decomposed  in sub-regions, and (iii) the action performed by the robots.
 
-Let STR be the universal set of strategies for Region decomposition, and let ACT\patrizio{decide if should be ACT or $ACT$, and be consistent. The same for STR before} be the universal set of actions that realize concrete robot actions
+Let $STR$ be the universal set of strategies for Region decomposition, and let $ACT$
+%\patrizio{decide if should be $ACT$ or $ACT$, and be consistent. The same for STR before} 
+be the universal set of actions that realize concrete robot actions
 (like taking a picture with a given resolution, detecting the
-presence of carbon dioxide, etc.). $\bot \in ACT$ denotes \ins{the} null action meaning that it is ineffectual. A task is defined as follows.
+presence of carbon dioxide, etc.). $\bot \in ACT$ denotes the null action meaning that it is ineffectual. A task is defined as follows.
 
-\begin{definition}[Task] 
+\begin{definition}[Task]\label{Def:Task}
 A task $t=(G,S,act)$ is a tuple where:
 \begin{itemize}
 \item $G$ is the region named as a \textit{goal space} in which the involved robots have to perform behaviours; 
 \item $S \in STR$ is the strategy according to which the goal space will be  decomposed on subregions;
 %$SR \in R$ \ivano{$SR$ is not defined here, maybe it is better to say that the goal space of $t$ will be decomposed into a set of subregions $\{S^t_1 \dots, S^t_n\}$ where all their coordinates identify geometric subset of $G$. Should the union of all the subregions correspond to the whole $G$? I think so. Should the subregions overlap? I think no.} 
-\item  $act \in ACT \times \{i, c\}$ specifies the concrete action to be performed by the robots involved in the task. $\{i, c\}$ identifies \chg{if}{whether} the action
+\item  $act \in ACT \times \{i, c\}$ specifies the concrete action to be performed by the robots involved in the task. $\{i, c\}$ identifies whether the action
 is instantaneous, like taking a picture, or continuous, like taking a
-video. An instantaneous action i\patrizio{decide if should be i or $i$, and be consistent.} is executed for each goal location. A continuous action is started at the beginning of the task and terminated at the end. In case of $\bot$, the continuous/instantaneous flag
+video. An instantaneous action is executed for each goal location. A continuous action is started at the beginning of the task and terminated at the end. In case of $\bot$, the continuous/instantaneous flag
 does not matter.
 \end{itemize}
 \end{definition}
 
 Let $SR = \{SR^t_1, \dots, SR^t_n \}$ is a set of subregions on which the goal space $G$ of a task $t$ is decomposed according to a strategy S. 
 Hence, we have $\{SR^t_1 \cup \dots \cup SR^t_n\} = G$ and 
-$ \{SR^t_1 \cap \dots \cap SR^t_n\} = \emptyset$ meaning that the union of all subregions \chg{correspond}{corresponds} to the whole space $G$, and there \chg{isn't}{is not} an overlap between different subregions.
+$ \{SR^t_1 \cap \dots \cap SR^t_n\} = \emptyset$ meaning that the union of all subregions corresponds to the whole space $G$, and there is not an overlap between different subregions.
 
 %the strategy according to which the goal space will be be  decomposed on subregions $SR \in R$ \ivano{$SR$ is not defined here, maybe it is better to say that the goal space of $t$ will be decomposed into a set of subregions $\{S^t_1 \dots, S^t_n\}$ where all their coordinates identify geometric subset of $G$. Should the union of all the subregions correspond to the whole $G$? I think so. Should the subregions overlap? I think no.} 
 
@@ -780,7 +789,7 @@ Then, for each block we assigned a unique identifier and associate a goal locati
 
 
 In the following we define a \textbf{Mission}.
-Let \textit{Tasks} denotes the universal set of all tasks (definition 5\patrizio{please fix the ref!}) and let A is the set of all agents (definition 4).
+Let \textit{Tasks} denotes the universal set of all tasks (see definition~\ref{Def:Task}) and let \textit{A} is the set of all agents (see definition~\ref{def:Agent}).
 \begin{definition}[Mission]
 A mission $M=\{t_1, ... , t_n \ \vert t_1, ..., t_n \in Task \}$  is defined as a set of tasks that need to be executed.
 \end{definition}
@@ -788,7 +797,7 @@ A mission $M=\{t_1, ... , t_n \ \vert t_1, ..., t_n \in Task \}$  is defined as 
 In this work we consider that the priority of all tasks in a mission is the same. Hence, we assume that there is not any ordering of tasks and each task can be performed at the same time as any other. 
 Now we formally define an MMRS system. 
 
-\begin{definition}[MMRS]
+\begin{definition}[MMRS]\label{def:MMRS}
 An \textbf{MMRS} 
 $S=\{(a_1, \{t_1,...,t_k\}),... , \\(a_n,\{t_1,...,t_n\}) \vert a_1, ... , a_n \in A  \land t_1,...t_k,...,t_n  \in TASK\}$ is a set representing the agents participating in the mission's tasks.
 \end{definition}
@@ -817,13 +826,13 @@ Agent is the basic unit around which an MMRS  is defined. Examples of agents in 
 %We discretize each of the subregions to discrete \textit{goal locations} $G_i \in Coordinates$
 
 Now, we formally define agent's behaviour. We denote by  $S$ the set of all available states for an agent, while with $OP$ the set of all atomic operations of an agent. When an agent performs an operation $op \in OP$, we can see the  impact in two aspects: (i) in the physical location where the action takes place and (ii) in  the agent's state.
-That is why, we represent  OP=($\Gamma$, $\Omega$)\patrizio{decide if should be OP or $OP$, and be consistent.} as a tuple of two disjoint subsets where:
+That is why, we represent  $OP$=($\Gamma$, $\Omega$) as a tuple of two disjoint subsets where:
 \begin{itemize}
     \item $\Gamma$ is the set of all ``atomic" movements available for a robot
     \item $\Omega$ is the set of all ``atomic" actions available for a robot
 \end{itemize}
 
-In this work, a combination of an ``atomic" movement and ``atomic" action  performed at a same time is considered as an ``atomic" operation\chg{. Ex.}{, e.g.,} a robot can move from a starting location to a goal location and record a video. Here, \textit{moving} is an ``atomic" movement, while \textit{recording} a video is an ``atomic" action. We consider that the combination of both of them happening at a same time is an ``atomic" operation that cannot be split on smaller parts. 
+In this work, a combination of an ``atomic" movement and ``atomic" action  performed at a same time is considered as an ``atomic" operation, e.g., a robot can move from a starting location to a goal location and record a video. Here, \textit{moving} is an ``atomic" movement, while \textit{recording} a video is an ``atomic" action. We consider that the combination of both of them happening at a same time is an ``atomic" operation that cannot be split on smaller parts. 
 
 
 %all available configurations for an agent. 
@@ -838,7 +847,7 @@ A \textbf{Behaviour state space} of an agent $a_i$ is a tuple $B_i$ = ($S$, $\Si
 \item $\Sigma$ is a finite, non-empty set of transitions;
 \item $ \Delta $ is the transition function,
 and $(S_p,\lambda,S_k,I) \in \Delta $ is a transition
-that \chg{define}{defines} the key characteristics of a Behaviour execution
+that defines the key characteristics of a Behaviour execution
 where:
 \begin{itemize}
 \item  $S_p$ is the source state of the transition;
@@ -847,7 +856,7 @@ where:
 \item I is a set of conditions that must be satisfied for a transition to be performed. The conditions are agent's properties that capture the key characteristics of the agent state and its environment.
 %and its behaviour plan execution. 
 %and must be valid during all the time of the execution of op 
-(\chg{ex.}{e.g.,} $battery level > x$, etc.);
+(e.g., $battery level > x$, etc.);
 \end{itemize}
 \item $S_{0} \in S$ is an initial state;
 %\item $G_i$ is the discrete lower-level Goal that will be reached if the Behaviour is executed correctly. It corresponds to the goal location $G_i$;
@@ -857,11 +866,11 @@ where:
 %In this work we assume that if a goal location $G_i$ is reached the associated corresponding Behaviour is completed successfully.
 
 We explore further the transition function. 
-For an agent state $S_i \in S$ and an operation $ op \in  OP$, we denote by $tran(S_i,op )$ the state where the agent transits when successfully performed an operation $ op $ at state $S_i$. We use $ interTrans(S_i,op) $ to denote the set of intermediate states through which the agent \chg{traverse}{traverses} when performing $ op $ at a state $S_i$ (including $S_i$ and $tran(S_i,op)$). 
+For an agent state $S_i \in S$ and an operation $ op \in  OP$, we denote by $tran(S_i,op )$ the state where the agent transits when successfully performed an operation $ op $ at state $S_i$. We use $ interTrans(S_i,op) $ to denote the set of intermediate states through which the agent traverses when performing $ op $ at a state $S_i$ (including $S_i$ and $tran(S_i,op)$). 
 Now we formally define a behaviour plan.
 
-\begin{definition}[Behaviour Plan]  A behaviour plan is defined as a sequence of atomic operations to be applied to an agent $A_m$ to transit from its current state $S_k$ to a goal state $S_j$.  A behaviour plan is denoted by \chg{$BP_i= (op_1, op_2 ... op_p)$}{$BP_i= (op_1, op_2, \dots, op_p)$}, where $op_n \in OP $ for 
-\chg{$ n \in \{1,2 ... p\} $}{$ n \in \{1,2, \dots, p\} $}  
+\begin{definition}[Behaviour Plan]  A behaviour plan is defined as a sequence of atomic operations to be applied to an agent $A_m$ to transit from its current state $S_k$ to a goal state $S_j$.  A behaviour plan is denoted by $BP_i= (op_1, op_2, \dots, op_p)$, where $op_n \in OP $ for 
+$ n \in \{1,2, \dots, p\} $  
 \end{definition}
 
 
@@ -872,7 +881,7 @@ To model the behaviour plans of an agent $a_i$ we will be using the Behaviour Tr
 \subsection{Behaviour Tree Architecture}
 %\patrizio{I don't understand the structure, design-time elements, run-time elements, and behaviour tree architecture. What's the rationale? BT architectyre is neither design-time, nor run-time?}}
 
-A Behaviour Tree (BT) is an organizational execution structure that groups behaviour units that one agent should execute as part of its mission. Behaviour Trees (BTs) were developed in the computer gaming industry, as a tool to increase modularity in
+A Behaviour Tree (BT) is an organizational execution structure that groups behaviour units that one agent should execute as part of its mission. BTs were developed in the computer gaming industry, as a tool to increase modularity in
 the control structures of in-game opponents \cite{colledanchise2017behavior}.
 
 
@@ -896,7 +905,7 @@ In this section, we will present the Behaviour Tree Architecture which we use fo
 From \cite{dromey2003requirements}, A Behavior Tree is a formal, tree-like graphical form that
 represents behaviour of individual entities
 which change states, make decisions, respond-to/cause events, and interact by exchanging information and/or passing control.
-A \textbf{Behaviour Tree (BT)}\patrizio{it's enough to introduce the acronym only the first time} is represented as a directed tree in which the nodes are classified as root, control flow nodes, or execution nodes (leafs). For each pair of connected nodes the outgoing node is the parent and the incoming node is the child node. The root has no parents and exactly one child, the control flow nodes have one parent and at least one child, and the execution nodes have one parent and no children. 
+A BT is represented as a directed tree in which the nodes are classified as root, control flow nodes, or execution nodes (leafs). For each pair of connected nodes the outgoing node is the parent and the incoming node is the child node. The root has no parents and exactly one child, the control flow nodes have one parent and at least one child, and the execution nodes have one parent and no children. 
  %Figure xx shows a table giving information about the different type of  nodes a behaviour tree has (their symbols and their semantics).
  %\patrizio{behaviour trees should be introduced in the backgroud section, not here}\\
 
@@ -922,21 +931,24 @@ A \textbf{Behaviour Tree (BT)}\patrizio{it's enough to introduce the acronym onl
  \hline
  Decorator & $\diamondsuit$ & varies & varies & varies \\ 
  \hline
-  Action n & $\square$ & $X_n(t) \in S_n$  & $X_n(t) \in F_n$ & $X_n(t) \in R_n$  \\
+  Action n & $\square$ & $X_n(t) \in$ \textbf{S}$_n$   & $X_n(t) \in$ \textbf{F}$_n$  & $X_n(t) \in$ \textbf{R}$_n$  \\
  \hline
-Condition n & $\bigcirc$ & $X_n(t) \in S_n$  & $X_n(t) \in S_n$  & never \\
+Condition n & $\bigcirc$ & $X_n(t) \in$  \textbf{S}$_n$   & $X_n(t) \in$ \textbf{F}$_n$   & never \\
 \hline
 \end{tabular}
-\caption{The seven node types of a BT. \textit{Ch} $\equiv$ children; \textit{S} $\equiv$ succeeded; \textit{F} $\equiv$ failed; \textit{R} $\equiv$ running; \textit{N} $\equiv$ children; \textit{S}, \textit{F} $\in \mathbb{N}$\patrizio{what about \textit{R} and \textit{N}?} }
+\caption{The seven node types of a BT. \textit{Ch} $\equiv$ children; \textit{S} $\equiv$ succeeded; \textit{F} $\equiv$ failed; \textit{R} $\equiv$ running; \textit{N} $\equiv$ children; $X_n(t)$ $\equiv$ current state;
+\textbf{S}, \textbf{F}, \textbf{R} $\in \mathbb{N}$ are node parameters
+%\patrizio{what about \textit{R} and \textit{N}?}
+\cite{marzinotto2014towards}} 
 \label{tab:BTnodes}
 \end{table}
 
 
-In a BT, each node belongs to one of the seven categories listed in Table~\ref{tab:BTnodes}: we have one root node; leaf nodes are either Actions or Conditions, while control flow nodes are \del{either} Fallbacks, Sequences, Parallels, or Decorators.
-The execution of a BT starts from the root which sends ticks with a certain frequency to its child. A tick is an enabling signal that allows the execution of a child. When the execution of a node in the BT is allowed, it returns to the parent a status running if its execution has not finished yet, success if it has achieved its goal, or failure if is unable to continue with execution. A minimalistic example of a behaviour tree is presented on Figure~\ref{fig:Example}. It represents the  behaviour of the agent in the motivating scenario: an agent checks if there isn't an obstacle along its trajectory. If there isn't an obstacle, it performs a movement towards p.\patrizio{p or $p$?}
+In a BT, each node belongs to one of the seven categories listed in Table~\ref{tab:BTnodes} taken from \cite{marzinotto2014towards}: we have one root node; leaf nodes are either Actions or Conditions, while control flow nodes are Fallbacks, Sequences, Parallels, or Decorators.
+The execution of a BT starts from the root which sends ticks with a certain frequency to its child. A tick is an enabling signal that allows the execution of a child. When the execution of a node in the BT is allowed, it returns to the parent a status running if its execution has not finished yet, success if it has achieved its goal, or failure if is unable to continue with execution. A minimalistic example of a behaviour tree is presented on Figure~\ref{fig:Example}. It represents the  behaviour of the agent in the motivating scenario: an agent checks if there isn't an obstacle along its trajectory. If there isn't an obstacle, it performs a movement towards $p$.
 %condition x is satisfied, behaviour plan 1 should be executed.
 %When a behaviour plan 1 successfully finished,  behaviour plan 2 should start its execution. When behaviour plan 2 successfully executed, we start executing behaviour plan 3. 
-If the agent successfully executed the movement towards point p, the behaviour tree would return success. If the agent did not reach the point p, the behaviour unit describing that behaviour plan returns failure which will be propagated to the root. In this case, an \textit{adaptation}  is needed.
+If the agent successfully executed the movement towards point $p$, the behaviour tree would return success. If the agent did not reach the point $p$, the behaviour unit describing that behaviour plan returns failure which will be propagated to the root. In this case, an \textit{adaptation}  is needed.
 %will be performed.
 
 \begin{figure}[h]
@@ -991,13 +1003,41 @@ If the agent successfully executed the movement towards point p, the behaviour t
 %We say that the agent is not performing a \textbf{correct behaviour} if its behaviour reaches the failure region. 
 
 
-\section{Overview of Solution}
-\patrizio{recall what the problem is. It would be nice to have a more significant name of this section.}
+\section{Framework for mission execution}
+%\patrizio{recall what the problem is. It would be nice to have a more significant name of this section.}
 
+Missions are specified at design-time by in-the-field operators. The operators are users that are non-expert in ICT, but have specific expertise in the mission domain (like  fire fighters, policemen etc.). Within the panorama of missions~\cite{skrzypietz2012unmanned}, typical mission scenarios concern: (i) Disaster Prevention and Management, like damage
+assessment after earthquakes, searching for survivors after
+airplane accidents and disasters; (ii) Homeland Security, such
+as coastal surveillance, securing large public events; (iii) Protection
+of Critical Infrastructure, such as monitoring oil and
+gas pipelines, protecting maritime transportation from piracy,
+observing traffic flows; (iv) Communications, like broadband
+communication, telecommunication relays; (v) Environmental
+Protection, such as pollution emission, protection of water
+resources etc. 
+%\patrizio{I am not sure this is the right place for this text. Here we should be direct to the point, direct to the solution}
+This spectrum of mission requires 
+MMRSs that are both mission-critical and safety-critical systems. The definition of missions at design-time include only the information that is available at that time. 
 
-MMRs are both mission-critical and safety-critical systems. Missions are defined at
-design-time and include the information that is available at that time. However, a proper management of the run-time phase is required since environments in which these systems have to
-operate are often unpredictable and unknown. 
+However, a proper management of the run-time phase is required since environments in which these systems have to
+operate are often unpredictable and unknown. A new plan for adaptation should be computed on the fly every time an unexpected system or environmental
+feature is observed. 
+However, there are few major challenges in performing adaptation on-the-fly, i.e., computing agents' behaviours on-the-fly. One challenge is to deal with the question of which part of the system should be engaged in an adaptation. This is not trivial at all, since solutions for the same problem
+may be generated at different levels. For instance, an issue of
+a robot (i.e., a drop of the battery level of a UAV below a
+safety threshold) can be resolved in the scope of its mission,
+by re-calculating its navigation plan (isolated adaptation), or in the wider scope
+with the engagement of other robots and supporting systems
+(e.g., a UAV trajectory manager) (collective adaptation). The challenge here is to
+understand these levels and create a mechanism, which decides the right scope for an adaptation for a given issue.
+The other challenge is to understand how  multiple
+entities in a collective adaptation can adapt altogether and transactionally and what type of negotiation must take place to decide the right behavioural changes that should be applied on each side.
+Moreover, managing the execution of complex missions requires a clear separation of concerns between safety and mission issues. This  way an operator can focus on the mission functional specification, while a safety engineer can only focus on safety-specific mechanisms that are
+generic and independent from the functional behaviour of the system. 
+
+%can be activated during mission 
+
 %In this paper we focus on the run-time phase.
 
 %That means that during mission execution, MMRSs have two global operational objectives which are orthogonal to each other: 
@@ -1012,33 +1052,87 @@ operate are often unpredictable and unknown.
 %specification becomes unsatisfiable due to the discovery of an
 %unexpected obstacle. C
 
-\vspace{-.1cm}
-\begin{figure*}[ht!]
-\centering
-\captionsetup{justification=centering}
-\subfigure[Mission Execution Framework]{%
-            \label{fig:second}
-            \includegraphics[width=.395\textwidth]{Figures/MissionExecution.png}
-        }
-        \subfigure[Adaptation Manager]{%
-           \label{fig:third}
-           \includegraphics[ width=.35\textwidth]{Figures/Execution_Framework.png}
-        }
-\vspace{-.2cm}
- \caption{Overview of the proposed approach\patrizio{where this figure is referenced and explained? I was expecting a figure that refers to the two algorithms mentioned in the section showing what these algorithms take as input, how these algorithms work together, etc.}}
- \vspace{-.2cm}
-\label{overall} 
-\end{figure*}
+\begin{figure}[h]
+\includegraphics[width=.5\textwidth]{Figures/overall_final.pdf}
+\caption{Overview of the execution framework}\label{overall}
+\end{figure}
 
 
-In this work we propose a framework for supporting \textbf{execution} of MMRSs missions. 
+%\vspace{-.1cm}
+%\begin{figure*}[ht!]
+%\centering
+%\captionsetup{justification=centering}
+%\subfigure[Mission Execution Framework]{%
+ %           \label{fig:second}
+ %           \includegraphics[width=.395\textwidth]{Figures/MissionExecution.png}
+ %       }
+ %       \subfigure[Adaptation Manager]{%
+%           \label{fig:third}
+%           \includegraphics[ width=.35\textwidth]{Figures/Execution_Framework.png}
+ %       }
+%\vspace{-.2cm}
+% \caption{Overview of the proposed approach\patrizio{where this figure is referenced and explained? I was expecting a figure that refers to the two algorithms mentioned in the section showing what these algorithms take as input, how these algorithms work together, etc.}}
+% \vspace{-.2cm}
+%\label{overall1} 
+%\end{figure*}
+
+
+
+
+In this work we propose a framework for supporting \textbf{execution} of MMRSs missions. A possible design-time phase for our execution framework can build on top of
+the FLYAQ~\cite{bozhinoski2015flyaq, di2013engineering} platform for the specification of missions of autonomous multicopters through a high-level and graphical domain specific language tailored to the specific application
+domains. In FLYAQ~\cite{bozhinoski2015flyaq, di2013engineering} the tool generates behaviour plans at design-time for each of the robots (specific types of agents) involved in the mission. The tool associates an agent (robot) $a_i$ with a subregion $SR$ for each of the mission tasks $t$. The correctness of the algorithms employed in the FLYAQ framework regarding preserving safety is proved in~\cite{ruscio2016automatic}.
+
+Here we focus on the run-time phase.
 Most of the existing works are based on the assumptions that the environment is static and that each agent has either a global communication range (can communicate with each other agent in the system) or that each agent can obtain a full knowledge of the system and the environment at any time. These
 assumptions, however, do not usually hold in real-world scenarios \cite{lahijanian2016iterative}.
-In our framework, an adaptation is performed on-the-fly every time an unexpected system or environmental feature is observed in a part of the system. That being said, a new behavioural plan is computed for one or a group of agents that are affected by it. Our framework supports on-the-fly adaptation that enables MMRSs to complete the defined mission while guaranteeing the preservation of safety constraints.
-When designing the framework we took in consideration the following types of uncertainty:
+In our framework, an adaptation is performed on-the-fly every time an unexpected system or environmental feature is observed in a part of the system. That being said, a new behavioural plan is computed for one or a group of agents that are affected by it. Our framework supports on-the-fly adaptation that enables MMRSs to complete the defined mission while guaranteeing the preservation of safety constraints. As shown in Figure~\ref{overall} the architecture of our framework consists of 3 main components:
 \begin{itemize}
-\item \textbf{Changing Availability of resources:} The availability of resources for an agent can change over time (e.g., the battery level of a robot is less then a certain value, so the robot cannot finish a task);
-\item \textbf{Change of environment conditions:} The environment where the agents operate is dynamic (e.g., a dynamic obstacle appears, so a robot cannot finish a task).
+    \item \textbf{Behavior Manager:} contains the behaviour model of the mission. Here, behaviour plans are stored as behaviours in a Behaviour Tree. Each agent in system is assigned a Behaviour Tree for each task. In the beginning of the mission, the Behavior Manager contains all behaviours that should be performed for completion of the mission. During mission execution, the  behaviour trees may be updated as a result of violations in the behaviour plans to one or more agents.
+    %with some safety or mission related issues.
+    %conditions.
+   % Each behaviour in the Behaviour Tree is associated with a specific GOAL.
+    \item \textbf{Execution manager} is in charge of :(i) receiving the current behaviour model of the mission from the \textit{Behaviour Manager},
+    (ii) interacting
+    with the controllers both to send their part of mission to be
+    executed and to receive telemetry data,
+    (iii) checking when some conditions in the behaviour plans are violated in order to trigger the \textit{Adaptation Manager}, and (iii) to log mission data.
+    
+    %\textit{Safety Manager} which is safety-specific adaptation component, (iii) checking when mission-related conditions are violated in order to trigger the \textit{Mission Manager} to perform mission problem resolution
+    \item \textbf{Adaptation Manager} is a component where the adaptation happens. 
+    It receives from the \textit{Execution Manager} the conditions that are violated and
+    depending on the type of conditions that are violated it triggers one of its subcomponents. If safety-related conditions are violated the \textit{Safety Manager}  is always triggered. The \textit{Safety Manager} is safety-specific adaptation component that can manage only safety-related problems. If there isn't any violation of safety-related conditions and there are mission-related conditions that are violated, the \textit{Mission Manager} is triggered in order to perform mission problem resolution.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+Based on the different type of issues: mission related vs. safety related the framework proposes different adaptation mechanisms which decide the right scope  for an  %organizing the different parts of MMRSs into groups
+adaptation. 
+  Safety is a first class concern in our missions as robots can collaborate with humans to accomplish the mission. In this context, the system should always satisfy all safety invariants, while the mission can be partially satisfied.
+  That is why distinguishing between safety-related and mission-related issues is of most importance in our framework.
+ %when making run-time analysis on the behaviour of the system, so we can apply different types of adaptation solutions to different issues.
+ As the nature of the mission objectives is different to the safety objectives, we propose two different adaptation resolution methods: one for partial satisfaction of mission objectives and one for full satisfaction
+of safety objectives. 
+ In this work, a MMRS might need 
+ %In this work, the need for 
+ an adaptation due to the following:
+\begin{itemize}
+\item the system cannot successfully complete the defined mission (mission objective);
+\item agent(s) performing the current mission may physically collide (safety objective). 
+\end{itemize}
+ The \textit{Safety Manager} contains "safety" solvers which are algorithms that generate a behavior for collision avoidance. These are agent-specific and defined independently from mission definition. The \textit{Mission Manager} contains solvers which generate a behavior for completing parts of the mission. These are mission-specific and employed  before the start of the mission.
+
+
+When designing the framework we took in consideration the following types of uncertainty that the system might face and can be a reason for adaptation:
+\begin{itemize}
+\item \textit{Changing Availability of resources:} The availability of resources for an agent can change over time (e.g., the battery level of a robot is less then a certain value, so the robot cannot finish a task);
+\item \textit{Change of environment conditions:} The environment where the agents operate is dynamic (e.g., a dynamic obstacle appears, so a robot cannot finish a task).
 \end{itemize}
 
 Even though the agents participating in the mission are autonomous, they are able to dynamically form collaborative groups, called ensembles \cite{bucchiarone2014collective} to gain benefits that otherwise would not be possible. %
@@ -1053,34 +1147,7 @@ This demonstrates that in MMRSs two levels of adaptation are possible:
 \end{itemize}
 
 In this work, we mostly focus on collective adaptation, even though the framework has capabilities to perform isolated adaptation by providing a simple solution to a specific issue.
-The framework performs on the fly collective adaptation in a decentralized fashion in order to satisfy specific mission and safety objectives.
-However, there are few major challenges in performing adaptation on-the-fly, i.e., computing agents' behaviours on-the-fly. One challenge is to deal with the question of which part of the system should be engaged in an adaptation. This is not trivial at all, since solutions for the same problem
-may be generated at different levels. For instance, an issue of
-a robot (i.e., a drop of the battery level of a UAV below a
-safety threshold) can be resolved in the scope of its mission,
-by re-calculating its navigation plan (isolated adaptation), or in the wider scope
-with the engagement of other robots and supporting systems
-(e.g., a UAV trajectory manager) (collective adaptation). The challenge here is to
-understand these levels and create a mechanism, which decides the right scope for an adaptation for a given issue.
-The other challenge is to understand how  multiple
-entities in a collective adaptation can adapt altogether and transactionally and what type of negotiation must take place to decide the right behavioural changes that should be applied on each side.
-Our framework has mechanisms that dynamically understand  which  parts of the system  should be  selected  for adaptation and can produce a solution for a specific issue. 
- In this work, an MMRS might need 
- %In this work, the need for 
- an adaptation due to the following:
-\begin{itemize}
-\item the system cannot successfully complete the defined mission;
-\item agent(s) performing the current mission may physically collide. 
-\end{itemize}
-
-The adaptation mechanisms decide the right scope  for  %organizing the different parts of MMRSs into groups 
-adaptation based on the different issues: mission related vs. safety related.
-  Safety is a first class concern in our missions as robots can collaborate with humans to accomplish the mission. In this context, the system should always satisfy all safety invariants, while the mission can be partially satisfied.
-  That is why distinguishing between safety-related and mission-related issues is of most importance in our framework.
- %when making run-time analysis on the behaviour of the system, so we can apply different types of adaptation solutions to different issues.
- As the nature of the mission objectives is different to the safety objectives, we propose two different adaptation resolution methods: one for partial satisfaction of mission objectives and one for full satisfaction
-of safety objectives. 
-
+The framework performs on the fly collective adaptation in a decentralized fashion in order to satisfy specific mission and safety objectives. It has mechanisms that dynamically understand  which  parts of the system  should be  selected  for adaptation and can produce a solution for a specific issue. 
 
 
 %The problem resolution can be performed either by one or
@@ -1104,10 +1171,18 @@ Finally, the framework is designed around the following principles:
 \item reusable, modular behaviour templates
 %around which we define our framework
 \item separation of concerns between mission-related vs. safety-related issues
-\item isolated vs. collective adaptation 
+\item for each issue type we have two types of adaptation: isolated vs. collective adaptation 
 %built around the concept of dynamic ensemble
 \end{itemize}
-In the following, we will introduce each of these concepts in more details. \ivano{Minor: I was expecting a section for each of the points above.}
+In the following sections, 
+%we will introduce each principle in more details.
+%In the following sections 
+we will describe 
+%the structure of the execution framework, 
+how we model the modular reusable behaviours and how agents adapt 
+when facing with mission and safety-critical issues.
+%We use two different adaptation strategies to solve the different types of issues.
+%\ivano{Minor: I was expecting a paragraph for each of the points above.}
 %the different components that illustrate the framework. 
 
 
@@ -1120,11 +1195,10 @@ In the following, we will introduce each of these concepts in more details. \iva
 %\end{definition}
 
 
-\section{Execution Framework}
+%\section{Execution Framework}
 
 
-In the following sections we will describe the structure of the execution framework, how we generate modular reusable behaviours and how agents adapt when facing with mission and safety-critical issues. We use two different adaptation strategies to solve the different types of issues.
-\patrizio{what do you want to write in this section? Implementation aspects should be explained later, not here.}
+
 
 %Then is when adaptation should be performed. 
 %In the following sections we will describe  a motivation scenario and two different types of adaptation strategies depending on the type of problems the system is facing.
@@ -1194,47 +1268,36 @@ In the following sections we will describe the structure of the execution framew
 
 
 
-Missions are specified at design-time by in-the-field operators. The operators are users that are non-expert in ICT, but have specific expertise in the mission domain (like  fire fighters, policemen etc.). Within the panorama of missions~\cite{skrzypietz2012unmanned}, typical mission scenarios concern: (i) Disaster Prevention and Management, like damage
-assessment after earthquakes, searching for survivors after
-airplane accidents and disasters; (ii) Homeland Security, such
-as coastal surveillance, securing large public events; (iii) Protection
-of Critical Infrastructure, such as monitoring oil and
-gas pipelines, protecting maritime transportation from piracy,
-observing traffic flows; (iv) Communications, like broadband
-communication, telecommunication relays; (v) Environmental
-Protection, such as pollution emission, protection of water
-resources etc. \patrizio{I am not sure this is the right place for this text. Here we should be direct to the point, direct to the solution}
+
+%\patrizio{what do you want to write in this section? Implementation aspects should be explained later, not here.}
 
 
 
-Here we focus on the run-time phase.  
-A possible design-time phase for our execution framework can build on top of
-the FLYAQ~\cite{bozhinoski2015flyaq, di2013engineering} platform for the specification of missions of autonomous multicopters through a high-level and graphical domain specific language tailored to the specific application
-domains. In FLYAQ~\cite{bozhinoski2015flyaq, di2013engineering} the tool generates behaviour plans at design-time for each of the robots (specific types of agents) involved in the mission. The tool associates an agent (robot) $a_i$ with a subregion $SR$ for each of the mission tasks $t$. The correctness of the algorithms employed in the FLYAQ framework regarding preserving safety is proved in~\cite{ruscio2016automatic}.
 
 
-As in FLYAQ~\cite{bozhinoski2015flyaq, di2013engineering}, at design-time safe behaviour plans are generated for the agents involved in the mission  according to the initial set of active agents and the mission specification. 
+In FLYAQ~\cite{bozhinoski2015flyaq, di2013engineering}, at design-time safe behaviour plans are generated for the agents involved in the mission  according to the initial set of active agents and the mission specification. 
 %For our specific mission scenarios, we use the algorithms employed in the FLYAQ platform to generate behaviour plans for the different agents. 
-Our assumption is that the algorithms the mission designers use to generate the behaviour plans for the agents in our framework is correct as in FLYAQ. 
+Our assumption is that the algorithms used by mission designers at design-time to generate behaviour plans for the agents in our framework is correct as in FLYAQ. 
 Now, we focus on the run-time phase.
 During mission execution, at each point of time the system can follow the state of the mission. We define a mission state as follows.
 
 \begin{definition}
-A \textbf{Mission State} is a tuple $MS = ( C, M, S, \tau  )$ where: \chg{C}{$C$} is the context, \chg{M}{$M$} is the mission that should be performed and \chg{S}{$S$} is the MMRS system performing it at time $\tau$.
+A \textbf{Mission State} is a tuple $MS = ( C, M, S, \tau  )$ where: $C$ is the context, $M$ is the mission that should be performed and $S$ is the MMRS system performing it at time $\tau$.
 \end{definition}
 
 Furthermore, we focus on the execution of behaviour plans.
+For each agent $a_i \in A$ involved in a specific task $t$ we generate a  behaviour plan $BP^t_i$. 
 %If the Behaviours are executed as specified and if the execution is correct.
 We define an execution of a behaviour plan for an agent $a_i$ as follows.
 
 \begin{definition}[Executing a Behaviour Plan]
 %\ivano{What is the $i$ about here? If it is relevant, then it should be also in all the elements of the tuple. In the subsequent definition, all the elements depending on $\tau$ should have it either as subscript or superscript. I think that $\tau$ should be a superscript of $EBP_i$}
-We define an \textit{execution of a Behaviour Plan} for an agent $a_i$ at time $\tau$ as a tuple $EBP^i_\tau=(BP^i_\tau, C^i_\tau,  R_\tau)$ where: 
+We define an \textit{execution of a Behaviour Plan} for an agent $a_i$ at time $\tau$ as a tuple $EBP^i_\tau=(BP^i_\tau, S^i_\tau,  R_\tau)$ where: 
 %\patrizio{if $BP_i$ is connected to the agent $a_i$ then you don't need to have $a_i$ as element of the tuple of $E$. Also, if you refer to an agent as $a_i$ then be coherent and don't use $A_i$} 
 \begin{itemize} 
 %\item $A_i$ is the agent that performs the behaviour plan
 \item $BP^i_\tau$ is the behaviour plan performed by $a_i$ at time $\tau$
-\item $C^i_\tau$ is the configuration of the agent $a_i$ at time $\tau$ 
+\item $S^i_\tau$ is the state of the agent $a_i$ at time $\tau$ 
 %executing the behaviour plan %$a_i$
 %\item PRIORITY is a dynamic numeric value that shows the importance with which an AGENT should perform the particular Behavior Bi at time t;  
 %\item q is a dynamic numeric value that gives information about the quality on how well a particular agent Ai performs a particular behaviour Bi in a particular configuration Ci;
@@ -1245,13 +1308,17 @@ We define an \textit{execution of a Behaviour Plan} for an agent $a_i$ at time $
 
 
 The behaviour state space $B_i$ for an agent is partitioned in three partitions: \textit{success}, \textit{failure}, \textit{running} when an agent $a_i$ is executing a behavior plan $BP_i$ (Figure~\ref{fig:BS}). The return status of the Behaviour Plan ${R, S, F}$ at time $\tau$ describes in which partition an agent's state is. The states defined in the \textit{success} partition describe that the agent successfully completed its behavior plan. 
-The states defined in the \textit{running} partition describe that the agent $a_i$ correctly executes its behavior plan at time $\tau$. We say that an agent $a_i$ is correctly executing a Behaviour plan $BP_i$ at time $\tau$ if from the current configuration $C_l$ the agent can continue performing its Behaviour Plan i.e., the set of conditions for the current operation $op \in BP_i$ are satisfied. %capture the configuration properties
-The states defined in the \textit{failure} partition describe that the behavior plan is failing at time $\tau$. In that point the agent should adapt i.e. change its behaviour plan, so it reaches a state in the \textit{running} region from which it can continue executing the mission or just safely exit the mission as described in~\cite{di2013engineering}.
+The states defined in the \textit{running} partition describe that the agent $a_i$ correctly executes its behavior plan at time $\tau$. We say that an agent $a_i$ is correctly executing a Behaviour plan $BP_i$ at time $\tau$ if from the current state $S_l$ the agent can continue performing its Behaviour Plan i.e., the set of conditions for the current operation $op \in BP_i$ are satisfied. %capture the configuration properties
+The states defined in the \textit{failure} partition describe that the behavior plan is failing at time $\tau$. In that point the agent should adapt i.e. change its behaviour plan, so it reaches a state in the \textit{running} region from which it can continue executing the mission or just safely exit the mission as described in~\cite{di2013engineering}. In Figure~\ref{fig:BS} is represented the behaviour state space $B_i$ for an agent $a_i$ executing a behavior plan $BP_i$. The \textit{behavioural plan execution state transition} ($a \rightarrow b \rightarrow c \rightarrow d$) represents a state transition for the agent from an initial state  $S_0$ to a state in the success region $S_7$. That is only one possible state transition that could happen. There are many other possible transitions which might include the agent transitioning into a state from the failure region from where it should adapt.
+%its behavioural plan to transit to a state in the running region.
+
+
 
 
 \begin{figure}[h]
-\includegraphics[width=.5\textwidth]{Figures/BS3.pdf}
-\caption{Partitioning behaviour state space\patrizio{explain better the figure. also states S903 and S960 are disconnected; are these states reachable? What's the meaning? Finally, ``behaviour plan execution state transition'' is not clear. Explain better.}}\label{fig:BS}
+\includegraphics[width=.5\textwidth]{Figures/BS5.pdf}
+\caption{Partitioning behaviour state space}\label{fig:BS}
+%\patrizio{explain better the figure. also states S903 and S960 are disconnected; are these states reachable? What's the meaning? Finally, ``behaviour plan execution state transition'' is not clear. Explain better.}
 \end{figure}
 
 
@@ -1315,8 +1382,8 @@ behavior plans to be easily reused by other robots in other context, without the
 
 
 
-\section{Problem Resolution}
-\patrizio{better using a more clear title. What's problem?}
+\section{Mission and Safety Problem Resolution}
+\patrizio{better using a more clear title. What's problem?}\darko{is it more clear?}
 
  In this section, we will discuss how our framework manages mission and safety issues. We present an iterative collective adaptation resolution method for partial satisfaction of mission objectives and full satisfaction of safety objectives. 
  
@@ -1460,7 +1527,7 @@ A role represents the type of collaborative interaction a particular agent can p
 %Problems generally correspond to different critical situations
 %that can happen to an entity.
 
-The model of an \textit{entity} is primarily determined by the ways it collaborates with other entities as part of an \textit{ensemble}.  In isolated adaptation the entity that triggered the problem is the same as the one that provides a solution, but in collective adaptation a solution is provided by other entities in the ensemble. An ensemble is primarily determined by the entities that collaborate to solve a particular problem. In isolated adaptation, the ensemble contains one entity, while in collective adaptation, the ensemble consists of multiple entities. In collective adaptation, the ensemble \chg{facilitate}{facilitates} cooperation between entities by means of an information exchange at run-time. The collaboration between two entities is possible only if the entities can communicate between each other.
+The model of an \textit{entity} is primarily determined by the ways it collaborates with other entities as part of an \textit{ensemble}.  In isolated adaptation the entity that triggered the problem is the same as the one that provides a solution, but in collective adaptation a solution is provided by other entities in the ensemble. An ensemble is primarily determined by the entities that collaborate to solve a particular problem. In isolated adaptation, the ensemble contains one entity, while in collective adaptation, the ensemble consists of multiple entities. In collective adaptation, the ensemble facilitates cooperation between entities by means of an information exchange at run-time. The collaboration between two entities is possible only if the entities can communicate between each other.
 %themselves i.e. the communication range of one entity includes the location of the other one and vice versa.
 %are in a are there  has strong dependence of the communication range between entities has a strong influence in their collaboration. 
 Formally, an ensemble is defined as follows.
@@ -1493,8 +1560,8 @@ MAPE-K loop.
 In Figure \ref{fig:agentsArchitecture} is represented a run-time perspective of the entity's MAPE-K architecture. This perspective represents how an entity manages the execution of the mission at run-time while preserving safety constraints.
 In this section, we will describe each of the MAPE-K loop components for the individual entities. The MAPE-K loop comprises of 4 
 components operating over a Knowledge base. In order to illustrate the separation of concerns between mission-related and safety-related mechanisms for self-adaptation,
-there are two sub-components  running in parallel at each stage of the loop, one managing the mission, while the other the safety (Figure~\ref{fig:agentsArchitecture}). 
-\patrizio{explain better the interplay between the safety and mission part. For instance, if in the monitor part we are in the safety part, then we will keep the saftey part for the other three components? Or?}
+there are two sub-components at each stage of the loop, one managing the mission, while the other the safety (Figure~\ref{fig:agentsArchitecture}). While both sub-components are running in parallel in the Monitor and Analysis to either obtain or update information about the system or the environment, only one subcomponent is running in the Planning and the Executor stage of the loop. In the decision of which component to run, safety has always a precedence over mission completion.
+%\patrizio{explain better the interplay between the safety and mission part. For instance, if in the monitor part we are in the safety part, then we will keep the saftey part for the other three components? Or?}
 
 In the \textit{Knowledge} base we define three different type of models that an entity contains. The first model is the Behaviour Tree model (BTM). The BTM contains all behaviour plans associated with the mission. Each entity has a set of behaviour plans defined at design-time, but only one behaviour plan can be \textit{active} in one point of time during mission execution (depending on its priority).
 The second model is the current configuration of the entity \textit{Conf}. This model gives information about the current resources of an entity containing information like position of the robot in the map, current level of battery, etc.
@@ -1502,7 +1569,9 @@ The third model is a repository of the solvers it can provide i.e. \textit{Missi
 %and the problems it can trigger i.e. the roles it can play as part of the mission.
 
 \textbf{Monitoring component}: This component receives stimuli from the environment and from the rest of the system (other entities in the system) and it updates the current configuration \textit{Conf} and \textit{BTM}. Then, it triggers the analysis component.
-The stimuli are values associated with specific safety-related or mission-related properties. 
+The stimuli are values associated with specific safety-related or mission-related properties. The \textit{Mission Monitor} keeps track of relevant mission-related information, while the \textit{Safety Monitor} keeps track of safety-related information. 
+
+
 %The current configuration model of the entity is updated with information like battery, speed, location on map etc.
 
 
@@ -1513,7 +1582,7 @@ The stimuli are values associated with specific safety-related or mission-relate
 
 \textbf{Analysis component}: This component makes analysis if 
 %gets information from the \textit{knowledge} component if the status of 
-the \textit{active} behaviour either \textit{failed}, \textit{succeeded}, or \textit{running}. It has two sub-components Mission analyzer and Safety analyzer, each making appropriate checking.
+the \textit{active} behaviour either \textit{failed}, \textit{succeeded}, or \textit{running}. It has two sub-components Mission analyzer and Safety analyzer, both running in parallel and each making checking of the appropriate conditions (mission related vs. safety related).
 %Furthermore, it checks if there is a new ``READY" behaviour which has higher priority then the current ACTIVE one. 
 Depending on the analysis of the \textit{active} behaviour it does the following:
 \begin{enumerate}
@@ -1528,23 +1597,26 @@ It references the \textit{active} behaviour with the ``next" behaviour plan in t
  
 \textbf{Planning component}: This component is triggered when the \textit{active} behaviour returns status failed. %or when there is a new READY behaviour with higher priority. 
 The component starts the process of adaptation i.e. which as output generates a behaviour plan that will allow the entity to continue its mission execution or safely exit it.
-The  planning component consists of two subcomponents: \textbf{Safety Planner} and \textbf{Mission Planner}.  When the planning component is triggered, first it gets information from the knowledge about the current configuration model.
-Depending on the type of configuration conditions that are violated it triggers one subcomponent or the other. If safety-related conditions are violated the \textit{Safety Manager}  is triggered. The Safety Manager is safety-specific adaptation component that can manage only safety-related problems. If mission-related conditions are violated the \textit{Mission Manager} is triggered to perform mission problem resolution.
+The  planning component consists of two subcomponents: \textbf{Safety Planner} and \textbf{Mission Planner}.  When the planning component is triggered, first it gets information from the knowledge about the current configuration model $Conf$.  
+Depending on the type of configuration conditions that are violated it triggers one subcomponent or the other. Safety has precedence over mission completion, so  if safety-related conditions are violated the \textit{Safety Planner} is always triggered. The Safety Planner is safety-specific adaptation component that manages only safety-related problems. If there isn't any violation of safety-related conditions and there are mission-related conditions that are violated, the \textit{Mission Planer} is triggered to perform mission problem resolution. 
 
 
 
 %the Knowledge component if the status of the \textit{active} behaviour failed, succeed or running. 
 
-More details about the adaptation process will be provided in the next section where we discuss the two adaptation resolutions: mission problem resolution and safety problem resolution. 
+More details about the problem resolution process will be provided in the next section where we discuss the two problem resolutions: mission problem resolution and safety problem resolution. Each of these resolutions enables two types of adaptation: (i) isolated adaptation: performed by the entity itself or (ii)  collective adaptation: performed by an ensemble of entities. The behaviour plan that is generated at the end of the adaptation process is updated in the BTM and then, the execution component is triggered.
 %\darko{more info here}
 %which we will describe in more details bellow.
 %s of It does re-planning or reconfiguration of the system . 
 
-\textbf{Execution component}: This component receives   the \textit{active} behaviour from the Behaviour Plan Model and executes(ticks) it i.e. issues commands to the entitys' effectors.
+\textbf{Executor component}: This component receives   the \textit{active} behaviour from the Behaviour Plan Model and executes(ticks) it i.e. issues commands to the entity's effectors.
+When the executor component is triggered, first decides which subcomponent should be activated. Depending on which subcomponent performed the adaptation, it will activate one of the executor subcomponent correspondingly.  
+If the safety planner was activated, the safety executor will be activated. If the mission planner was activated the mission executor will be activated. The mission executor performs mission-related behaviours, while the safety executor performs safety-related behaviours.
+
 
 %taking it from the Knowledge component. , updates the KNOWLEDGE model with the return status of the ACTIVE BEHAVIOUR (Running, Success, Failed) and it triggers the Monitoring component.
 
-\patrizio{at this point I missed the part about creation of ensambles mentioned before. When this happen?}
+%\patrizio{at this point I missed the part about creation of ensambles mentioned before. When this happen?}
 
 
 
@@ -1585,7 +1657,7 @@ In an initial work \cite{bozhinoski2016leveraging}, we provided a generic approa
 Our framework implements a \textit{Mission Manager component} as part of the Planning component in the MAPE-K loop for each entity. 
 %If the entity can perform isolated adaptation i.e. contains solvers which can generate a solution
 %behavior for completing parts of the mission. These are mission-specific and employed  before the start of the mission.
- The mission manager receives information about the eligible mission related solvers in the Knowledge base. These are mission-specific and defined before the start of the mission. Mission-specific solvers have a set of solver constraints (configuration parameters) that reduce the space of acceptable problems (\chg{ex.}{e.g.,} a solver for covering a geographical area might require an entity to have an active camera, enough level of battery etc. to be  able to resolve a particular problem).  If an entity %activate an perform isolated adaptation
+ The mission manager receives information about the eligible mission related solvers in the Knowledge base. These are mission-specific and defined before the start of the mission. Mission-specific solvers have a set of solver constraints (configuration parameters) that reduce the space of acceptable problems (e.g., a solver for covering a geographical area might require an entity to have an active camera, enough level of battery etc. to be  able to resolve a particular problem).  If an entity %activate an perform isolated adaptation
  activates an eligible solver, it generates a solution i.e. behaviour plan to complete parts of the mission.
  The generated solution (behaviour plan) brings the agent into a state from which it can continue executing the mission.
 %\darko{what are the consequences of behaviour plans execution}
@@ -1594,7 +1666,7 @@ Our framework implements a \textit{Mission Manager component} as part of the Pla
 
 %partitioning the different types of problems and solvers and 
 \subsection{Collective adaptation}
-At design time we assigned the goal space $G$ for a task $t$ to a set of agents $A$. On Figure~\ref{Fig:Synthesis} the goal space G\patrizio{G or $G$?} is assigned to two agents $a_1$ and $a_2$. A subregion $SR^t_i$ of a task $t$ that a specific agent $a_i$  was assigned to do is decomposed in number of blocks (\chg{ex.}{e.g.:} the rectangle delimited by q11\patrizio{better $q11$}, q16, q15, and q12 in Figure~\ref{Fig:Synthesis} is one block).
+At design time we assigned the goal space $G$ for a task $t$ to a set of agents $A$. On Figure~\ref{Fig:Synthesis} the goal space $G$ is assigned to two agents $a_1$ and $a_2$. A subregion $SR^t_i$ of a task $t$ that a specific agent $a_i$  was assigned to do is decomposed in number of blocks (e.g.: the rectangle delimited by $q11$, $q16$, $q15$, and $q12$ in Figure~\ref{Fig:Synthesis} is one block).
 %We showed in \cite{bozhinoski2015flyaq, di2013engineering} how we decompose the regions on blocks.  
 Then, for each block we assigned a unique identifier and associate a goal location $G_i \in Coordinates$. 
 For each agent $a_i \in A$ involved in a specific task $t$ we generate a  behaviour plan $BP^t_i$ covering a sub-region $SR^t_i \in G$ from its home location $G^i_{home}$ to the last goal location $G^i_n$. 
@@ -1710,26 +1782,40 @@ The main section of the ensemble specification is
 the \textit{ensemble membership} which defines the
 structure of the ensemble.
 A structure of an ensemble is defined through the ensemble
-roles the agents can participate in. A partial EDL Specification for the mission resolution ensembles is presented on Listing~\ref{lstEDLMission}.
-\begin{lstlisting}[caption=EDL Specification for mission resolution ensembles, language=Python, label=lstEDLMission]
-ensemble MissionResolution
-    id ensemble_id: Agent
-    membership
-        roles
-           Leader : Agent
-           Solver_Agent [1..n]: Agent
-    constraints
-        constraint Agent.hascommpath(Leader)
-    fitness sum Leader.solution.quality+Solver_Agent.solution.quality
-    knowledge exchange
-        Agent.target = Leader.id
-        Agent.Problemid = Leader.Problemid
-        Leader.solution=Agent.solution
-\end{lstlisting}
+roles the agents can participate in. A partial EDL Specification for the mission resolution ensembles is presented on Figure~\ref{lstEDLMission}.
+%\begin{lstlisting}[caption=EDL Specification for mission resolution ensembles, language=Python, label=lstEDLMission]
+%ensemble MissionResolution
+%    id ensemble_id: Agent
+%    membership
+%        roles
+%           Leader : Agent
+%           Solver_Agent [1..n]: Agent
+%    constraints
+%        constraint Agent.hascommpath(Leader)
+%    fitness sum Leader.solution.quality+Solver_Agent.solution.quality
+ %   knowledge exchange
+  %      Agent.target = Leader.id
+  %      Agent.Problemid = Leader.Problemid
+%        Leader.solution=Agent.solution
+%\end{lstlisting}
+\lstdefinelanguage{sl} {morekeywords={ensemble, id, constraints, constraint, fitness, knowledge, exchange, membership, roles, sum, e, if, in, continue, break, else, goto, return, function, then, fi, end, foreach, defer, on, state, entry, start, machine }}
+\lstset{mathescape=true, keywordstyle=\bfseries\underbar, tabsize=1, commentstyle=\itshape, numbers=left, numberstyle=\tiny, %xleftmargin=\listingnumberwidth, 
+numbersep=1em}
+\vspace{-0.5cm}
+\begin{center}
+\begin{figure}[!h]
+ \lstinputlisting[language=sl, basicstyle=\scriptsize, tabsize=4,xleftmargin=3.0ex]{src/main2.src}
+%\lstinputlisting[multicols=2,language=sl, tabsize=2]{src/mainAnto.src}  
+\vspace{-0.2cm}
+ \caption{EDL Specification for mission resolution ensembles} 
+ \label {lstEDLMission}
+\vspace{-0.7cm}
+\end{figure} 
+\end{center} 
+ 
+
 %The ensemble is defined in terms of roles and role connectors. A role can be seen as a meta-component that can be instantiated by agents of different types.
-
 %An ensemble introduces a set of roles that can be taken by participating agents, and a set of constraints regulating the operation of participating entities in the scope of ensemble.
-
 %As such, we define a run-time agent structure named role that includes a
 %set of Problem Cases it can produce, and a set of Solvers it provides.
 %Role  is a dynamic run-time structure represented as a tupple Ri=(Ai, P, S) where:
@@ -1738,7 +1824,6 @@ ensemble MissionResolution
 %\item P is the set of Problem Cases an Agent Ai can raise playing the role
 %\item S is the set of solvers that Agent Ai can activate playing the role
 %\end{itemize}
-
  %We specify the ensemble type used for mission problem resolution on Listing 1.
 To identify the ensemble, we declare the id of the entity playing the role Leader to be the id of the ensemble – essentially
 saying that instances of this ensemble type cannot be
@@ -1786,7 +1871,7 @@ An agent can play more then one role in the ensemble i.e. it can be a leader and
 %\item G is the GOAL they are workings towards
 %\end{itemize}
  
-Next, we place semantic constraints, represented by the constraint expression. In our scenario a constraint for an entity to be part of the ensemble is that there must be a \textit{communication path} between the corresponding entity and its leader. What we mean by communication path is that if the ensemble leader sends \ins{a} message in the environment, the information can be transferred from one entity to another, and all entities that are able to receive the information are in the communication path of the leader.
+Next, we place semantic constraints, represented by the constraint expression. In our scenario a constraint for an entity to be part of the ensemble is that there must be a \textit{communication path} between the corresponding entity and its leader. What we mean by communication path is that if the ensemble leader sends a message in the environment, the information can be transferred from one entity to another, and all entities that are able to receive the information are in the communication path of the leader.
 %transit and the corresponding agent is able to receive it after infinite time. all the agents that can receive that information after infinite time in the environment
 In other words, each entity in the ensemble should have a neighborhood region that is overlapping with the neighborhood region 
 %in its neighborhood region 
@@ -1796,9 +1881,9 @@ of at least one other entity from the same ensemble. Neighborhood $NR$ is a regi
  %at that time.
 %Here, we assume that all entities preserved their position in the environment (they are static for some time period $\tau$). 
 %i it taking in consideration the fact that all Agents preserved their position in the environment.
-The third part of the membership definition is the fitness function, specified with a numeric expression. The fitness function provides information about which aspect of the ensemble membership should be optimized. That gives the framework a way to decide which entities should participate in the ensemble formation. More precisely, ensemble instances will be created in such a way to maximize the fitness function. In our example, the fitness function is calculated as a sum of the solution quality provided by all entities in the communication range of the leader. Finally, knowledge exchange is specified, creating an information exchange between the members of the ensemble. In our case, we have exchange of three types of information. First, is the information on which entity is the leader in the ensemble (line 14), second each of the entities in the ensemble has information about the problem that should be solved (line 15) and last is the solution that the leader obtains 
+The third part of the membership definition is the fitness function, specified with a numeric expression. The fitness function provides information about which aspect of the ensemble membership should be optimized. That gives the framework a way to decide which entities should participate in the ensemble formation. More precisely, ensemble instances will be created in such a way to maximize the fitness function. In our example, the fitness function is calculated as a sum of the solution quality provided by all entities in the communication range of the leader. Finally, knowledge exchange is specified, creating an information exchange between the members of the ensemble. In our case, we have exchange of three types of information. First, is the information on which entity is the leader in the ensemble (line 11), second each of the entities in the ensemble has information about the problem that should be solved (line 12) and last is the solution that the leader obtains 
 %about the solution that can be provided 
-for each entity in the ensemble (line 16). 
+for each entity in the ensemble (line 13). 
 
 \subsection{Mission Problem Resolution Algorithm}
 
@@ -1889,7 +1974,7 @@ there isn't a noticeable difference between the  solution  quality the moment  a
 
 
 The decentralized mission manager for an entity $r_i \in R$ is shown in
-Listing~\ref{lstMission} in the form of a state machine, which is executed by
+Figure~\ref{lstMission} in the form of a state machine, which is executed by
 each entity in the system. It is presented in the form of pseudo-code that closely represents the syntax of the P programming language.
 A P program comprises of concurrently executing state machines communicating asynchronously with each other
 using events accompanied by typed data values. Each state machine
@@ -1897,89 +1982,90 @@ has an input queue and machine-local store for a collection of variables. Each s
 get executed on receiving the corresponding event. The function
 $send(r_k, ev, d)$ is used to send an event \textit{ev} with payload data d
 to target machine $r_k$. An entity $r_i$ broadcasts event ev with payload d to all the robots in its communication range using the function $broadcast (ev,d)$. (more details about P language is available at \cite{Plang}).
-
 %ri <- robot_id; P <---- whole problem space
 %S <---- global solution
 %var timerV : machine;
 %Target <----- target;
 %sol <---- local solution$
+%\begin{lstlisting}[caption=Mission problem resolution algorithm, language=Python, label=lstMission]
+%machine MissionResolution{
+% start state Discover{
+%  on TriggerMissionProblem(problem Pi) do{
+%    sol=callSolvers(pi)
+%    timerV = new Timer(this);
+%     StartTimer(timerV);
+%     goto ConstructSolution;
+ %  }
+% 
+%   on ReqForSolver(Pj, rj, d) do{
+%       if (Pj not in P){
+%         sol=callSolver(pj)
+%         if (sol!=empty && t<=d)
+%             P=P union pi
+%             send(rj, solutionfound, sol)
+%      }
+%      
+%   on Commit(sol, rj){
+%     sol=check(sol)
+% 	  update(sol);
+ %    send(rj, confirm, (rj, sol))
+%   }
+% }
+% 
+% state ConstructSolution{  
+%   defer ReqForSolver, Commit;
+%   entry {
+%     if (sol!=null){
+%       Target=ri;
+%       S=sol;
+%       Pj=pi\p(sol)
+%       if (Pj==null)
+%          goto RequestCommit;
+%          
+%     }
+%     else
+%          broadcast (ReqForSolver, (Pj, ri));
+%   }
+  %   
+% 
+%     onSolutionFound(rj, sol) do{
+%        Target <-  Target union {rj}
+%        S=S union {sol}    
+%     }
+% 
+% 
+%   on TIMEOUT push RequestCommit;
+%   
+% 
+% }
+% 
+% state RequestCommit{
+%   entry{
+%     <Sbest, Target>=find_best_solution(S,Target)
+%     S=null;
+%     Rrecv=null;
+%     foreach t in Target
+%       send(t, commit, (Sbest(t), ri))
+%   }
+% 
+%   on Confirm(rj, solution){
+ %    S=S union solution;
+  %   Rrecv <- Rrecv union {rj}
+%     if (sizeof(Rrecv) = |Target|) then 
+%        update(sol)
+%        goto Discover
+%   }
+% }
+% \end{lstlisting}
 
-
-
-
-
-\begin{lstlisting}[caption=Mission problem resolution algorithm, language=Python, label=lstMission]
-machine MissionResolution{
- start state Discover{
-  on TriggerMissionProblem(problem Pi) do{
-    sol=callSolvers(pi)
-    timerV = new Timer(this);
-    StartTimer(timerV);
-    goto ConstructSolution;
-  }
-
-  on ReqForSolver(Pj, rj, d) do{
-      if (Pj not in P){
-        sol=callSolver(pj)
-        if (sol!=empty && t<=d)
-            P=P union pi
-            send(rj, solutionfound, sol)
-     }
-     
-  on Commit(sol, rj){
-    sol=check(sol)
-	  update(sol);
-    send(rj, confirm, (rj, sol))
-  }
-}
-
-state ConstructSolution{  
-  defer ReqForSolver, Commit;
-  entry {
-    if (sol!=null){
-      Target=ri;
-      S=sol;
-      Pj=pi\p(sol)
-      if (Pj==null)
-         goto RequestCommit;
-         
-    }
-    else
-         broadcast (ReqForSolver, (Pj, ri));
-  }
-    
-
-    onSolutionFound(rj, sol) do{
-       Target <-  Target union {rj}
-       S=S union {sol}    
-    }
-
-
-  on TIMEOUT push RequestCommit;
-  
-
-}
-
-state RequestCommit{
-  entry{
-    <Sbest, Target>=find_best_solution(S,Target)
-    S=null;
-    Rrecv=null;
-    foreach t in Target
-      send(t, commit, (Sbest(t), ri))
-  }
-
-  on Confirm(rj, solution){
-    S=S union solution;
-    Rrecv <- Rrecv union {rj}
-    if (sizeof(Rrecv) = |Target|) then 
-       update(sol)
-       goto Discover
-  }
-}
-\end{lstlisting}
-
-
+\begin{center}
+\begin{figure}[!h]
+ \lstinputlisting[language=sl, basicstyle=\scriptsize, tabsize=4,xleftmargin=3.0ex]{src/MR1.src}
+%\lstinputlisting[multicols=2,language=sl, tabsize=2]{src/mainAnto.src}  
+ \caption{Mission problem resolution algorithm} 
+ \label{lstMission}
+\end{figure} 
+\end{center} 
 
 % \begin{lstlisting}[caption=Mission problem resolution algorithm, language=Python]
 % machine MissionResolutiion{
@@ -2013,25 +2099,20 @@ state RequestCommit{
 %             S=sol;
 %             Pj=pi\p(sol)
 %             if (Pj==null)
-%                 goto Commitment;        
+%                 goto Commitment;      
 %         }
 %         else
 %             broadcast (ReqForSolver, (Pj, ri));
-    
 %         on SolutionFound(rj, sol) do{
 %             Target <-  Target union {rj}
 %             S=S union t.solution           
 %         }
-        
-        
 %         on TriggerMissionProblem (problem Pk) do{
 %           MissionProblemList.Add(Pk);
 %         }
         
 %         if (t>=deadline) then Commitment;
-
 %     }
-
 %     state Commitment{
 %         S=null
 %         <Sbest, Target>=find_best_solution(S,Target)
@@ -2041,9 +2122,6 @@ state RequestCommit{
 %     }
 % }
 % \end{lstlisting}
-
-
-
 %(line ...). The function includes the following important steps:
 % \begin{lstlisting}[caption=Mission problem resolution algorithm, language=Python]
 % function resolve(pi,ai, d):
@@ -2097,7 +2175,6 @@ state RequestCommit{
 % 	    <S,T>=find_best_solver(SolverList)
 % 	    S=commit(Sbest,Leader)
 % }
-
 % function find_best_solver(SolverList){
 %     Sbest=SolverList[0];
 %     Root_Leader=SolverList[0];
@@ -2108,18 +2185,13 @@ state RequestCommit{
 % 	}
 %     return <Sbest,Root_Leader>
 % }
-
 % function commit(S, T){
 % 	foreach t in Target
 % 		S=S union commit(S,T);
 % 	update(S);
 % 	return S;
 % }
-
 % \end{lstlisting}
- 
- 
- 
 % \begin{lstlisting}[caption=Mission problem resolution algorithm, language=Python]
 % sol=null;
 % S=null;
@@ -2142,7 +2214,6 @@ state RequestCommit{
 % 	update(S);
 % 	return S;
 % }
-
 % state ConstructSolution{  
 %     if (sol!=empty){
 %       Target=ei;
@@ -2150,21 +2221,15 @@ state RequestCommit{
 %       Pj=pi\p(sol)
 %       if (Pj==null)
 %          goto Commit;
-         
 %     }
 %     else
 %          broadcast (ReqForSolver, (Pj, ri));
-    
 %     onSolutionFound(rj, sol) do{
 %       Target <-  Target union {rj}
 %       S=S union t.solution
-       
-            
 %     }
 %     if (t>=deadline) then RequestCommit;
-
 % }
-
 % state RequestCommit{
 % entry{
 % S=null
@@ -2180,11 +2245,8 @@ state RequestCommit{
 % function commit(ri, S, T){
 % 	foreach t in Target
 % 		S=S union commit(S,T);
-
 % }  
 % }
-
-
 % function resolve(pi,ai, d):
 % if (pi in P):
 %     t=Timenow()
@@ -2236,7 +2298,6 @@ state RequestCommit{
 % 	    <S,T>=find_best_solver(SolverList)
 % 	    S=commit(Sbest,Leader)
 % }
-
 % function find_best_solver(SolverList){
 %     Sbest=SolverList[0];
 %     Root_Leader=SolverList[0];
@@ -2247,47 +2308,39 @@ state RequestCommit{
 % 	}
 %     return <Sbest,Root_Leader>
 % }
-
 % function commit(S, T){
 % 	foreach t in Target
 % 		S=S union commit(S,T);
 % 	update(S);
 % 	return S;
 % }
-
 % \end{lstlisting}
- 
- 
- 
- 
- 
- 
-Now we will describe the algorithm in Listing~\ref{lstMission}. 
+Now we will describe the algorithm in Figure~\ref{lstMission}. 
 The mission-problem resolution state machine has three states: \textit{Discover}, \textit{ConstructSolution} and \textit{RequestCommit}. 
 It contains the following variables which are important for understanding the code: 
-ri - represents the id of the robot that executes the state machine, P is the whole problem space for which the entity has already proposed a solution, S is the global solution that the leader obtains, timerV is a state machine that is instantiated when a problem is triggered, sol is a local solution provided by an entity in the ensemble. \\
+$r_i$ - represents the id of the robot that executes the state machine, $P$ is the whole problem space for which the entity has already proposed a solution, $S$ is the global solution that the leader obtains, $timerV$ is a state machine that is instantiated when a problem is triggered, sol is a local solution provided by an entity in the ensemble. \\
 Now, we will go through the code.
 The algorithm includes the following important steps: \\
-\textbf{Lines 2-8.} The mission-resolution manager starts executing in the Discover state. When a mission related problem is triggered, the solver of the entity $r_i$ is invoked and a solution \textit{sol}
+\textbf{Lines 2-8.} The mission-resolution manager starts executing in the \textit{Discover} state. When a mission related problem is triggered, the solver of the entity $r_i$ is invoked and a solution \textit{sol}
 is calculated for the specific problem \textit{Pi}. Function \textit{callSolvers} (\textbf{line 4}) 
 is beyond the scope of this paper but may generally exploit
-various mission-specific solvers and provide corresponding full or partial solutions.  After the solution is calculated, the machine creates an instance of a Timer machine, starts the timer and goes to ConstructSolution state.
+various mission-specific solvers and provide corresponding full or partial solutions.  After the solution is calculated, the machine creates an instance of a Timer machine, starts the timer and goes to \textit{ConstructSolution} state.
 
-\textbf{Lines 25-50.} Upon entering the ConstructSolution state, 
+\textbf{Lines 24-43.} Upon entering the \textit{ConstructSolution} state, 
 %For each of the returned solutions the following is done: a 
-it checks if the solution can fully or partially solve the triggered problem \textit{Pi}. If we have full solution to the problem Pi, the state machine transits to state \textit{RequestCommit} state(line 33).
+it checks if the solution can fully or partially solve the triggered problem $P_i$. If we have full solution to the problem $P_i$, the state machine transits to state \textit{RequestCommit} state(\textbf{line 32}).
 %the solution is added to the list of possible solutions. 
-If there is a partial solution, the problem space is reduced to \textit{Pj} (\textbf{line 31}) and  the agent broadcasts problem \textit{Pj} in its neighborhood (communicates the problem \textit{pj} with all entities in its communication range).
+If there is a partial solution, the problem space is reduced to $P_j$ (\textbf{line 30}) and  the agent broadcasts problem $P_j$ in its neighborhood (communicates the problem $P_j$ with all entities in its communication range).
 %\textit{Send\_feedback} (\textbf{line 9}) sends feedback to the agent that broadcasted a problem, if a corresponding solver is found and the deadline for finding a solution is not passed. 
 
 %The functions \textit{broadcast} and \textit{send\_feedback} are used for ensemble formation mentioned previously. 
-The events \textit{ReqForSolver} and \textit{onSolutionFound} are used for ensemble formation. 
+The events \textit{ReqForSolver} and \textit{SolutionFound} are used for ensemble formation. 
 They create the links between the different ensemble participants that provide solution in the resolution process. For each link, a corresponding problem communication is derived. For each problem communication, a combination of potential solutions is identified across all reachable entities and returned. The entity that triggered the Problem stays in the \textit{ConstructSolution} state until the timeout is reached. When the \textit{Timer} machine sends \textit{TIMEOUT} event to the entity that triggered the problem, the same entity goes to \textit{RequestCommit} state.
 
-\textbf{Lines 52-68.}
-Upon entering the RequestCommit state, the function \textit{find\_best\_solution} is executed to identify the best solution \textit{sbest} and which combination of entities contributes to \textit{sbest} (line 54). The function \textit{find\_best\_solution} is beyond the scope of this paper but generally is a domain and application specific. Finally, the leader sends the event \textit{commit} to ask the ensemble participants in the specific problem resolution to commit their resources. 
-It should be noted that in the time between the solution is proposed and the solution is chosen, some deviations of resources important for problem resolution might be encountered. That is why the check function (line 19) checks the change in the proposed and the current solution, it updates the Behaviour Tree in the update() function (line 20) with the current state of the local solution and sends confirmation to the leader. When the leader receives confirmation from all ensemble participants (line 61) it updates its Behaviour Tree and transits to Discover State. 
-The algorithm provided in Listing~\ref{lstMission} is able to resolve only one problem resolution triggered by one entity at one point of time without any recursion. Here, all the members in the ensemble can directly communicate with the leader. We propose an extension of the algorithm for resolving multiple problems triggered by different entities at a same time. Furthermore, sub-problems are recursively triggered across different entities in the system in order to have a larger range of possible solutions i.e. a leader can obtain a solution from an entity that can't directly communicate with it, but through another entity in the ensemble that is in its communication range. We define a data type  $MissionResolution = (PI, Ei, Si, ES, deadline, parent, PO, FE, FS)$ which is a tuple that contains information about one problem resolution (one ensemble) in which the entity participates.
+\textbf{Lines 44-62.}
+Upon entering the \textit{RequestCommit} state, the function \textit{find\_best\_solution} is executed to identify the best solution \textit{sbest} and which combination of entities contributes to \textit{sbest} (\textbf{line 46}). The function \textit{find\_best\_solution} is beyond the scope of this paper but generally is a domain and application specific. Finally, the leader sends the event \textit{commit} to ask the ensemble participants in the specific problem resolution to commit their resources. 
+It should be noted that in the time between the solution is proposed and the solution is chosen, some deviations of resources important for problem resolution might be encountered. That is why the check function (\textbf{line 19}) checks the change in the proposed and the current solution, it updates the Behaviour Tree in the \textit{update()} function (\textbf{line 20}) with the current state of the local solution and sends confirmation to the leader. When the leader receives confirmation from all ensemble participants (\textbf{line 53}) it updates its Behaviour Tree and transits to \textit{Discover} State. 
+The algorithm provided in Figure~\ref{lstMission} is able to resolve only one problem resolution triggered by one entity at one point of time without any recursion. Here, all the members in the ensemble can directly communicate with the leader. We propose an extension of the algorithm for resolving multiple problems triggered by different entities at a same time. Furthermore, sub-problems are recursively triggered across different entities in the system in order to have a larger range of possible solutions i.e. a leader can obtain a solution from an entity that can't directly communicate with it, but through another entity in the ensemble that is in its communication range. We define a data type  $MissionResolution = (PI, Ei, Si, ES, deadline, parent, PO, FE, FS)$ which is a tuple that contains information about one problem resolution (one ensemble) in which the entity participates.
 It contains the following variables:
 %has the following data:
 \begin{itemize}
@@ -2467,7 +2520,7 @@ Second, we assume that we have stable connectivity between agents which means th
 Third, we assume that we have stable resources during adaptation which means that there isn’t a change in the resources important for the agent to execute the solution it proposes.
 Taking in consideration these assumptions, we define the completeness of the approach as follows:
 \begin{theorem}[Completeness]
-If a solution $S_i$ for a specific problem $P_i$ exists and we have an infinite time to find it, the algorithm is able to find it.
+If a solution $S_i$ for a specific problem $P_i$ exists and we have an infinite time (deadline $d$) to find it, the algorithm is able to find it.
 \end{theorem}
 \begin{proof}
 If we represent one instance of the resolution process of problem $P_i$ as function that reduces problem $P_i$, then we can represent each reduction of $P_i$ in a monotonic decreasing sequence, each instance representing the appropriate reductions of the problem $P_i$.
@@ -2493,9 +2546,9 @@ Proving that the algorithm will always find a solution, and that all participant
 
 \section{Safety Problem Resolution} 
 
-In this \ugh{paragraph}, we discuss about the adaptation resolution problem related to safety problems. To be able to model specific safety related behaviours, we discuss few properties of agents and how they are connected to safety. \patrizio{what will be in this section?}
+In this section, we discuss about the adaptation resolution problem related to safety problems. To be able to model specific safety related behaviours, we discuss few properties of agents and how they are connected to safety. %\patrizio{what will be in this section?}
 
-\section{Modeling Safety}
+%\section{Modeling Safety}
 
 %Let $Coordinates = {(x,y,z) | x,y,z \in R}$  be the universal set of geographical coordinates where the mission takes place and let C be a point in that set.
 
@@ -2505,7 +2558,7 @@ In this \ugh{paragraph}, we discuss about the adaptation resolution problem rela
 
 %\textbf{Region for reaction} is a three dimensional region of an agent that represents the minimum 
 
-In this work what we mean by safety is the capability of avoiding undesired outcomes. In the MMMRs domain we consider actions that has catastrophic outcomes for safety and can't be undone by a finite sequence of other actions. 
+Here, what we mean by safety is the capability of avoiding undesired outcomes. In the MMMRs domain we consider actions that has catastrophic outcomes for safety and can't be undone by a finite sequence of other actions. 
 
 We define what a \textit{safe MMRS} is. Informally, a MMRS is safe if:
 \begin{itemize}
@@ -2622,34 +2675,28 @@ If one agent fails to comply to the rules in the ensemble, safety will be compro
 
 
 
-\begin{lstlisting}[caption=EDL Specification for safety resolution ensembles, language=Python, mathescape=true, label=lstSafety]
-ensemble SafetyResolution
-    id ensemble_id: Agent
-    membership
-        roles
-           Leader : Agent
-           Solver_Agent [1..n]: Agent
-    constraints
-        constraint Agent.hascommpath(Leader)
-        $\forall$ Agent $\in$ ensemble
-        $\exists$ Agent.solver  compatible to Leader.solver
-    fitness Leader.solution.quality
-    knowledge exchange
-        Leader.Problem=Agent.Problem(conflict_region)
-        Agent.solver = Leader.solver(algorithm, attributes_of_algorithm)
-        Leader.solution=Solver_Agent.solution
-\end{lstlisting}
 
+\begin{center}
+\begin{figure}[!h]
+ \lstinputlisting[language=sl, basicstyle=\scriptsize, tabsize=4,xleftmargin=3.0ex]{src/SafetyResolution.src}
+%\lstinputlisting[multicols=2,language=sl, tabsize=2]{src/mainAnto.src}  
+%\vspace{-0.2cm}
+ \caption{EDL Specification for safety resolution ensembles} 
+ \label {lstSafety}
+ \vspace{-0.8cm}
+\end{figure} 
+\end{center} 
 %(Leader.solution+Solver_Agent.solution)==FULL  
 %(position,speed)
 %(center, speed)     \forall a  \in VR(a1)
-We  specify the ensemble  type  used  for  safety  problem resolution on Listing~\ref{lstSafety}. To identify the ensemble, we declare a leader  agent  to  be  the  id  of  the  ensemble - essentially saying that instances of this ensemble type cannot be created without the ensemble being associated with a unique entity instance, which can be seen as a coordinator of the ensemble. \patrizio{please explain better. Moreover in the listing (row 2), is id a variable? Then what's Leader? As I understand Agent is the type} 
+We  specify the ensemble  type  used  for  safety  problem resolution on Figure~\ref{lstSafety}. To identify the ensemble, we declare a leader  agent  to  be  the  id  of  the  ensemble - essentially saying that instances of this ensemble type cannot be created without the ensemble being associated with a unique entity instance, which can be seen as a coordinator of the ensemble. 
+%\patrizio{please explain better. Moreover in the listing (row 2), is id a variable? Then what's Leader? As I understand Agent is the type} 
 A Leader of an ensemble for safety resolution is an agent that leads the ensemble formation and decides for a safety resolution protocol.
 %has knowledge of all ensemble members.
 Example could be a fixed camera positioned in a particular point in the environment that checks if there is a possibility for collision between two or more robots or a robot that notices another robot in its visible region. Unlike the leader in the mission resolution ensemble, the leader in a safety resolution has knowledge of all the possible ensemble participants when decides for a solution type and when it starts the coordination of the problem resolution process.
 
 %the process of coordination.
-As we can see from Listing~\ref{lstSafety},
+As we can see from Figure~\ref{lstSafety},
 the  ensemble  membership  function  consists  of  three  sections as before. First, the structure of the ensemble is defined by declaring the ensemble roles the agents can play. In  our  case, same as in the mission resolution, an  agent  can  play one  of  the  following  roles in the safety resolution ensemble:
 \begin{itemize}
 \item Leader - an agent that has the highest safety index and leads the ensemble formation
@@ -2657,13 +2704,13 @@ the  ensemble  membership  function  consists  of  three  sections as before. Fi
 \item Solver\_Agent  (an  agent  that  can provide partial solution that contributes towards the final solution)
 \end{itemize}
 Next,  we  place  semantic  constraints,  represented  by  the constraint  expression.  In  our  safety resolution ensemble a  constraint  for  an agent  to  be  part of  the  ensemble  is  that  there  must  be  a communication  link between  the  corresponding  agent  and its  leader.  What  we  mean  here  is  that the Leader can communicate with all ensemble participants. The other very important aspect in the ensemble formation is the solution space. In contrast to the mission resolution ensemble, a safety resolution ensemble must provide a full solution, so we put that as a constraint. Full solution consists of combination of behaviours generated by all participants in the ensemble. What we mean is that all ensemble participants agree to follow a specific protocol suggested by the Leader i.e. each entity in the ensemble must have a solver compatible to the solver proposed by the leader. Our assumption is that each entity has at least one solver that is compatible to the solvers of the rest of the system. We consider this assumption reasonable because we consider safety independently from the mission, so 
-all safety solvers can be independently embedded in the knowledge component before the start of the mission independently of its type.  
+all safety solvers can be independently embedded in the knowledge base before the start of the mission independently of its type.  
 %\patrizio{what's happen if an entity does not have a solver compatible to the solver proposed by the leader? Please explain here}. 
 The third part of the membership definition  is  the  fitness  function, providing  information  about which  aspect  of  the  ensemble  membership  should  be  optimized. In  our  example,  the  fitness  function  is represented as maximized solution quality of the leader that coordinates all ensemble participants. 
-Finally, knowledge exchange is specified, creating an information exchange between the members of the ensemble.  In  our  case,  we  have  exchange  of  three  types  of information.  First,  it is  the  information  of the agents' conflict\_region, which is calculated by the position of the agent and its corresponding speed 
+Finally, knowledge exchange is specified, creating an information exchange between the members of the ensemble.  In  our  case,  we  have  exchange  of  three  types  of information.  First,  it is  the  information  of the agents' conflict region $conflict\_r$, which is calculated by the position of the agent and its corresponding speed 
 %that generates the problem case
-(line 12). The conflict\_region is the safety region of an agent in a specific time interval during mission execution. Second, each of the entities in the  ensemble receives an information about a specific solver proposed by the Leader. Each entity in the ensemble receives information about a collision avoidance algorithm and the attributes of the algorithm (example of attributes of the algorithm might be the central point around which the entities will perform the collision avoidance protocol,  their corresponding speed, etc.) (line 13).
-Third, the leader gets information about the solution  of each entity in the ensemble (line 14).
+(line 13). The $conflict\_r$ is the safety region of an agent in a specific time interval during mission execution. Second, each of the entities in the  ensemble receives an information about a specific solver proposed by the Leader. Each entity in the ensemble receives information about a collision avoidance algorithm $A$ and the attributes of the algorithm $attr$ (example of attributes of the algorithm might be the central point around which the entities will perform the collision avoidance protocol,  their corresponding speed, etc.) (line 14).
+Third, the leader gets information about the solution  of each entity in the ensemble (line 15).
 %that  can  be  provided  by  each  agent  in  the  ensemble(line 14).
 
 
@@ -2740,32 +2787,32 @@ When each of Rconf entities join the ensemble, the entity
 goes into a \textit{Planning} state. The last entity that enters the \textit{Planning} state is the leader. When the leader enters this state,  on-the-fly ensemble formation phase finishes and the final ensemble is formed. 
 Here, the leader has information for all ensemble participants and the final conflict region of the ensemble.
 In this state the leader makes a decision of what is the best solver i.e.  what is the best collision avoidance protocol that all ensemble participants should follow. We implemented that by using the function $coordinate()$  %\todo{9}\patrizio{please use latex commands to refer to figures. Moreover, you probably wants to refr to Listing 4}, 
-which is executed only by the ensemble leader (Listing~\ref{lstCodeSafety}). 
+which is executed only by the ensemble leader (Figure~\ref{lstCodeSafety}). 
 %\ugh{Based on the ensemble information it lists a prioritized list}
-Based on the information about the ensemble (conflict regions, participants etc.), the leader generates a prioritized list of all possible solvers (list of collision avoidance algorithms) embedded in the Knowledge component that could solve the possible collision for this ensemble formation (line 3). 
+Based on the information about the ensemble (conflict regions, participants etc.), the leader generates a prioritized list of all possible solvers (list of collision avoidance algorithms) embedded in the Knowledge base that could solve the possible collision for this ensemble formation (line 3). 
 Then, the ensemble leader starts from the first algorithm and calls the recursive function resolve\_safety(A, id, e\_j) where A is the algorithm that is chosen for safety resolution, id is the identifier of the entity that executes the algorithm to generate a solution and e\_j is the identifier of the entity that triggered the algorithm in the entity that executes it. 
 Initially resolve\_safety(A, id, e\_j) is called locally by the ensemble leader so it has the form resolve\_safety(A, id, id) (line 5).
 
 The function resolve\_safety includes the following.
 %It lists all possible solvers embedded in the safety manager. First, function callSolvers finds all possible solvers that can solve this particular problem and prioritizes them (line 5). 
-First, the appropriate solver is called to generate a solution S based on the algorithm A (line 12). 
+First, the appropriate solver is called to generate a solution S based on the algorithm A (line 10). 
 %For each solution, starting from the top ranked, 
 Then, a corresponding communication is derived using derive\_coms for each of the reachable entities in the ensemble. In other words, derive\_coms finds all the children in the problem resolution tree reachable from the corresponding entity in the final ensemble.
 %in the safety resolution process.  
 %If no other agents are involved in the solution, we associate the corresponding solution with the final one.
 
-For each identified entity, the function resolve\_safety is called with the algorithm A (line (15)) 
+For each identified entity, the function resolve\_safety is called with the algorithm A (line (13)) 
 and a solution $S$ is calculated. 
 %A solution is calculated by remote invoking the resolve\_safety function
 %and the solution is memorized in $S$.
 
 The function resolve\_safety returns a boolean: 
 \begin{itemize}
-\item it returns true when the entity and all its children in the problem resolution tree contain the algorithm A in its knowledge component.  If that is the case, the generated solution $S$ is stored locally (function store (line 21));
+\item it returns true when the entity and all its children in the problem resolution tree contain the algorithm A in its knowledge base.  If that is the case, the generated solution $S$ is stored locally (function store (line 18));
 \item it returns false when the entity itself or one of its children(targets) doesn't contain the algorithm A in its knowledge base.
 \end{itemize}
 
-In the end the resolve\_safety for the ensemble leader (line 5) returns true if all the entities in the ensemble are able and agreed to perform some algorithm A. If that is not the case, the ensemble leader goes through the other algorithms in the SolverList and repeats the process until finds a suitable algorithm A for which all ensemble participants are able to perform it. If it finds one, it calls locally the function \textit{commit} and breaks the loop. Execution of the commit function is when the entity enters the Execution state in Figure~\ref{fig:STMachine}.
+In the end the resolve\_safety for the ensemble leader (line 5) returns true if all the entities in the ensemble are able and agreed to perform some algorithm $A$. If that is not the case, the ensemble leader goes through the other algorithms in the $SolverList$ and repeats the process until finds a suitable algorithm $A$ for which all ensemble participants are able to perform it. If it finds one, it calls locally the function \textit{commit} and breaks the loop. Execution of the commit function is when the entity enters the Execution state in Figure~\ref{fig:STMachine}.
 
 %If other agents are involved in the safety problem resolution, 
 %a set of solvers is identified across all reachable entities. A solution is calculated by remote invoking of the
@@ -2773,7 +2820,7 @@ In the end the resolve\_safety for the ensemble leader (line 5) returns true if 
 %and the solution is memorized in S.
 %If a full solution is found (line 17) - meaning all agents involved in the problem provided a solution, the root agent that triggered the problem asks the participants to follow the protocol by using the commit function. \\ 
 The \textit{commit} function 
-{Line 27-31.} is recursive, it goes through each entity in the ensemble and enacts a distributed commit of the best solution. It updates the solution in each entity by updating its Behaviour Tree in the Behaviour Manager component with the function update(S) (line 30).
+{Line 23-26.} is recursive, it goes through each entity in the ensemble and enacts a distributed commit of the best solution. It updates the solution in each entity by updating its Behaviour Tree with the function update(S) (line 26).
 When the entity finishes with the \textit{commit} function in the Execution state, it goes to \textit{Discover}.
 
 
@@ -2807,150 +2854,22 @@ When the entity finishes with the \textit{commit} function in the Execution stat
 
 
 
-\begin{lstlisting}[caption=Code snippets from the Planning and Execution state, language=Python, label=lstCodeSafety]
-function coordinate(){
-	if (id==ensemble.leader){
-		SolverList = callSolvers(ensemble);
-		foreach (A in SolverList){
-			if (resolve_safety(A, id, id))
-			{commit(id);break;}
-		}
-	}
-}
 
-function resolve_safety(A, id, e_j){
-	S=callSolver(A); 
-    Target:= derive_coms(ensemble);
-    foreach t in Target{
-		t.solution = rpc (resolve_safety(A, t, id))
-		if (t.solution==false){
-			S = null; break;
-		}
-	}
-	if (S!=null){
-		store(S, Target);
-		return true;
-	}
-	else return false;
-}
 
-function commit(id){
-	foreach t in Target
-		commit(t);
-	update(S)
-	}
-\end{lstlisting}
+\vspace{-0.3cm}
+\begin{center}
+\begin{figure}[bht]
+ \lstinputlisting[language=sl, basicstyle=\scriptsize, tabsize=4,xleftmargin=3.0ex, ]{src/safecode.src}
+%\lstinputlisting[multicols=2,language=sl, tabsize=2]{src/mainAnto.src}  
+ \caption{Code snippets from Planning and Execution state} 
+ \label {lstCodeSafety}
+\end{figure} 
+\end{center} 
+ %\vspace{-0.8cm}
+
+
 
 \patrizio{I am missing here a discussion about the correctness of the collective adaptation.}
-
-\darko{END}
-
-%\begin{lstlisting}[language=Python]
-%function resolve_safety(pi,ai){
-%sol=callSolvers(pi); 
-%S=null; 
-%if (sol!=0){ l
-%	SolverList=prioritize(sol)
-%	foreach (s in SolverList){
-%			Target:= derive_coms(s)
-%			if (Target is empty){
-%				S=s;
-%				
-%			}
-%			else{
-%				foreach t \in Target
-%					t.solution = rpc (callsolver(s, t))
-%					S = S \union t.solution
-%			}
-%			if (|pi\{p(S)}|=null)
-%				commit (S, Target)
-%				break;
-%		}
-%	}
-%}
-%function commit(s, t){
-%	store()
-%}
-%function commit(S, T){
-%	foreach t in Target
-%		t.update(S)
-%	update(S)
-%}
-%\end{lstlisting}
-The function includes the following important steps:\\
-\textbf{Line 11-5}. It lists all possible solvers embedded in the safety manager. First, function callSolvers finds all possible solvers that can solve this particular problem and prioritizes them (line 5). 
-For each solution, starting from the top ranked, a corresponding problem communication is derived using derive\_coms for each of the agents in the ensemble. If no other agents are involved in the solution, we associate the corresponding solution with the final one.
-If other agents are involved in the safety problem resolution, 
-a set of solvers is identified across all reachable entities. A solution is calculated by remote invoking of the
-callsolvers function on the targets (line 14)
-and the solution is memorized in S.
-If a full solution is found (line 17) - meaning all agents involved in the problem provided a solution, the root agent that triggered the problem asks the participants to follow the protocol by using the commit function. \\ 
-{Line 26-30.}The commit function goes through each agent in the safety resolution process and updates their Behaviour Tree in the Behaviour Manager component.
-
-
-
-\darko{END}
-
-
-
-The agent architecture consists of 4 components:
-\begin{itemize}
-    \item \textit{Behavior Manager:} containing information about the overall behavior of an agent. Here the Behaviour Plans are stored as Behaviours in a Behaviour Tree. Each agent is assigned a Behaviour Tree. A behaviour tree is a run-time structure that represents the Behaviours associated with a specific agent. In the beginning of the mission, it contains all behaviours related to a specific agent $A_i$ to fulfill its part of the mission. During mission execution, the agent's behaviour tree may be updated as a result of violations in the behaviour plan with safety or mission related issues.
-    %conditions.
-   % Each behaviour in the Behaviour Tree is associated with a specific GOAL.
-    \item \textit{Execution manager} is in charge of :(i) interacting with the \textit{Behaviour Manager} to receive the information about the status of the current behaviour, (ii) checking when safety-related conditions are violated in order to trigger the \textit{Safety Manager} which is safety-specific adaptation component, (iii) checking when mission-related conditions are violated in order to trigger the \textit{Mission Manager} to perform mission problem resolution and (iv) to log mission data.
-    \item \textit{Safety Manager:} Contains "safety" solvers which are algorithms that generate a behavior for collision avoidance. These are agent-specific and defined before mission definition.
-    \item \textit{Mission Manager:} Contains solvers which generate a behavior for completing parts of the mission. These are mission-specific and employed  before the start of the mission.  
-\end{itemize}
-
-
-
-\begin{figure}[h]
-\includegraphics[width=3.25in]{Figures/CAdapt2.png}
-\caption{Safety Problem Resolution\patrizio{unreadable}}
-\end{figure}
-
-
-
-%we envision the following: creation of dynamic ensemble are created using attribute-based communication grouping together agents that can see each other in specific regi.
-
-
-
-
-In Figure 1, the Problem resolution for safety related issues is presented.
-
-Here we will go for each of the cases independently and see how the state machine displayed in Figure 1 illustrates the process.
-
-\subsection{PROBLEM Static/Dynamic obstacle}
-
-In this case, we have an ensemble consisting of one AGENT\patrizio{please use the same notations used in previous sections. A generic agent can be $a_i$. The same for other entities.}. That AGENT is the ROOT(ENSEMBLE leader). 
-In the initial state, each of the agents is monitoring its state and the environment where it is operating. When an AGENT performing a behaviour, notices that its AGENT CONTEXT MODEL is not aligned with its BEHAVIOUR CONTEXT a PROBLEM CASE (OBSTACLE) is generated and triggered. It checks if its KNOWLEDGE MODEL contains a SOLVER(Obstacle avoidance algorithm) that can provide a solution (a PATH) for this particular PROBLEM CASE. If it does not find a SOLVER, it goes to the state SOLVER\_NOT\_FOUND. In our framework, our aim is that an agent will never come to this state when a resolution for a safety issue happens. In order to ensure this never happens, we are providing an algorithm that is a DEFAULT SOLVER for safety problems. This SOLVER will always be able to calculate a PATH for an agent from its current location to its HOME.
-
-When one or multiple SOLVERS are found, it transits to the state SOLVERS FOUND, from which it passes to the state SOLVERS INITIALIZATION. Here, the agent goes through the SOLVERS until finds one that can be executed. SOLVERS are prioritized according to system designer preference.
-
-For each SOLVER that is found, the AGENT decides if the solver can be activated or not. If according the initial conditions(LOCAL DEMANDS GUARANTEED), the ALGORITHM can provide a PATH, the SOLVER goes into ACTIVE STATE. For this type of problem, we don’t need the collaboration of other agents, so we don’t follow that branch in the state machine. In the ACTIVE state, the SOLVER generates a new Behaviour according to the PROBLEM parameters. Then, the AGENT goes into state EXECUTE. Here, a new Behaviour is generated and its execution is started.
-We call this a LOCAL ADAPTATION. 
-
-%Here, we have shown LOCAL ADAPTATION.
-
-
-\subsection{Collision avoidance among agents}
-
-In this case, we have an ensemble consisting of multiple agents. In safety related problems, all members of the ensemble participate in the resolution process because we want to be able to guarantee safety for each member in the team. We distinguish between the following type of AGENTS in the ensemble:
-\begin{itemize}
-    \item ENSEMBLE LEADER (the agent that triggers the PROBLEM CASE)
-    \item SOLVER PARTICIPANT (Agent which was contacted to help in the resolution process with its SOLVER)
-\end{itemize}
-
-In the initial state, each of the agents in the ensemble is monitoring its state and the environment where it is operating. Some or ALL of the AGENTS in the ensemble might notice a COLLISION between agents. All the AGENTS that notice a COLLISION, triggers a PROBLEM CASE. A Consensus about ENSEMBLE LEADER is done. In our work, we will consider the agent with the  smallest id as an ensemble leader. The ENSEMBLE LEADER continue the process by checking if its KNOWLEDGE MODEL contains a SOLVER (a coordination protocol, dynamic obstacle avoidance algorithm etc.) that can provide collision avoidance maneuvers.
-If it does not find a SOLVER, it goes to the state SOLVER\_NOT\_FOUND. However, as we stated before there is always a DEFAULT SOLVER for safety problems to avoid this state.
-
-If the ENSEMBLE LEADER finds one or multiple SOLVERS that can solve COLLISION AVOIDANCE, it transits to the state SOLVERS FOUND, from which it passes to the state SOLVERS INITIALIZATION. Here, the leader goes through each of the SOLVERS until finds one that can be executed.
-How the check process works?
-First, the AGENT checks if the initial conditions of the protocol defined in the SOLVER are satisfied. If that is not the case, it transits to INACTIVE state immediately and continue with the checking of the next SOLVER. If the initial conditions are satisfied, the ENSEMBLE LEADER sends REQUEST to the corresponding ACTIVE SOLVERS for each of the AGENT’s in the ensemble.
-If there is a TIMEOUT (the Leader waited long enough and did not received an answer from all other AGENTS in the ensemble), the SOLVER becomes INACTIVE. It the AGENT receives information about other ACTIVE SOLVERS it transit to state: RECEIVED ACTIVE SOLVERS FROM ENSEMBLE PARTICIPANTS,  meaning the initial conditions of all ensemble members guarantee correct collision avoidance. The Ensemble Leader asks all ensemble members to commit to this ensemble and waits for confirmation. When a confirmation about commitment is received from all participants, the LEADER sends confirmation back and the ENSEMBLE enters in a critical section meaning the agents must stay in the ensemble and follow the protocol and the rules defined in it in order to not provoke a collision. In this point, the SOLVER is ACTIVE (a behaviour is generated) and the ENSEMBLE LEADER starts with execution by going into state EXECUTE.
-
-For the ENSEMBLE PARTICIPANTS the following happens. They receive a request for a SOLVER. If the SOLVER is found, is initialized. In collision avoidance, SOLVER PARTICIPANTS do not provide SOLVERS that involve other AGENTS i.e. they have a local solution. From there, it is easy to check for them if they fulfill the initial conditions in order to become ACTIVE/INACTIVE. If they have an ACTIVE SOLVER, they communicate with the ENSEMBLE LEADER and confirm their commitment in the execution process. After confirmation about the commitment is received, the process of execution can start. 
 
 
 \section{Related work}
@@ -2988,21 +2907,20 @@ For each of them, we categorize the approaches as follows.
 &\multicolumn{2}{|c|}{\textbf{Safety Management}}
 &\multicolumn{3}{|c|}{\textbf{Adaptation mechanisms}}\\
 \cline{2-12}
-& A. Type & Openness & Ens. type & Mgmt. & Hierarchy &  ENV & Coop. Mechanisms & Concerns sep. & Adaptability &Type  & Human \\
+& A. Type & Openness & Ens. type & Mgmt. & Hierarchy &  ENV & Coop. Mechanisms & Concerns sep. & Adapt &Type  & Human \\
 \hline
 
 \cite{cui2014refresh} & Heterogenous & N/A & dynamic & N/A & N/A & N/A & cooperative & NO & YES & BOTH & NO\\
 \cite{parker1998alliance} & Heterogenous & YES & N/A & N/A & NO &  dynamic & local & NO & YES & isolated & NO \\
-\cite{morais2015distributed}& Heterogenous & NO & N/A & N/A &  N/A & dynamic & cooperative & NO & YES & colective & NO  \\
+\cite{morais2015distributed}& Heterogenous & NO & N/A & N/A &  N/A & dynamic & cooperative & NO & NO & N/A & N/A  \\
 
 \cite{khan2015framework} & Heterogenous & NO & dynamic & distributed & NO & static & cooperative & NO  & YES & isolated & NO\\
 \cite{castello2016adaptive} & Homogeneous & NO & N/A & N/A & NO  & static & local & NO & YES & isolated & NO\\
 \cite{desai2017drona} & Homogeneous & NO & N/A & N/A & NO & static & cooperative & NO & NO & N/A & NO \\
-\cite{decastro2018collision} &  Heterogenous & NO & N/A & N/A &  NO & dynamic & local & NO & YES & isolated & N/A \\
-
- 
-
-
+\cite{decastro2018collision} &  Heterogenous & NO & N/A & N/A &  NO & dynamic & centralized & NO & YES & N/A & N/A \\
+\cite{desai2016dynamically}  & Homogeneous & NO & dynamic & centralized & NO & N/A & centralized & NO & NO & N/A & N/A\\
+\cite{alrahman2016power} & Heterogeneous & YES & dynamic & distributed & YES & dynamic & N/A & N/A & YES & BOTH & NO \\
+%\cite{bozhinoski2016leveraging} & Heterogeneous & YES & static & distributed & YES & dynamic & cooperative & YES & YES & BOTH & YES\\
 \hline
 \end{tabular}
 \caption{Literature Comparison}
@@ -3061,11 +2979,23 @@ mission.
 \end{itemize}
 
 
-As shown in Table xx, most of the approaches are unable to deal with open systems (only 5 approaches, namely P2, P22,P48, P49, P53, are able to deal with open systems).  By open systems, we mean systems that can accept external entities at run-time (e.g.,  new robots,  new human actors).   This implies that  most  of the  approaches  that  have  been  proposed  are  not able to manage safety once the system evolves in terms of addition or removal of robots and/or other types of agents, including humans.  This is indeed an interesting research direction since  systems of the near future will be necessarily characterized by openness, and it is often impossible to assess at design time the exact boundaries and topology of the system.
+As shown in Table~\ref{tab:literature}, most of the approaches are unable to deal with open systems (only 2/9 approaches are able to deal with open systems).  By open systems, we mean systems that can accept external entities at run-time (e.g.,  new robots,  new human actors).   This implies that  most  of the  approaches  that  have  been  proposed do not consider that the system evolves in terms of addition or removal of robots and/or other types of agents, including humans.  This is indeed an interesting research direction since  systems of the near future will be necessarily characterized by openness, and it is often impossible to assess at design time the exact boundaries and topology of the system.
 
-A  peculiar  system  characteristic  is  the  capability  of managing  teams  consisting  of  robots  of  different  types  (e.g.,robots for grabbing objects,  for video streaming,  sensing and discovering  relevant  information). According  to  Table. most of the analyzed systems (46/58) do not have the capability of managing heterogeneous robots. 
-Only 10 systems provide users with such a functionality.
+A  peculiar  system  characteristic  is  the  capability  of managing  teams  consisting  of  robots  of  different  types  (e.g.,robots for grabbing objects,  for video streaming,  sensing and discovering  relevant  information). According  to  Table~\ref{tab:literature} most of the analyzed systems have the capability of managing heterogeneous robots which is the direction in which we are going with our approach. 
 
+In order to manage different unpredictable situations of missions and considering situations where there is only partial communication between different agents,  it is preferable  that  the MMR system is capable of grouping and regrouping agents in ensembles at run-time in a  decentralized fashion.  
+Most of the approaches propose solutions where they assume that all robots in the system will be able to communicate to each other. Only 2/9 approaches discuss about the possible benefits of distributed ensemble formation. 
+The concept of an ensemble enables single agents to take part in a group where they will follow certain rules and in return the ensemble offers certain advantages with respect to a preservation of a particular system quality. In this context, we don't need to consider the whole system to analyze if a particular system quality is satisfied, we only consider part of it.
+
+Furthermore, as shown in Table~\ref{tab:literature}, in all approaches the management of safety-specific issues (e.g., safety rules) is not kept separated from the functional management of the robots (e.g., the mission). Keeping a separation of concerns means for instance that the approach prescribes a special layer for managing safety, which is totally separated from the rest of the system. 
+%The only work where separation of safety-specific issues is considered is our previous work on which we build upon. 
+
+Regarding the cooperation mechanisms,  most  of  the  approaches adopt  local  safety  mechanisms,  i.e.   safety  mechanisms  that are conceived to work on single robots, without any cooperation. Centralized safety management mechanism means that there exist an entity managing the safety aspect of the overall system. As can be seen in Table~\ref{tab:literature}
+only 2 approach have a centralized safety management  mechanism.   Instead, 4  approaches  rely  on  co-operative safety mechanisms, meaning that safety mechanisms involve a cooperation between different robots.  
+
+Regarding the adaptation mechanisms, most of the approaches allow the system to adapt at run-time, meaning that the system is able to adapt (e.g., behaviour adaptation, trajectory recalculation, goal renegotiation, etc.) in order to find a solution depending on some change in the context. Adaptability might be considered in conjunction with context awareness since awareness of the context is a required capability in order to support adaptability. Human involvement in the adaptation process brings some degree of control-ability that can help in defining regulations and rules about the responsibilities of the operators in operational scenarios and make adaptation more practical and safer. None of the approaches in Table~\ref{tab:literature} includes the human as a factor in the adaptation process.
+Regarding the collectiveness of the adaptation process, 3 of the approaches consider isolated adaptation where the agent adapt its behaviour independently from the rest of the system, while only 2 approaches consider the two types of adaptation: (i) on a collective level where multiple agents must adapt altogether and transactionally
+and (ii) isolated adaptation where one agent adapts its behaviour independently from the rest of the system. 
 
 
 Classifying our framework in this classification schema is as follows:
@@ -3076,10 +3006,128 @@ Regarding the environment, the framework has mechanisms for modeling MMRSs that 
 
 Most of the frameworks we have analyzed do not consider safety aspects separate from the functional behaviour of the robots. In our framework we make a \textit{clear separation of concerns between safety and mission}. We consider this as extremely important for managing complex missions and it is one of the fundamental parts on which we base our framework. This way an operator modeling its mission can focus on the mission specification, while a safety engineer can focus on the safety-specific mechanisms, thus making safety-specific mechanisms reusable across missions, projects, and organizations.
 
-Another really important feature of our framework is allowing \textit{cooperation mechanisms} between different agents when safety-related issues are triggered. This means that safety is not managed in a centralized way (there isn't an  entity that manages the whole aspect of safety, but it is managed on a level of ensemble in a distributed way where each agent should perform an appropriate behavior as part of the ensemble for safety to be satisfied).
+Another really important feature of our framework is allowing \textit{cooperation mechanisms} between different agents when safety-related issues are triggered. This means that safety is not managed in a centralized way (there isn't an  entity that manages the whole aspect of safety, but it is managed on a level of ensemble in a distributed way where each agent should perform an appropriate behavior as part of the ensemble).
 
-One of the decisions for designing the modeling framework is to be able system designers to design systems which are \textit{adaptable} during mission execution. Our framework allows part of the adaptation decisions to be done at \textit{run-time}. That being said, we make clear distinction about which decisions should be made at design-time versus decisions at run-time. Regarding the type, we allow agents to adapt on collective(ensemble) level which means that a collection of autonomous agents collaborate to perform adaptation in order to satisfy a particular goal or solve a particular problem. 
-In the end, we allowed the operator(human) be able to have control in the adaptation process. Some adaptation decisions can't be done by the system at run-time, however with our approach as we showed in \cite{bozhinoski2016leveraging} we allow the operator to take over and participate as agent in the adaptation process.
+
+One of the decisions for designing the modeling framework is to be able system designers to design systems which are \textit{adaptable} during mission execution. Our framework allows part of the adaptation decisions to be done at \textit{run-time}. That being said, we make clear distinction about which decisions should be made at design-time versus decisions at run-time. Regarding the type, we allow agents to adapt on a collective(ensemble) level which means that a collection of autonomous agents collaborate to perform adaptation in order to satisfy a particular goal or solve a particular problem. 
+In the end, we allowed the operator(human) be able to have control in the adaptation process. Some adaptation decisions can't be done by the system at run-time, however with our approach as we showed in \cite{bozhinoski2016leveraging} we allow the operator to take over and participate as agent in the adaptation process. 
+
+
+
+
+
+\darko{END}
+
+%\begin{lstlisting}[language=Python]
+%function resolve_safety(pi,ai){
+%sol=callSolvers(pi); 
+%S=null; 
+%if (sol!=0){ l
+%	SolverList=prioritize(sol)
+%	foreach (s in SolverList){
+%			Target:= derive_coms(s)
+%			if (Target is empty){
+%				S=s;
+%				
+%			}
+%			else{
+%				foreach t \in Target
+%					t.solution = rpc (callsolver(s, t))
+%					S = S \union t.solution
+%			}
+%			if (|pi\{p(S)}|=null)
+%				commit (S, Target)
+%				break;
+%		}
+%	}
+%}
+%function commit(s, t){
+%	store()
+%}
+%function commit(S, T){
+%	foreach t in Target
+%		t.update(S)
+%	update(S)
+%}
+%\end{lstlisting}
+The function includes the following important steps:\\
+\textbf{Line 11-5}. It lists all possible solvers embedded in the safety manager. First, function callSolvers finds all possible solvers that can solve this particular problem and prioritizes them (line 5). 
+For each solution, starting from the top ranked, a corresponding problem communication is derived using derive\_coms for each of the agents in the ensemble. If no other agents are involved in the solution, we associate the corresponding solution with the final one.
+If other agents are involved in the safety problem resolution, 
+a set of solvers is identified across all reachable entities. A solution is calculated by remote invoking of the
+callsolvers function on the targets (line 14)
+and the solution is memorized in S.
+If a full solution is found (line 17) - meaning all agents involved in the problem provided a solution, the root agent that triggered the problem asks the participants to follow the protocol by using the commit function. \\ 
+{Line 26-30.}The commit function goes through each agent in the safety resolution process and updates their Behaviour Tree in the Behaviour Manager component.
+
+
+
+\darko{END}
+
+
+
+The agent architecture consists of 4 components:
+\begin{itemize}
+    \item \textit{Behavior Manager:} containing information about the overall behavior of an agent. Here the behaviour plans are stored as behaviours in a Behaviour Tree. Each agent is assigned a Behaviour Tree. A behaviour tree is a run-time structure that represents the Behaviours associated with a specific agent. In the beginning of the mission, it contains all behaviours related to a specific agent $A_i$ to fulfill its part of the mission. During mission execution, the agent's behaviour tree may be updated as a result of violations in the behaviour plan with safety or mission related issues.
+    %conditions.
+   % Each behaviour in the Behaviour Tree is associated with a specific GOAL.
+    \item \textit{Execution manager} is in charge of :(i) interacting with the \textit{Behaviour Manager} to receive the information about the status of the current behaviour, (ii) checking when safety-related conditions are violated in order to trigger the \textit{Safety Manager} which is safety-specific adaptation component, (iii) checking when mission-related conditions are violated in order to trigger the \textit{Mission Manager} to perform mission problem resolution and (iv) to log mission data.
+    \item \textit{Safety Manager:} Contains "safety" solvers which are algorithms that generate a behavior for collision avoidance. These are agent-specific and defined before mission definition.
+    \item \textit{Mission Manager:} Contains solvers which generate a behavior for completing parts of the mission. These are mission-specific and employed  before the start of the mission.  
+\end{itemize}
+
+
+
+\begin{figure}[h]
+\includegraphics[width=3.25in]{Figures/CAdapt2.png}
+\caption{Safety Problem Resolution\patrizio{unreadable}}
+\end{figure}
+
+
+
+%we envision the following: creation of dynamic ensemble are created using attribute-based communication grouping together agents that can see each other in specific regi.
+
+
+
+
+In Figure 1, the Problem resolution for safety related issues is presented.
+
+Here we will go for each of the cases independently and see how the state machine displayed in Figure 1 illustrates the process.
+
+\subsection{PROBLEM Static/Dynamic obstacle}
+
+In this case, we have an ensemble consisting of one AGENT\patrizio{please use the same notations used in previous sections. A generic agent can be $a_i$. The same for other entities.}. That AGENT is the ROOT(ENSEMBLE leader). 
+In the initial state, each of the agents is monitoring its state and the environment where it is operating. When an AGENT performing a behaviour, notices that its AGENT CONTEXT MODEL is not aligned with its BEHAVIOUR CONTEXT a PROBLEM CASE (OBSTACLE) is generated and triggered. It checks if its KNOWLEDGE MODEL contains a SOLVER(Obstacle avoidance algorithm) that can provide a solution (a PATH) for this particular PROBLEM CASE. If it does not find a SOLVER, it goes to the state SOLVER\_NOT\_FOUND. In our framework, our aim is that an agent will never come to this state when a resolution for a safety issue happens. In order to ensure this never happens, we are providing an algorithm that is a DEFAULT SOLVER for safety problems. This SOLVER will always be able to calculate a PATH for an agent from its current location to its HOME.
+
+When one or multiple SOLVERS are found, it transits to the state SOLVERS FOUND, from which it passes to the state SOLVERS INITIALIZATION. Here, the agent goes through the SOLVERS until finds one that can be executed. SOLVERS are prioritized according to system designer preference.
+
+For each SOLVER that is found, the AGENT decides if the solver can be activated or not. If according the initial conditions(LOCAL DEMANDS GUARANTEED), the ALGORITHM can provide a PATH, the SOLVER goes into ACTIVE STATE. For this type of problem, we don’t need the collaboration of other agents, so we don’t follow that branch in the state machine. In the ACTIVE state, the SOLVER generates a new Behaviour according to the PROBLEM parameters. Then, the AGENT goes into state EXECUTE. Here, a new Behaviour is generated and its execution is started.
+We call this a LOCAL ADAPTATION. 
+
+%Here, we have shown LOCAL ADAPTATION.
+
+
+\subsection{Collision avoidance among agents}
+
+In this case, we have an ensemble consisting of multiple agents. In safety related problems, all members of the ensemble participate in the resolution process because we want to be able to guarantee safety for each member in the team. We distinguish between the following type of AGENTS in the ensemble:
+\begin{itemize}
+    \item ENSEMBLE LEADER (the agent that triggers the PROBLEM CASE)
+    \item SOLVER PARTICIPANT (Agent which was contacted to help in the resolution process with its SOLVER)
+\end{itemize}
+
+In the initial state, each of the agents in the ensemble is monitoring its state and the environment where it is operating. Some or ALL of the AGENTS in the ensemble might notice a COLLISION between agents. All the AGENTS that notice a COLLISION, triggers a PROBLEM CASE. A Consensus about ENSEMBLE LEADER is done. In our work, we will consider the agent with the  smallest id as an ensemble leader. The ENSEMBLE LEADER continue the process by checking if its KNOWLEDGE MODEL contains a SOLVER (a coordination protocol, dynamic obstacle avoidance algorithm etc.) that can provide collision avoidance maneuvers.
+If it does not find a SOLVER, it goes to the state SOLVER\_NOT\_FOUND. However, as we stated before there is always a DEFAULT SOLVER for safety problems to avoid this state.
+
+If the ENSEMBLE LEADER finds one or multiple SOLVERS that can solve COLLISION AVOIDANCE, it transits to the state SOLVERS FOUND, from which it passes to the state SOLVERS INITIALIZATION. Here, the leader goes through each of the SOLVERS until finds one that can be executed.
+How the check process works?
+First, the AGENT checks if the initial conditions of the protocol defined in the SOLVER are satisfied. If that is not the case, it transits to INACTIVE state immediately and continue with the checking of the next SOLVER. If the initial conditions are satisfied, the ENSEMBLE LEADER sends REQUEST to the corresponding ACTIVE SOLVERS for each of the AGENT’s in the ensemble.
+If there is a TIMEOUT (the Leader waited long enough and did not received an answer from all other AGENTS in the ensemble), the SOLVER becomes INACTIVE. It the AGENT receives information about other ACTIVE SOLVERS it transit to state: RECEIVED ACTIVE SOLVERS FROM ENSEMBLE PARTICIPANTS,  meaning the initial conditions of all ensemble members guarantee correct collision avoidance. The Ensemble Leader asks all ensemble members to commit to this ensemble and waits for confirmation. When a confirmation about commitment is received from all participants, the LEADER sends confirmation back and the ENSEMBLE enters in a critical section meaning the agents must stay in the ensemble and follow the protocol and the rules defined in it in order to not provoke a collision. In this point, the SOLVER is ACTIVE (a behaviour is generated) and the ENSEMBLE LEADER starts with execution by going into state EXECUTE.
+
+For the ENSEMBLE PARTICIPANTS the following happens. They receive a request for a SOLVER. If the SOLVER is found, is initialized. In collision avoidance, SOLVER PARTICIPANTS do not provide SOLVERS that involve other AGENTS i.e. they have a local solution. From there, it is easy to check for them if they fulfill the initial conditions in order to become ACTIVE/INACTIVE. If they have an ACTIVE SOLVER, they communicate with the ENSEMBLE LEADER and confirm their commitment in the execution process. After confirmation about the commitment is received, the process of execution can start. 
+
+
+
+
 
 
 
@@ -3140,7 +3188,7 @@ For each type we identify several parameters.\patrizio{explain better} For each 
 \hline
 \end{tabular}
 \caption{Literature Comparison}
-\label{tab:literature}
+\label{tab:dliterature}
 \end{table*}
 
 

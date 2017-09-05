@@ -1,0 +1,26 @@
+function coordinate()
+	if ($id$ == $ensemble.leader$)
+		$SolverList$ = callSolvers($ensemble$);
+		foreach $A \in SolverList$:
+			if (resolve_safety($A$, $id$, $id$))
+				commit($id$) 
+				break
+	
+function resolve_safety($A$, $id$, $e\_j$)
+	$S$ = callSolver($A$)
+    $Target$ = derive_coms($ensemble$)
+    foreach $t \in Target$:
+		$t.solution$ = rpc (resolve_safety($A$, $t$, $id$))
+		if ($t.solution$ == false)
+			$S = \emptyset$
+			break
+	if ($S \neq \emptyset$)
+		store($S$, $Target$)
+		return true
+	else 
+		return false
+
+function commit($r_{id}$)
+	foreach $t \in r_{id}.Target$
+		commit($t$)
+	update($S$)

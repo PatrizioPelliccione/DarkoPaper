@@ -1,0 +1,13 @@
+ensemble MissionResolution
+    id ensemble_id: Entity
+    membership
+        roles
+           Leader : Entity
+           Solver_Agent [1..n]: Entity
+    constraints
+        constraint Solver_Agent.hascommpath(Leader)==$\top$
+    fitness sum Leader.solution.quality+Solver_Agent.solution.quality
+    knowledge exchange
+        Solver_Agent.target = Leader.r_id
+        Solver_Agent.Problem = Leader.Problem
+        Leader.solution=Solver_Agent.solution
