@@ -1316,7 +1316,7 @@ The states defined in the \textit{failure} partition describe that the behavior 
 
 
 \begin{figure}[h]
-\includegraphics[width=.5\textwidth]{Figures/BS5.pdf}
+\includegraphics[width=\columnwidth]{Figures/BS5.pdf}
 \caption{Partitioning behaviour state space}\label{fig:BS}
 %\patrizio{explain better the figure. also states S903 and S960 are disconnected; are these states reachable? What's the meaning? Finally, ``behaviour plan execution state transition'' is not clear. Explain better.}
 \end{figure}
@@ -1383,7 +1383,6 @@ behavior plans to be easily reused by other robots in other context, without the
 
 
 \section{Mission and Safety Problem Resolution}
-\patrizio{better using a more clear title. What's problem?}\darko{is it more clear?}
 
  In this section, we will discuss how our framework manages mission and safety issues. We present an iterative collective adaptation resolution method for partial satisfaction of mission objectives and full satisfaction of safety objectives. 
  
@@ -2512,7 +2511,7 @@ Hence, we proved correctness of our algorithm.
 \end{proof}
 
 
-\textbf{Completeness}
+\subsubsection{Completeness}
 
 Completeness of the approach is defined based on assumptions about the connectivity between the agents and the stability of resources and connectivity.
 First, we assume that we have complete connectivity between agents meaning that starting from each agent we can broadcast a message that will reach all agents in the environment. 
@@ -2523,14 +2522,14 @@ Taking in consideration these assumptions, we define the completeness of the app
 If a solution $S_i$ for a specific problem $P_i$ exists and we have an infinite time (deadline $d$) to find it, the algorithm is able to find it.
 \end{theorem}
 \begin{proof}
-If we represent one instance of the resolution process of problem $P_i$ as function that reduces problem $P_i$, then we can represent each reduction of $P_i$ in a monotonic decreasing sequence, each instance representing the appropriate reductions of the problem $P_i$.
-According to the monotone convergence theorem [reference needed \darko{Where to find good reference for this}], if a sequence is decreasing and is bounded below by a minimum, in some infinite time will reach that minimum. In our case, the minimum would be the problem that corresponds to the final solution $S_i$ that in ideal situation will be the empty set.
+If we represent one instance of the resolution process of problem $P_i$ as function that reduces problem $P_i$, then we can represent each reduction of $P_i$ in a monotonic decreasing sequence, \chg{each instance representing}{where each instance represents} the appropriate reductions of the problem $P_i$.
+\chg{According to the monotone convergence theorem [reference needed \darko{Where to find good reference for this}],}{Obviously,} if a sequence is decreasing and is bounded below by a minimum, in some \chg{infinite}{finite} time \ins{we} will reach that minimum. In our case, the minimum would be the problem that corresponds to the final solution $S_i$\chg{ that}{, which} in ideal situation will be the empty set.
 Having that for all instances of the mission resolution process, we can conclude completeness.
-\end{proof}
+\end{proof}~\\
 
 
 Proving that the algorithm will always find a solution, and that all participants in one instance of the problem resolution process are different, 
-
+\patrizio{incomplete sentence}
 
 
 %In situations where the ROOT AGENT does not provide any type of solution, we have another agent that provides the full solution to the triggered top-level problem case. That is the ROOT LEADER ENSEMBLE. In situations where there is an overlap between the 
